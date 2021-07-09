@@ -14,7 +14,7 @@ import {
 } from "../../store/actions";
 import colors, { Icon } from "@codedrops/react-ui";
 import SelectCollection from "../SelectCollection";
-import { md } from "../../utils";
+import { md } from "../../lib/utils";
 import { generateSlug } from "@codedrops/lib";
 import { noteType } from "../../constants";
 import axios from "axios";

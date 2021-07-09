@@ -19,12 +19,12 @@ import moment from "moment";
 import _ from "lodash";
 import colors, { Icon, Tag } from "@codedrops/react-ui";
 import { saveSettings, setAppLoading, updateNote } from "../../store/actions";
-import { copyToClipboard, generateFormData } from "../../utils";
+import { copyToClipboard, generateFormData } from "../../lib/utils";
 import short from "short-uuid";
 import { statusFilter } from "../../constants";
-import EmptyState from "../molecules/EmptyState";
-import ImageCard from "../molecules/ImageCard";
-import UploadButton from "../molecules/UploadButton";
+import EmptyState from "../../lib/EmptyState";
+import ImageCard from "../../lib/ImageCard";
+import UploadButton from "../../lib/UploadButton";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -260,7 +260,8 @@ const Controls = ({
           if (item.label === upload.original_filename) {
             resourceMatch = true;
             return { ...item, media: upload };
-          } else return item;
+          }
+          return item;
         });
 
         if (!resourceMatch) {

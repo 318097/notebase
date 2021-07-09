@@ -5,7 +5,7 @@ import _ from "lodash";
 import { fetchStats } from "../store/actions";
 import colors from "@codedrops/react-ui";
 import { Doughnut, HorizontalBar, Bar } from "react-chartjs-2";
-import { extractTagCodes } from "../utils";
+import { extractTagCodes } from "../lib/utils";
 
 const StyledContainer = styled.section`
   display: flex;

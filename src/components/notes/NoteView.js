@@ -9,9 +9,9 @@ import queryString from "query-string";
 import colors, { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
 import { getNoteById, setModalMeta, updateNote } from "../../store/actions";
-import { md, copyToClipboard } from "../../utils";
-import { fadeInDownAnimation } from "../../animations";
-import JSONEditor from "../molecules/JSONEditor";
+import { md, copyToClipboard } from "../../lib/utils";
+import { fadeInDownAnimation } from "../../lib/animations";
+import JSONEditor from "../../lib/JSONEditor";
 
 const Wrapper = styled.div`
   padding-top: 20px;

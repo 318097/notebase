@@ -4,8 +4,8 @@ import { Icon as AntIcon } from "antd";
 import moment from "moment";
 import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
 import _ from "lodash";
-// import Dropdown from "../molecules/Dropdown";
-import { md } from "../../utils";
+// import Dropdown from "../lib/Dropdown";
+import { md } from "../../lib/utils";
 
 const StyledCard = styled.div`
   height: 300px;

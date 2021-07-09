@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
-import { StyledSection } from "../styled";
+import { StyledSection } from "../lib/styled";
 import axios from "axios";
 // import { setSessionInStorage } from "../authService";
 // import { setSession } from "../store/actions";
@@ -18,8 +18,10 @@ const Register = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialState);
 
-  const handleInput = (key) => ({ target: { value } }) =>
-    setForm((data) => ({ ...data, [key]: value }));
+  const handleInput =
+    (key) =>
+    ({ target: { value } }) =>
+      setForm((data) => ({ ...data, [key]: value }));
 
   const handleRegister = async () => {
     setLoading(true);

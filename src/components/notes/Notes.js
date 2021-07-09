@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Table, Tag, Pagination, Badge } from "antd";
 import colors from "@codedrops/react-ui";
-import { MessageWrapper } from "../../styled";
+import { MessageWrapper } from "../../lib/styled";
 import NoteCard from "./NoteCard";
 import {
   setNoteToEdit,
@@ -12,7 +12,7 @@ import {
   setFilter,
   setKey,
 } from "../../store/actions";
-import { extractTagCodes } from "../../utils";
+import { extractTagCodes } from "../../lib/utils";
 import config from "../../config";
 import moment from "moment";
 

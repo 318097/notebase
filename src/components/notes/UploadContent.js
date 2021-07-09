@@ -6,14 +6,14 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import uuid from "uuid";
 import _ from "lodash";
-import { MessageWrapper } from "../../styled";
+import { MessageWrapper } from "../../lib/styled";
 import SelectCollection from "../SelectCollection";
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
 import { initialUploadingDataState } from "../../store/reducer";
-import { md } from "../../utils";
+import { md } from "../../lib/utils";
 import axios from "axios";
-import ImageCard from "../molecules/ImageCard";
-import UploadButton from "../molecules/UploadButton";
+import ImageCard from "../../lib/ImageCard";
+import UploadButton from "../../lib/UploadButton";
 
 const config = {
   POST: {

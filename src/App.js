@@ -25,7 +25,7 @@ import QuickAdd from "./components/notes/QuickAdd";
 import Stats from "./components/Stats";
 import Navigation from "./components/Navigation";
 
-import { getToken, hasToken } from "./authService";
+import { getToken, hasToken } from "./lib/authService";
 import config from "./config";
 
 axios.defaults.baseURL = config.SERVER_URL;

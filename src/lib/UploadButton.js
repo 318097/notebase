@@ -1,6 +1,6 @@
 import React, { useRef, Fragment } from "react";
 import { Button } from "antd";
-import { readFileContent } from "../../utils";
+import { readFileContent } from "./utils";
 
 const UploadButton = ({
   accept,

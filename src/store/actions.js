@@ -1,7 +1,7 @@
 import axios from "axios";
 import _ from "lodash";
 import { message } from "antd";
-import { getNextNote } from "../utils";
+import { getNextNote } from "../lib/utils";
 import {
   SET_SESSION,
   SET_SETTINGS,
@@ -222,21 +222,20 @@ export const setActiveCollection = (id) => async (dispatch) => {
   await dispatch(setFilter());
 };
 
-export const setSettings =
-  (updatedSettings, updateOnServer = false) =>
-  async (dispatch, getState) => {
-    const { settings = {}, session } = getState();
+// export const setSettings =
+//   (updatedSettings, updateOnServer = false) =>
+//   async (dispatch, getState) => {
+//     const { settings = {}, session } = getState();
 
-    if (updateOnServer)
-      await axios.put(`/users/${session.userId}/settings`, updatedSettings);
+//     if (updateOnServer) await axios.put(`/users/app-settings`, updatedSettings);
 
-    const newSettings = { ...settings, ...updatedSettings };
+//     const newSettings = { ...settings, ...updatedSettings };
 
-    dispatch({
-      type: SET_SETTINGS,
-      payload: newSettings,
-    });
-  };
+//     dispatch({
+//       type: SET_SETTINGS,
+//       payload: newSettings,
+//     });
+//   };
 
 export const toggleSettingsDrawer = (status) => ({
   type: TOGGLE_SETTINGS_DRAWER,
@@ -287,7 +286,7 @@ export const saveSettings = (input) => async (dispatch, getState) => {
     const newSettings = {
       notesApp: updatedSettings,
     };
-    await axios.put(`/users/${session._id}`, newSettings);
+    await axios.put(`/user/app-settings`, newSettings);
     await dispatch({ type: SET_SESSION, payload: newSettings });
     message.success(`Settings updated.`);
   } catch (err) {

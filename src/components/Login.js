@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import { setSessionInStorage } from "../authService";
-import { StyledSection } from "../styled";
+import { setSessionInStorage } from "../lib/authService";
+import { StyledSection } from "../lib/styled";
 import { setSession } from "../store/actions";
 import { connect } from "react-redux";
 
@@ -20,8 +20,10 @@ const Login = ({ history, setSession, session }) => {
     if (session && session.loggedIn) history.push("/");
   }, []);
 
-  const handleInput = (key) => ({ target: { value } }) =>
-    setForm((data) => ({ ...data, [key]: value }));
+  const handleInput =
+    (key) =>
+    ({ target: { value } }) =>
+      setForm((data) => ({ ...data, [key]: value }));
 
   const handleLogin = async () => {
     setLoading(true);

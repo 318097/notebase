@@ -1,6 +1,6 @@
 import _ from "lodash";
 import config from "../config";
-import { getNextNote } from "../utils";
+import { getNextNote } from "../lib/utils";
 import {
   SET_SESSION,
   SET_SETTINGS,

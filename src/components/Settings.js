@@ -5,7 +5,7 @@ import _ from "lodash";
 import short from "short-uuid";
 import { toggleSettingsDrawer, saveSettings } from "../store/actions";
 import SelectCollection from "./SelectCollection";
-import JSONEditor from "./molecules/JSONEditor";
+import JSONEditor from "../lib/JSONEditor";
 
 const { TextArea } = Input;
 
