@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import { connect } from "react-redux";
-import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import axios from "axios";
 import "./App.scss";
 import {
@@ -11,20 +11,13 @@ import {
   setQuickAddModalMeta,
 } from "./store/actions";
 import { Loading } from "@codedrops/react-ui";
-import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
-import Register from "./components/Register";
-import Login from "./components/Login";
-import NotFound from "./components/NotFound";
-import Notes from "./components/notes/Notes";
-import NoteView from "./components/notes/NoteView";
-import UploadContent from "./components/notes/UploadContent";
 import Settings from "./components/Settings";
 import AddNote from "./components/notes/AddNote";
 import QuickAdd from "./components/notes/QuickAdd";
-import Stats from "./components/Stats";
 import Navigation from "./components/Navigation";
-
+import Routes from "./routes";
+import _ from "lodash";
 import { getToken, hasToken } from "./lib/authService";
 import config from "./config";
 
@@ -47,6 +40,8 @@ const App = ({
   activePage,
   viewNoteMeta,
 }) => {
+  const hasAccess = _.get(session, "loggedIn");
+
   const [loading, setLoading] = useState(true);
   const viewNoteMetaRef = useRef();
   const activePageRef = useRef();
@@ -130,41 +125,10 @@ const App = ({
       <div className="contentWrapper">
         <Header />
         <div className="content">
-          {!loading && (
-            <Switch>
-              <Route path="/register" exact component={Register} />
-              <Route path="/login" exact component={Login} />
-              <ProtectedRoute
-                session={session}
-                path="/home"
-                exact
-                component={Notes}
-              />
-              <ProtectedRoute
-                session={session}
-                path="/note/:id"
-                exact
-                component={NoteView}
-              />
-              <ProtectedRoute
-                session={session}
-                path="/upload"
-                exact
-                component={UploadContent}
-              />
-              <ProtectedRoute
-                session={session}
-                path="/stats"
-                exact
-                component={Stats}
-              />
-              <Route path="/" exact render={() => <Redirect to="/home" />} />
-              <Route component={NotFound} />
-            </Switch>
-          )}
+          {!loading && <Routes session={session} hasAccess={hasAccess} />}
         </div>
       </div>
-      {session && session.loggedIn && (
+      {hasAccess && (
         <Fragment>
           {addModalVisibility && <AddNote />}
           {quickAddModalVisibility && <QuickAdd />}
