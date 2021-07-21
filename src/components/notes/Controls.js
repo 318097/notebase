@@ -249,13 +249,15 @@ const Controls = ({
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(transactionResponse);
 
-      const updatedData = {};
+      const updatedData = {
+        resources: [...resources],
+        fileNames: [...fileNames],
+      };
 
       _.forEach(_.get(transactionResponse, "data"), (upload) => {
         let resourceMatch = false;
-        updatedData["resources"] = resources.map((item) => {
+        updatedData["resources"] = updatedData["resources"].map((item) => {
           if (item.label === upload.original_filename) {
             resourceMatch = true;
             return { ...item, media: upload };
@@ -264,7 +266,7 @@ const Controls = ({
         });
 
         if (!resourceMatch) {
-          updatedData["fileNames"] = fileNames.map((item) =>
+          updatedData["fileNames"] = updatedData["fileNames"].map((item) =>
             item.label === upload.original_filename
               ? { ...item, media: upload }
               : item
@@ -507,13 +509,26 @@ const Controls = ({
           </div>
 
           <EmptyState input={fileNames}>
-            {fileNames.map((item, index) => (
-              <Popover key={item.label} placement="bottom" content={item.label}>
-                <div className="name-id" onClick={() => copy(item.label)}>
-                  {index + 1}
-                </div>
-              </Popover>
-            ))}
+            {fileNames.map((item, index) => {
+              const hasFile = _.get(item, "media");
+
+              const styles = hasFile ? { background: colors.green } : {};
+              return (
+                <Popover
+                  key={item.label}
+                  placement="bottom"
+                  content={item.label}
+                >
+                  <div
+                    className="name-id"
+                    style={styles}
+                    onClick={() => copy(item.label)}
+                  >
+                    {index + 1}
+                  </div>
+                </Popover>
+              );
+            })}
           </EmptyState>
         </Fragment>
       )}
