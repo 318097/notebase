@@ -18,11 +18,11 @@ import QuickAdd from "./components/notes/QuickAdd";
 import Navigation from "./components/Navigation";
 import Routes from "./routes";
 import _ from "lodash";
-import { getToken, hasToken } from "./lib/authService";
+import sessionManager from "./lib/sessionManager";
 import config from "./config";
 
 axios.defaults.baseURL = config.SERVER_URL;
-axios.defaults.headers.common["authorization"] = getToken();
+axios.defaults.headers.common["authorization"] = sessionManager.getToken();
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
 const App = ({
@@ -53,9 +53,9 @@ const App = ({
 
   useEffect(() => {
     const isAccountActive = async () => {
-      if (hasToken()) {
+      if (sessionManager.hasToken()) {
         try {
-          const token = getToken();
+          const token = sessionManager.getToken();
           const { data } = await axios.post(`/auth/account-status`, { token });
           setSession({ loggedIn: true, info: "ON_LOAD", ...data });
           getChains();

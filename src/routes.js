@@ -15,17 +15,11 @@ const routes = ({ session, hasAccess }) => {
       <Route path="/register" exact component={Register} />
       <Route path="/login" exact component={Login} />
       <ProtectedRoute hasAccess={hasAccess}>
-        <Route session={session} path="/home" exact component={Notes} />
-        <Route session={session} path="/note/:id" exact component={NoteView} />
-        <Route
-          session={session}
-          path="/upload"
-          exact
-          component={UploadContent}
-        />
-        <Route session={session} path="/stats" exact component={Stats} />
+        <Route path="/home" exact component={Notes} />
+        <Route path="/note/:id" exact component={NoteView} />
+        <Route path="/upload" exact component={UploadContent} />
+        <Route path="/stats" exact component={Stats} />
       </ProtectedRoute>
-
       <Route path="/" exact render={() => <Redirect to="/home" />} />
       <Route component={NotFound} />
     </Switch>

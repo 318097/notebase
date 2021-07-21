@@ -3,7 +3,7 @@ import { Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
 import { StyledSection } from "../lib/styled";
 import axios from "axios";
-// import { setSessionInStorage } from "../authService";
+// import sessionManager from "../sessionManager";
 // import { setSession } from "../store/actions";
 // import { connect } from "react-redux";
 

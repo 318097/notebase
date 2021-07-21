@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@codedrops/lib": "^0.0.16",
-    "@codedrops/react-ui": "^3.0.12",
+    "@codedrops/lib": "^0.0.32",
+    "@codedrops/react-ui": "^3.0.14",
     "antd": "^3.26.18",
     "axios": "^0.19.0",
     "chart.js": "^2.9.3",

@@ -77,7 +77,12 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
               labels: statusData.labels,
               datasets: [
                 {
-                  backgroundColor: [colors.green, colors.orange, colors.orchid],
+                  backgroundColor: [
+                    colors.green,
+                    colors.orange,
+                    colors.orchid,
+                    colors.coffee,
+                  ],
                   data: statusData.values,
                 },
               ],
@@ -181,7 +186,12 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
               labels: typesData.labels,
               datasets: [
                 {
-                  backgroundColor: [colors.coffee, colors.yellow, colors.blue],
+                  backgroundColor: [
+                    colors.coffee,
+                    colors.yellow,
+                    colors.blue,
+                    colors.orange,
+                  ],
                   data: typesData.values,
                 },
               ],

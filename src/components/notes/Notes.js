@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Table, Tag, Pagination, Badge } from "antd";
-import colors from "@codedrops/react-ui";
-import { MessageWrapper } from "../../lib/styled";
+import colors, { EmptyState } from "@codedrops/react-ui";
 import NoteCard from "./NoteCard";
 import {
   setNoteToEdit,
@@ -99,8 +98,8 @@ const Notes = ({
 
   return (
     <section ref={scrollRef} style={{ paddingBottom: "30px" }}>
-      {notes.length ? (
-        <>
+      {appLoading ? null : (
+        <EmptyState input={notes}>
           {displayType === "CARD" ? (
             <CardView
               notes={notes}
@@ -125,9 +124,7 @@ const Notes = ({
               {...others}
             />
           )}
-        </>
-      ) : appLoading ? null : (
-        <MessageWrapper>Empty</MessageWrapper>
+        </EmptyState>
       )}
     </section>
   );

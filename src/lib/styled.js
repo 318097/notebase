@@ -18,11 +18,4 @@ const StyledSection = styled.section`
   }
 `;
 
-const MessageWrapper = styled.div`
-  font-size: 3.6rem;
-  text-align: center;
-  color: lightgrey;
-  font-family: Cascadia-Bold;
-`;
-
-export { StyledSection, MessageWrapper };
+export { StyledSection };

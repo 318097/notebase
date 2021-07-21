@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import { setSessionInStorage } from "../lib/authService";
+import sessionManager from "../lib/sessionManager";
 import { StyledSection } from "../lib/styled";
 import { setSession } from "../store/actions";
 import { connect } from "react-redux";
@@ -30,14 +30,14 @@ const Login = ({ history, setSession, session }) => {
     try {
       const { data } = await axios.post("/auth/login", form);
 
-      setSessionInStorage(data);
+      sessionManager.set(data);
       await setSession({
         loggedIn: true,
         info: "LOGIN",
         ...data,
       });
       axios.defaults.headers.common["authorization"] = data.token;
-      history.push("/");
+      history.push("/home");
     } catch (err) {
       const { response: { data: errorMessage = "Error." } = {} } = err;
       message.error(errorMessage);

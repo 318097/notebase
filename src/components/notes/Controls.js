@@ -17,12 +17,11 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import moment from "moment";
 import _ from "lodash";
-import colors, { Icon, Tag } from "@codedrops/react-ui";
+import colors, { Icon, Tag, EmptyState } from "@codedrops/react-ui";
 import { saveSettings, setAppLoading, updateNote } from "../../store/actions";
 import { copyToClipboard, generateFormData } from "../../lib/utils";
 import short from "short-uuid";
 import { statusFilter } from "../../constants";
-import EmptyState from "../../lib/EmptyState";
 import ImageCard from "../../lib/ImageCard";
 import UploadButton from "../../lib/UploadButton";
 

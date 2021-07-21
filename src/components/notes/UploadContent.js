@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, Fragment } from "react";
 import { Button, message, Tag, Select, Divider, Modal } from "antd";
-import { Card, Icon } from "@codedrops/react-ui";
+import { Card, Icon, EmptyState } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import uuid from "uuid";
 import _ from "lodash";
-import { MessageWrapper } from "../../lib/styled";
 import SelectCollection from "../SelectCollection";
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
 import { initialUploadingDataState } from "../../store/reducer";
@@ -394,14 +393,13 @@ const UploadContent = ({
         </div>
       </StyledPageHeader>
 
-      {data.length ? (
+      <EmptyState input={data}>
         <Wrapper>
           {data.map((item, i) => {
             if (dataType === "RESOURCES") {
               // const title = _.get(item, "file.name", "");
               return <ImageCard key={i} {...item} />;
             }
-
             const { title = "", content = "", tags = [], viewed } = item;
             return (
               <div
@@ -421,7 +419,6 @@ const UploadContent = ({
                     ))}
                   </div>
                 </Card>
-
                 <span className="index-number">#{i + 1}</span>
                 <div className="actions">
                   <Icon
@@ -447,9 +444,7 @@ const UploadContent = ({
             <div dangerouslySetInnerHTML={{ __html: rawData }} />
           </Modal>
         </Wrapper>
-      ) : (
-        <MessageWrapper>EMPTY</MessageWrapper>
-      )}
+      </EmptyState>
     </section>
   );
 };
