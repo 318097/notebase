@@ -10,15 +10,17 @@ const StyledCard = styled(Card)`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding: 10px;
   position: relative;
   img {
     max-width: 100%;
+    max-height: inherit;
   }
   h3 {
     position: absolute;
     bottom: 4px;
-    left: 8px;
-    font-size: 1rem;
+    left: 10px;
+    font-size: 0.9rem;
     color: ${colors.steel};
   }
 `;

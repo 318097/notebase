@@ -11,6 +11,7 @@ import {
   Modal,
   Empty,
   Drawer,
+  Button,
 } from "antd";
 import axios from "axios";
 import styled from "styled-components";
@@ -36,6 +37,7 @@ const ControlsWrapper = styled.div`
   border-radius: 4px;
   border: 1px solid ${colors.shade2};
   box-shadow: 3px 3px 3px ${colors.shade2};
+  position: relative;
   .header {
     display: flex;
     align-items: center;
@@ -46,23 +48,6 @@ const ControlsWrapper = styled.div`
     font-size: 1rem;
     font-family: Cascadia-SemiBold;
   }
-  /* .slug {
-    background: ${colors.yellow};
-    width: 100%;
-    color: white;
-    padding: 4px;
-    border-radius: 2px;
-    font-size: 0.9rem;
-    transition: 0.4s;
-    cursor: pointer;
-    margin-bottom: 6px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    &:hover {
-      background: ${colors.blue};
-    }
-  } */
   .name-id {
     background: ${colors.strokeThree};
     color: white;
@@ -115,6 +100,12 @@ const ControlsWrapper = styled.div`
       z-index: 1;
     }
   }
+  .caption-modal-button {
+    position: absolute;
+    right: -50px;
+    bottom: 21px;
+    transform: rotate(-90deg);
+  }
 `;
 
 const Controls = ({
@@ -147,12 +138,13 @@ const Controls = ({
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
   const [showCaptionDrawer, setCaptionDrawerVisibility] = useState(false);
-  const [showImagesModal, setImagesModal] = useState(false);
+  const [showMediaDrawer, setMediaDrawer] = useState(false);
   const [editCaptionId, setEditCaptionId] = useState(null);
   const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
   const [files, setFiles] = useState({});
   const [blockSocialPlatforms, setBlockSocialPlatforms] = useState(true);
+  const [uploadingStatus, setUploading] = useState(false);
   const [socialPlatformCaptionCheckAll, setSocialPlatformCaptionCheckAll] =
     React.useState();
 
@@ -236,7 +228,7 @@ const Controls = ({
   // );
 
   const uploadFiles = async () => {
-    setAppLoading(true);
+    setUploading(true);
     try {
       const formData = generateFormData({
         type: "RESOURCES",
@@ -286,7 +278,7 @@ const Controls = ({
     } catch (err) {
       console.log(err);
     } finally {
-      setAppLoading(false);
+      setUploading(false);
     }
   };
 
@@ -401,36 +393,6 @@ const Controls = ({
 
   const Naming = (
     <ControlsWrapper className="naming">
-      <div className="fcc">
-        <UploadButton
-          accept={".png"}
-          onFileRead={setFiles}
-          customButton={({ openFileExplorer }) => {
-            const status = _.get(files, "data.length") ? "selected" : "empty";
-            return (
-              <Tag
-                color="green"
-                onClick={status === "selected" ? uploadFiles : openFileExplorer}
-              >
-                {status === "selected"
-                  ? `Upload ${_.get(files, "data.length", 0)} files`
-                  : "Select Files"}
-              </Tag>
-            );
-          }}
-        />
-        <Tag color="nbOrange" onClick={() => setImagesModal(true)}>
-          Media
-        </Tag>
-        {!_.isEmpty(socialPlatformsList) && (
-          <Tag onClick={() => setCaptionDrawerVisibility(true)} color="nbPink">
-            Caption
-          </Tag>
-        )}
-      </div>
-
-      <div className="divider" />
-
       <div className="header">
         <h4>Naming/Suffix</h4>
       </div>
@@ -533,6 +495,32 @@ const Controls = ({
         </Fragment>
       )}
 
+      <div className="divider" />
+
+      <div className="flex center gap-8">
+        <UploadButton
+          accept={".png"}
+          onFileRead={setFiles}
+          customButton={({ openFileExplorer }) => {
+            const status = _.get(files, "data.length") ? "selected" : "empty";
+            return (
+              <Button
+                loading={uploadingStatus}
+                size="small"
+                onClick={status === "selected" ? uploadFiles : openFileExplorer}
+              >
+                {status === "selected"
+                  ? `Upload ${_.get(files, "data.length", 0)} files`
+                  : "Upload Files"}
+              </Button>
+            );
+          }}
+        />
+        <Button size="small" onClick={() => setMediaDrawer(true)}>
+          Media
+        </Button>
+      </div>
+
       {!!hashtags && (
         <Fragment>
           <div className="divider"></div>
@@ -542,6 +530,16 @@ const Controls = ({
           </div>
           <div className="hashtag">{hashtags}</div>
         </Fragment>
+      )}
+
+      {!_.isEmpty(socialPlatformsList) && (
+        <Button
+          className="caption-modal-button"
+          size="small"
+          onClick={() => setCaptionDrawerVisibility(true)}
+        >
+          Caption
+        </Button>
       )}
     </ControlsWrapper>
   );
@@ -659,28 +657,31 @@ const Controls = ({
   ];
 
   const ImagesModal = (
-    <Modal
+    <Drawer
       title={"Media"}
-      centered={true}
-      width={"50vw"}
-      wrapClassName="react-ui images-modal"
-      visible={showImagesModal}
-      footer={null}
-      onCancel={() => setImagesModal(false)}
+      width={600}
+      closable={true}
+      className="react-ui media-drawer"
+      visible={showMediaDrawer}
+      onClose={() => setMediaDrawer(false)}
     >
-      <h3 className="mb">Resources</h3>
-      {resources
-        .filter((item) => item.media)
-        .map((item, i) => (
-          <ImageCard key={i} {...item} />
-        ))}
-      <h3 className="mt mb">Files</h3>
-      {fileNames
-        .filter((item) => item.media)
-        .map((item, i) => (
-          <ImageCard key={i} {...item} />
-        ))}
-    </Modal>
+      <h5 className="mt mb">Files</h5>
+      <div className="image-container">
+        {fileNames
+          .filter((item) => item.media)
+          .map((item, i) => (
+            <ImageCard key={i} {...item} />
+          ))}
+      </div>
+      <h5 className="mb">Resources</h5>
+      <div className="image-container">
+        {resources
+          .filter((item) => item.media)
+          .map((item, i) => (
+            <ImageCard key={i} {...item} />
+          ))}
+      </div>
+    </Drawer>
   );
 
   const CaptionModal = (
