@@ -66,7 +66,8 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
   const typesData = getChartData({ data: stats, type: "types" });
   const statusData = getChartData({ data: stats, type: "status" });
   const createdOnData = getChartData({ data: stats, type: "created" });
-
+  const selectedColors = Object.values(colors).slice(0, 7);
+  const barColors = [...selectedColors, ...selectedColors, ...selectedColors];
   return (
     <StyledContainer>
       <div className="wrapper">
@@ -107,7 +108,7 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
               labels: createdOnData.labels,
               datasets: [
                 {
-                  backgroundColor: Object.values(colors),
+                  backgroundColor: barColors,
                   data: createdOnData.values,
                 },
               ],
