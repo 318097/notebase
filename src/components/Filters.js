@@ -62,11 +62,7 @@ const Filters = ({
     let extraFilters = {};
     if (props.length === 1) {
       const [key, value] = props[0];
-      if (
-        key === "status" &&
-        value.length === 1 &&
-        _.includes(value, ["POSTED"])
-      )
+      if (key === "status" && value.length === 1 && _.includes(value, "POSTED"))
         extraFilters = { sortFilter: "liveId", sortOrder: "DESC" };
       else if (key === "status")
         extraFilters = { sortFilter: "createdAt", sortOrder: "DESC" };
