@@ -68,3 +68,4 @@
 - [x] Keyboard events dont work when a note is opened for the first time. It works after going back and then opening a note again
 - [x] Hide filters when empty dropdown (ex., tags)
 - [ ] Fix autocomplete
+- [x] Debounce for filters

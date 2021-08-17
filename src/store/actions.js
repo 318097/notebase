@@ -242,6 +242,14 @@ export const toggleSettingsDrawer = (status) => ({
   payload: status,
 });
 
+const refetch = _.debounce(
+  (dispatch) =>
+    dispatch(
+      window.location.pathname === "/stats" ? fetchStats() : fetchNotes()
+    ),
+  500
+);
+
 export const setFilter =
   (filterUpdate = {}, resetPage = true) =>
   async (dispatch, getState) => {
@@ -252,9 +260,7 @@ export const setFilter =
     const updatedFiters = { ...filters, ...filterUpdate };
     if (resetPage) updatedFiters["page"] = 1;
     dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
-    dispatch(
-      window.location.pathname === "/stats" ? fetchStats() : fetchNotes()
-    );
+    refetch(dispatch);
   };
 
 export const getChains = () => async (dispatch, getState) => {

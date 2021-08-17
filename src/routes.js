@@ -9,7 +9,7 @@ import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
 import Stats from "./components/Stats";
 
-const routes = ({ session, hasAccess }) => {
+const routes = ({ hasAccess }) => {
   return (
     <Switch>
       <Route path="/register" exact component={Register} />
