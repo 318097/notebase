@@ -58,7 +58,7 @@ const Wrapper = styled.div`
         margin-bottom: 16px;
         .chain-item-id {
           background: ${colors.strokeOne};
-          border-radius: 50%;
+          border-radius: 4px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -158,7 +158,7 @@ const Wrapper = styled.div`
     grid-column: 2;
     position: relative;
     .prev {
-      right: 9px;
+      left: 0px;
     }
   }
   .next-icon {
@@ -166,7 +166,7 @@ const Wrapper = styled.div`
     position: relative;
     .next {
       transform: rotate(180deg);
-      left: 9px;
+      right: 0px;
     }
   }
   .prev,

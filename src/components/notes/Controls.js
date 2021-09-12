@@ -51,7 +51,7 @@ const ControlsWrapper = styled.div`
   .name-id {
     background: ${colors.strokeThree};
     color: white;
-    border-radius: 50%;
+    border-radius: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -105,6 +105,7 @@ const ControlsWrapper = styled.div`
     right: -50px;
     bottom: 21px;
     transform: rotate(-90deg);
+    z-index: 10;
   }
 `;
 

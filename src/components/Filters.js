@@ -87,7 +87,7 @@ const Filters = ({
       style={{ width: "120px" }}
       className="form-field"
       placeholder="Search..."
-      defaultValue={filters.search}
+      defaultValue={filters?.search}
       onSearch={(value) => setFilterValues({ search: value })}
     />
   );

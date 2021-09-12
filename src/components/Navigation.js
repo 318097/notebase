@@ -20,7 +20,7 @@ const StyledNavigation = styled.div`
   background: ${colors.bar};
   padding: 10px;
   .app-name {
-    color: ${colors.green};
+    color: ${colors.cdGreen};
     font-size: 2.6rem;
     position: relative;
     top: -6px;
@@ -35,10 +35,11 @@ const StyledNavigation = styled.div`
       font-size: 20px;
       margin: 10px 0 0 0;
       &.active {
-        color: ${colors.green};
+        color: ${colors.cdGreen};
       }
       &:hover {
-        background: ${colors.green} !important;
+        border-radius: 4px !important;
+        background: ${colors.cdGreen} !important;
         color: ${colors.white} !important;
       }
     }
