@@ -77,13 +77,14 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
 export const addNote = (notes, collection) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection } = getState();
+    const { activeCollection, filters } = getState();
     const addToCollection = collection || activeCollection;
 
     const data = [].concat(notes);
     await axios.post(`/posts?collectionId=${addToCollection}`, { data });
     dispatch({
       type: UPDATE_FILTER,
+      payload: filters,
     });
     message.success(`Success.`);
   } finally {

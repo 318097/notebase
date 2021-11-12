@@ -112,7 +112,7 @@ const AddNote = ({
 
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
-  const [createAnotherPost, setCreateAnotherPost] = useState(true);
+  const [createAnotherPost, setCreateAnotherPost] = useState(false);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
   const [collection, setCollection] = useState();
   const [note, setNote] = useState(INITIAL_STATE);
@@ -154,16 +154,17 @@ const AddNote = ({
     setLoading(true);
     try {
       if (mode === "edit") await updateNote({ ...note });
-      else if (mode === "add")
+      else if (mode === "add") {
+        const isContentEmpty = note.content === "```js\n\n```";
         await addNote(
           {
             ...note,
             userId: session.uid,
-            content: note.content === "```js\n\n```" ? "" : note.content,
+            content: isContentEmpty ? "" : note.content,
           },
           collection
         );
-      else await updateUploadNote({ ...note, viewed: true });
+      } else await updateUploadNote({ ...note, viewed: true });
     } finally {
       setLoading(false);
       handleClose("add-event");
