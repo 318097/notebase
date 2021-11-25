@@ -23,7 +23,7 @@ import config from "./config";
 
 axios.defaults.baseURL = config.SERVER_URL;
 axios.defaults.headers.common["authorization"] = sessionManager.getToken();
-axios.defaults.headers.common["external-source"] = "NOTES_APP";
+axios.defaults.headers.common["external-source"] = "NOTEBASE";
 
 const App = ({
   setSession,

@@ -1,5 +1,5 @@
 import { SessionManager } from "@codedrops/lib";
 
-const sessionManager = new SessionManager({ key: "notes-app" });
+const sessionManager = new SessionManager({ key: "notebase" });
 
 export default sessionManager;
