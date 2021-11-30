@@ -7,25 +7,24 @@ import { setActiveCollection } from "../store/actions";
 const { Option } = Select;
 
 const SelectCollection = ({
-  collection,
+  value,
   session,
   setActiveCollection,
-  setCollection,
+  handleChange,
   style = {},
   resetFilter,
-  setFilterValues,
 }) => {
-  const handleChange = (_id) => {
-    setCollection ? setCollection(_id) : setActiveCollection(_id);
-    if (resetFilter) setFilterValues();
+  const onChange = (_id) => {
+    handleChange ? handleChange(_id) : setActiveCollection(_id);
+    if (resetFilter) resetFilter();
   };
 
   return (
     <Select
-      onChange={handleChange}
+      onChange={onChange}
       style={{ width: 120, ...style }}
       placeholder="Collections"
-      value={collection}
+      value={value}
     >
       {_.get(session, "notebase", []).map(({ _id, name }) => (
         <Option key={_id} value={_id}>

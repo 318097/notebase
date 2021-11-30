@@ -75,9 +75,8 @@ const Filters = ({
   const ActiveCollection = (
     <SelectCollection
       style={{ margin: "2px" }}
-      collection={activeCollectionId}
-      resetFilter={true}
-      setFilterValues={() => setFilterValues({ ...INITIAL_STATE.filters })}
+      value={activeCollectionId}
+      resetFilter={() => setFilterValues({ ...INITIAL_STATE.filters })}
     />
   );
 

@@ -18,7 +18,7 @@ const Settings = ({
 }) => {
   const [collectionList, setCollectionList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [active, setActive] = useState(activeCollectionId);
+  const [activeId, setActiveId] = useState(activeCollectionId);
   const [showJSON, setShowJSON] = useState(true);
 
   useEffect(() => {
@@ -26,15 +26,14 @@ const Settings = ({
     setCollectionList(session.notebase);
   }, [session.notebase]);
 
-  const { _id: settingId, ...settingData } =
-    _.find(collectionList, { _id: active }) || [];
+  const activeSettings = _.find(collectionList, { _id: activeId }) || [];
 
   const handleClose = () => toggleSettingsDrawer(false);
 
   const handleSave = (data) => {
     try {
       setLoading(true);
-      saveSettings({ ...data, _id: settingId });
+      saveSettings(data);
       handleClose();
     } finally {
       setLoading(false);
@@ -53,20 +52,20 @@ const Settings = ({
     >
       <Header
         setCollectionList={setCollectionList}
-        active={active}
-        setActive={setActive}
+        activeId={activeId}
+        setActiveId={setActiveId}
         showJSON={showJSON}
         setShowJSON={setShowJSON}
       />
       {showJSON ? (
         <JSONEditor
-          data={settingData}
+          data={activeSettings}
           handleSave={handleSave}
           loading={loading}
         />
       ) : (
-        <CollectionInfo
-          settingData={settingData}
+        <CollectionSetting
+          data={activeSettings}
           handleSave={handleSave}
           loading={loading}
         />
@@ -77,20 +76,20 @@ const Settings = ({
 
 const Header = ({
   setCollectionList,
-  active,
-  setActive,
+  activeId,
+  setActiveId,
   showJSON,
   setShowJSON,
 }) => {
   const addNewCollection = () => {
     const _id = "NEW_COLLECTION";
     setCollectionList((prev) => [...prev, { _id, ...DEFAULT_SETTING_STATE }]);
-    setActive(_id);
+    setActiveId(_id);
   };
 
   return (
     <div className="flex space-between mb">
-      <SelectCollection collection={active} setCollection={setActive} />
+      <SelectCollection value={activeId} handleChange={setActiveId} />
       <div className="fcc">
         <Button
           type={showJSON ? "primary" : "dashed"}
@@ -105,24 +104,25 @@ const Header = ({
   );
 };
 
-const CollectionInfo = ({ settingData, handleSave, loading }) => {
-  const [data, setData] = useState({});
+const CollectionSetting = ({ data, handleSave, loading }) => {
+  const [localData, setLocalData] = useState({});
   const [newTag, setNewTag] = useState({ label: "", color: "" });
 
   useEffect(() => {
-    if (!settingData) return;
-    setData({ ...settingData });
-  }, [settingData]);
+    if (!data) return;
+    setLocalData({ ...data });
+  }, [data]);
 
-  const handleChange = (update) => setData((prev) => ({ ...prev, ...update }));
+  const handleChange = (update) =>
+    setLocalData((prev) => ({ ...prev, ...update }));
 
   const addNewTag = () => {
-    const tags = _.get(data, "tags");
+    const tags = _.get(localData, "tags");
     handleChange({ tags: [...tags, newTag] });
     setNewTag({ label: "", color: "" });
   };
 
-  const { name = "", tags = [] } = data;
+  const { name = "", tags = [] } = localData;
   return (
     <div className="settings-content">
       <div className="setting-group">
@@ -171,7 +171,7 @@ const CollectionInfo = ({ settingData, handleSave, loading }) => {
         <TextArea
           rows={6}
           placeholder="Caption"
-          value={data.caption}
+          value={localData.caption}
           onChange={(e) => handleChange({ caption: e.target.value })}
         />
       </div>
@@ -179,7 +179,7 @@ const CollectionInfo = ({ settingData, handleSave, loading }) => {
         disabled={loading}
         type="primary"
         style={{ marginTop: "20px" }}
-        onClick={() => handleSave(data)}
+        onClick={() => handleSave(localData)}
       >
         Save
       </Button>

@@ -60,17 +60,13 @@ const QuickAdd = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [collection, setCollection] = useState(activeCollectionId);
+  const [activeId, setActiveId] = useState(activeCollectionId);
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState(INITIAL_STATE);
   const [activeTab, setActiveTab] = useState("TITLE_ONLY");
 
-  const { name: activeCollectionName, tags: activeCollectionTags } = _.find(
-    session.notebase,
-    { _id: collection },
-    {}
-  );
-  const tagList = _.map(activeCollectionTags, ({ label }) => ({
+  const activeSettings = _.find(session.notebase, { _id: activeId }, {});
+  const tagList = _.map(activeSettings.tags, ({ label }) => ({
     label,
     value: label,
   }));
@@ -102,7 +98,7 @@ const QuickAdd = ({
         tags,
       }));
 
-      await addNote(inputData, collection);
+      await addNote(inputData, activeId);
       clearData();
     } finally {
       setLoading(false);
@@ -175,7 +171,7 @@ const QuickAdd = ({
           Cancel
         </Button>,
         <Popconfirm
-          title={`Add ${totalItems} item(s) to '${activeCollectionName}'`}
+          title={`Add ${totalItems} item(s) to '${activeSettings.Name}'`}
           onConfirm={handleOk}
           // onCancel={cancel}
           okText="Yes"
@@ -197,9 +193,9 @@ const QuickAdd = ({
         type={"card"}
         tabBarExtraContent={
           <SelectCollection
-            collection={collection}
-            setCollection={(value) => {
-              setCollection(value);
+            value={activeId}
+            handleChange={(value) => {
+              setActiveId(value);
               setTags([]);
             }}
             style={{ marginRight: "8px" }}

@@ -325,8 +325,8 @@ const AddNote = ({
             </Radio.Group>
 
             <SelectCollection
-              collection={collection}
-              setCollection={(value) => {
+              value={collection}
+              handleChange={(value) => {
                 setCollection(value);
                 // if (mode !== "add") setData({ collectionId: value });
               }}

@@ -267,10 +267,7 @@ const UploadContent = ({
       visible: !isResourceUpload,
       component: (
         <Fragment>
-          <SelectCollection
-            collection={collection}
-            setCollection={setCollection}
-          />
+          <SelectCollection value={collection} handleChange={setCollection} />
 
           <Select
             style={{ minWidth: "80px" }}
