@@ -54,13 +54,13 @@ const QuickAdd = ({
   addNote,
   modalVisibility,
   appLoading,
-  activeCollection,
+  activeCollectionId,
   setQuickAddModalMeta,
   session,
 }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [collection, setCollection] = useState(activeCollection);
+  const [collection, setCollection] = useState(activeCollectionId);
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState(INITIAL_STATE);
   const [activeTab, setActiveTab] = useState("TITLE_ONLY");
@@ -283,12 +283,12 @@ const QuickAdd = ({
 const mapStateToProps = ({
   quickAddModalMeta: { visibility } = {},
   session,
-  activeCollection,
+  activeCollectionId,
   appLoading,
 }) => ({
   modalVisibility: visibility,
   session,
-  activeCollection,
+  activeCollectionId,
   appLoading,
 });
 

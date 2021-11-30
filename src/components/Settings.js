@@ -12,13 +12,13 @@ const { TextArea } = Input;
 const Settings = ({
   settingsDrawerVisibility,
   session,
-  activeCollection,
+  activeCollectionId,
   toggleSettingsDrawer,
   saveSettings,
 }) => {
   const [collectionList, setCollectionList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [active, setActive] = useState(activeCollection);
+  const [active, setActive] = useState(activeCollectionId);
   const [showJSON, setShowJSON] = useState(true);
 
   useEffect(() => {
@@ -190,11 +190,11 @@ const CollectionInfo = ({ settingData, handleSave, loading }) => {
 const mapStateToProps = ({
   session,
   settingsDrawerVisibility,
-  activeCollection,
+  activeCollectionId,
 }) => ({
   session: session || {},
   settingsDrawerVisibility,
-  activeCollection,
+  activeCollectionId,
 });
 
 export default connect(mapStateToProps, {

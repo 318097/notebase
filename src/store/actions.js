@@ -36,14 +36,14 @@ export const setKey = (obj) => ({
 export const fetchNotes = () => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { filters, notes = [], activeCollection, displayType } = getState();
+    const { filters, notes = [], activeCollectionId, displayType } = getState();
 
     const data =
       filters && filters.page > 1 && displayType === "CARD" ? [...notes] : [];
 
     const {
       data: { posts, meta },
-    } = await axios.get(`/posts?collectionId=${activeCollection}`, {
+    } = await axios.get(`/posts?collectionId=${activeCollectionId}`, {
       params: filters,
     });
     data.push(...posts);
@@ -57,7 +57,7 @@ export const fetchNotes = () => async (dispatch, getState) => {
 };
 
 export const getNoteById = (noteId) => async (dispatch, getState) => {
-  const { notes, activeCollection } = getState();
+  const { notes, activeCollectionId } = getState();
   dispatch(setAppLoading(true));
 
   let viewPost = notes.find((note) => note._id === noteId);
@@ -65,7 +65,7 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
   if (!viewPost) {
     const {
       data: { post },
-    } = await axios.get(`/posts/${noteId}?collectionId=${activeCollection}`);
+    } = await axios.get(`/posts/${noteId}?collectionId=${activeCollectionId}`);
     viewPost = post;
   }
 
@@ -76,8 +76,8 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
 export const addNote = (notes, collection) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection, filters } = getState();
-    const addToCollection = collection || activeCollection;
+    const { activeCollectionId, filters } = getState();
+    const addToCollection = collection || activeCollectionId;
 
     const data = [].concat(notes);
     await axios.post(`/posts?collectionId=${addToCollection}`, { data });
@@ -107,11 +107,11 @@ export const setNoteToEdit =
 export const updateNote = (note, action) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection } = getState();
+    const { activeCollectionId } = getState();
     const {
       data: { result },
     } = await axios.put(
-      `/posts/${note._id}?collectionId=${activeCollection}&action=${action}`,
+      `/posts/${note._id}?collectionId=${activeCollectionId}&action=${action}`,
       note
     );
 
@@ -194,10 +194,10 @@ export const logout = () => ({
 export const fetchStats = () => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection, filters } = getState();
+    const { activeCollectionId, filters } = getState();
     const {
       data: { stats },
-    } = await axios.get(`/posts/stats?collectionId=${activeCollection}`, {
+    } = await axios.get(`/posts/stats?collectionId=${activeCollectionId}`, {
       params: filters,
     });
 
@@ -251,10 +251,10 @@ export const setFilter =
 export const getChains = () => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection } = getState();
+    const { activeCollectionId } = getState();
     const {
       data: { chains },
-    } = await axios.get(`/posts/chains?collectionId=${activeCollection}`);
+    } = await axios.get(`/posts/chains?collectionId=${activeCollectionId}`);
 
     dispatch({ type: FETCH_CHAINS, payload: chains });
   } catch (err) {

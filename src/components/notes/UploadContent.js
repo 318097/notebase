@@ -102,13 +102,13 @@ const UploadContent = ({
   },
   setUploadingData,
   addNote,
-  activeCollection,
+  activeCollectionId,
   settings,
 }) => {
   const [viewRawData, setViewRawData] = useState(false);
   const [requireParsing, setRequireParsing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [collection, setCollection] = useState(activeCollection);
+  const [collection, setCollection] = useState(activeCollectionId);
   // const [fileParsing, setFileParsing] = useState();
 
   useEffect(() => {
@@ -449,9 +449,9 @@ const UploadContent = ({
   );
 };
 
-const mapStateToProps = ({ uploadingData, activeCollection, settings }) => ({
+const mapStateToProps = ({ uploadingData, activeCollectionId, settings }) => ({
   uploadingData,
-  activeCollection,
+  activeCollectionId,
   settings,
 });
 

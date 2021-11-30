@@ -61,7 +61,7 @@ const INITIAL_STATE = {
   settingsDrawerVisibility: false,
   retainPage: false,
   showAllFilters: false,
-  activeCollection: undefined,
+  activeCollectionId: undefined,
   meta: undefined,
   session: undefined,
   viewNote: undefined,
@@ -76,10 +76,10 @@ const getSettings = (list, _id) => _.find(list, { _id }) || {};
 const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SET_SESSION:
-      const { activeCollection, session } = state;
+      const { activeCollectionId, session } = state;
       const updatedSession = { ...(session || {}), ...action.payload };
       const newActiveCollectionId =
-        activeCollection || _.get(updatedSession, "notebase.0._id", "");
+        activeCollectionId || _.get(updatedSession, "notebase.0._id", "");
 
       const settings = getSettings(
         updatedSession.notebase,
@@ -89,7 +89,7 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         session: updatedSession,
-        activeCollection: newActiveCollectionId,
+        activeCollectionId: newActiveCollectionId,
         settings,
       };
     case SET_APP_LOADING:
@@ -104,7 +104,7 @@ const reducer = (state = INITIAL_STATE, action) => {
     case SET_ACTIVE_COLLECTION:
       return {
         ...state,
-        activeCollection: action.payload,
+        activeCollectionId: action.payload,
         settings: getSettings(state.session.notebase, action.payload),
       };
     case TOGGLE_SETTINGS_DRAWER:
@@ -233,4 +233,5 @@ const reducer = (state = INITIAL_STATE, action) => {
 };
 
 export default reducer;
+
 export { INITIAL_STATE, INITIAL_UPLOADING_DATA_STATE };

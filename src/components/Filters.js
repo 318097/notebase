@@ -52,7 +52,7 @@ const Filters = ({
   filters,
   notes,
   meta,
-  activeCollection,
+  activeCollectionId,
   settings,
   displayType,
   showAllFilters,
@@ -75,7 +75,7 @@ const Filters = ({
   const ActiveCollection = (
     <SelectCollection
       style={{ margin: "2px" }}
-      collection={activeCollection}
+      collection={activeCollectionId}
       resetFilter={true}
       setFilterValues={() => setFilterValues({ ...INITIAL_STATE.filters })}
     />
@@ -336,7 +336,7 @@ const mapStateToProps = ({
   filters,
   notes,
   meta,
-  activeCollection,
+  activeCollectionId,
   settings,
   displayType,
   showAllFilters,
@@ -344,7 +344,7 @@ const mapStateToProps = ({
   filters,
   notes,
   meta,
-  activeCollection,
+  activeCollectionId,
   settings,
   displayType,
   showAllFilters,

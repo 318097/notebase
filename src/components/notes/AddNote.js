@@ -106,7 +106,7 @@ const AddNote = ({
   updateUploadNote,
   setNextNoteForEditing,
   appLoading,
-  activeCollection,
+  activeCollectionId,
 }) => {
   const searchDbDebounced = useRef();
 
@@ -127,7 +127,7 @@ const AddNote = ({
   useEffect(() => {
     if (modalVisibility) {
       if (mode === "add") {
-        setCollection(activeCollection);
+        setCollection(activeCollectionId);
       } else {
         const clone = { ...selectedNote };
         delete clone.updatedAt;
@@ -188,7 +188,7 @@ const AddNote = ({
     try {
       //  setAppLoading(true);
       const result = await axios.get(
-        `/posts?collectionId=${activeCollection}`,
+        `/posts?collectionId=${activeCollectionId}`,
         {
           params: {
             search: value,
@@ -450,7 +450,7 @@ const AddNote = ({
 const mapStateToProps = ({
   modalMeta: { visibility, mode, selectedNote },
   session,
-  activeCollection,
+  activeCollectionId,
   settings,
   appLoading,
 }) => ({
@@ -462,7 +462,7 @@ const mapStateToProps = ({
     label,
     value: label,
   })),
-  activeCollection,
+  activeCollectionId,
   appLoading,
 });
 
