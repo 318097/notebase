@@ -37,7 +37,7 @@ const initialState = {
   modalMeta: {
     visibility: false,
     mode: undefined,
-    selectedNote: null,
+    selectedNote: undefined,
   },
   filters: {
     tags: undefined,
@@ -52,12 +52,12 @@ const initialState = {
     page: 1,
     limit: config.LIMIT,
   },
-  activeCollection: null,
+  activeCollection: undefined,
   notes: [],
-  meta: null,
-  session: null,
+  meta: undefined,
+  session: undefined,
   settings: {},
-  viewNote: null,
+  viewNote: undefined,
   settingsDrawerVisibility: false,
   stats: {},
   displayType: "CARD",
@@ -68,28 +68,29 @@ const initialState = {
   retainPage: false,
   showAllFilters: false,
   chains: [],
-  activePage: null,
-  viewNoteMeta: null,
+  activePage: undefined,
+  viewNoteMeta: undefined,
 };
+
+const getSettings = (list, _id) => _.find(list, { _id }) || {};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_SESSION:
       const { activeCollection, session } = state;
       const updatedSession = { ...(session || {}), ...action.payload };
-      const currentSettingKey =
-        activeCollection ||
-        Object.keys(_.get(updatedSession, "notesApp", {}))[0] ||
-        "";
+      const newActiveCollectionId =
+        activeCollection || _.get(updatedSession, "notebase.0._id", "");
 
-      const settings = currentSettingKey
-        ? _.get(updatedSession, ["notesApp", currentSettingKey], {})
-        : {};
+      const settings = getSettings(
+        updatedSession.notebase,
+        newActiveCollectionId
+      );
 
       return {
         ...state,
         session: updatedSession,
-        activeCollection: currentSettingKey,
+        activeCollection: newActiveCollectionId,
         settings,
       };
     case SET_SETTINGS:
@@ -110,7 +111,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         activeCollection: action.payload,
-        settings: _.get(state, ["session", "notesApp", action.payload], {}),
+        settings: getSettings(state.session.notebase, action.payload),
       };
     case TOGGLE_SETTINGS_DRAWER:
       return {
@@ -145,7 +146,6 @@ const reducer = (state = initialState, action) => {
         id: _.get(action, "payload._id"),
         increment: -1,
       });
-      // console.log(previousNote, nextNote);
       return {
         ...state,
         viewNote: action.payload,

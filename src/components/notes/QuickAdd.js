@@ -65,9 +65,9 @@ const QuickAdd = ({
   const [input, setInput] = useState(INITIAL_STATE);
   const [activeTab, setActiveTab] = useState("TITLE_ONLY");
 
-  const { name: activeCollectionName, tags: activeCollectionTags } = _.get(
-    session,
-    ["notesApp", collection],
+  const { name: activeCollectionName, tags: activeCollectionTags } = _.find(
+    session.notebase,
+    { _id: collection },
     {}
   );
   const tagList = _.map(activeCollectionTags, ({ label }) => ({
@@ -89,12 +89,13 @@ const QuickAdd = ({
   const handleOk = async () => {
     setLoading(true);
     try {
-      const inputData = (activeTab === "TITLE_ONLY"
-        ? data.map((item) => ({
-            ...item,
-            status: "QUICK_ADD",
-          }))
-        : input.slice(0, input.length - 1)
+      const inputData = (
+        activeTab === "TITLE_ONLY"
+          ? data.map((item) => ({
+              ...item,
+              status: "QUICK_ADD",
+            }))
+          : input.slice(0, input.length - 1)
       ).map((item) => ({
         ...item,
         status: "QUICK_ADD",

@@ -280,21 +280,15 @@ export const getChains = () => async (dispatch, getState) => {
   }
 };
 
-export const saveSettings = (input) => async (dispatch, getState) => {
+export const saveSettings = (input) => async (dispatch) => {
   try {
     dispatch(setAppLoading(true));
-    const { session, activeCollection } = getState();
-    const key = input.settingId || activeCollection;
-
-    const updatedSettings = {
-      ..._.get(session, "notesApp", {}),
-      [key]: { ..._.get(session, ["notesApp", key]), ...input.data },
-    };
-    const newSettings = {
-      notesApp: updatedSettings,
-    };
-    await axios.put(`/user/app-settings`, newSettings);
-    await dispatch({ type: SET_SESSION, payload: newSettings });
+    const action = input._id === "NEW_COLLECTION" ? "CREATE" : "UPDATE";
+    const { data } = await axios.put(
+      `/user/settings?action=${action}&key=notebase`,
+      input
+    );
+    await dispatch({ type: SET_SESSION, payload: data.result });
     message.success(`Settings updated.`);
   } catch (err) {
     console.log(err);

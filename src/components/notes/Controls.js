@@ -702,6 +702,7 @@ const Controls = ({
             <div className="social-caption-item-wrapper">
               {editCaptionId === value ? (
                 <TextArea
+                  rows={8}
                   defaultValue={caption}
                   onBlur={(e) => {
                     const updatedCaptions = _.map(socialPlatformsList, (item) =>
@@ -710,7 +711,8 @@ const Controls = ({
                         : item
                     );
                     saveSettings({
-                      data: { socialPlatforms: updatedCaptions },
+                      socialPlatforms: updatedCaptions,
+                      _id: note.collectionId,
                     });
                     setEditCaptionId(null);
                   }}

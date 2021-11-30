@@ -2,83 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Drawer, Tag, Input, Button } from "antd";
 import { connect } from "react-redux";
 import _ from "lodash";
-import short from "short-uuid";
 import { toggleSettingsDrawer, saveSettings } from "../store/actions";
 import SelectCollection from "./SelectCollection";
 import JSONEditor from "../lib/JSONEditor";
+import { DEFAULT_SETTING_STATE } from "../constants";
 
 const { TextArea } = Input;
-
-const DEFAULT_SETTING_STATE = {
-  name: "Untitled",
-  caption: "",
-  index: 1,
-  liveId: 1,
-  tags: [],
-  postTypes: [
-    {
-      label: "POST",
-      value: "POST",
-      fields: ["TITLE", "CONTENT"],
-      required: ["TITLE", "CONTENT"],
-    },
-    {
-      label: "DROP",
-      value: "DROP",
-      required: ["TITLE"],
-    },
-  ],
-  fields: [
-    {
-      label: "TITLE",
-      value: "TITLE",
-      type: "TEXT",
-      defaultValue: "",
-    },
-    {
-      label: "CONTENT",
-      value: "CONTENT",
-      type: "RICH_TEXT",
-      defaultValue: "",
-    },
-    {
-      label: "URL",
-      value: "URL",
-      type: "TEXT",
-      defaultValue: "",
-    },
-  ],
-  socialPlatforms: [
-    {
-      label: "FB",
-      value: "facebook",
-    },
-    {
-      label: "Instagram",
-      value: "instagram",
-    },
-    {
-      label: "Twitter",
-      value: "twitter",
-    },
-    {
-      label: "Dev.to",
-      value: "dev",
-    },
-    {
-      label: "Hashnode",
-      value: "hashnode",
-    },
-    {
-      label: "Linkedin",
-      value: "linkedin",
-    },
-  ],
-  pageLimit: 25,
-  cardSmStyles: {},
-  defaultDisplayType: "CARD",
-  defaultCollectionId: "", // collection to load on siginin
-};
 
 const Settings = ({
   settingsDrawerVisibility,
@@ -87,25 +16,25 @@ const Settings = ({
   toggleSettingsDrawer,
   saveSettings,
 }) => {
-  const [collections, setCollections] = useState([]);
+  const [collectionList, setCollectionList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(activeCollection);
   const [showJSON, setShowJSON] = useState(true);
 
   useEffect(() => {
-    if (!session.notesApp) return;
-    setCollections(Object.entries(session.notesApp));
-  }, [session.notesApp]);
+    if (!session.notebase) return;
+    setCollectionList(session.notebase);
+  }, [session.notebase]);
 
-  const [settingId = "", settingData = {}] =
-    collections.find(([id]) => id === active) || [];
+  const { _id: settingId, ...settingData } =
+    _.find(collectionList, { _id: active }) || [];
 
   const handleClose = () => toggleSettingsDrawer(false);
 
   const handleSave = (data) => {
     try {
       setLoading(true);
-      saveSettings({ data, settingId });
+      saveSettings({ ...data, _id: settingId });
       handleClose();
     } finally {
       setLoading(false);
@@ -123,7 +52,7 @@ const Settings = ({
       visible={settingsDrawerVisibility}
     >
       <Header
-        setCollections={setCollections}
+        setCollectionList={setCollectionList}
         active={active}
         setActive={setActive}
         showJSON={showJSON}
@@ -147,16 +76,16 @@ const Settings = ({
 };
 
 const Header = ({
-  setCollections,
+  setCollectionList,
   active,
   setActive,
   showJSON,
   setShowJSON,
 }) => {
   const addNewCollection = () => {
-    const id = short.generate();
-    setCollections((prev) => [...prev, [id, DEFAULT_SETTING_STATE]]);
-    setActive(id);
+    const _id = "NEW_COLLECTION";
+    setCollectionList((prev) => [...prev, { _id, ...DEFAULT_SETTING_STATE }]);
+    setActive(_id);
   };
 
   return (

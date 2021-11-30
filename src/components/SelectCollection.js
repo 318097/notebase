@@ -15,8 +15,8 @@ const SelectCollection = ({
   resetFilter,
   setFilterValues,
 }) => {
-  const handleChange = (id) => {
-    setCollection ? setCollection(id) : setActiveCollection(id);
+  const handleChange = (_id) => {
+    setCollection ? setCollection(_id) : setActiveCollection(_id);
     if (resetFilter) setFilterValues();
   };
 
@@ -27,9 +27,9 @@ const SelectCollection = ({
       placeholder="Collections"
       value={collection}
     >
-      {Object.entries(_.get(session, "notesApp", [])).map(([id, config]) => (
-        <Option key={id} value={id}>
-          {_.get(config, "name", "")}
+      {_.get(session, "notebase", []).map(({ _id, name }) => (
+        <Option key={_id} value={_id}>
+          {name}
         </Option>
       ))}
     </Select>

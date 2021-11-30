@@ -37,6 +37,77 @@ const ratingsFilter = [
   { label: "1", value: "1" },
 ];
 
+const DEFAULT_SETTING_STATE = {
+  name: "Untitled",
+  caption: "",
+  index: 1,
+  liveId: 1,
+  tags: [],
+  postTypes: [
+    {
+      label: "POST",
+      value: "POST",
+      fields: ["TITLE", "CONTENT"],
+      required: ["TITLE", "CONTENT"],
+    },
+    {
+      label: "DROP",
+      value: "DROP",
+      required: ["TITLE"],
+    },
+  ],
+  fields: [
+    {
+      label: "TITLE",
+      value: "TITLE",
+      type: "TEXT",
+      defaultValue: "",
+    },
+    {
+      label: "CONTENT",
+      value: "CONTENT",
+      type: "RICH_TEXT",
+      defaultValue: "",
+    },
+    {
+      label: "URL",
+      value: "URL",
+      type: "TEXT",
+      defaultValue: "",
+    },
+  ],
+  socialPlatforms: [
+    {
+      label: "FB",
+      value: "facebook",
+    },
+    {
+      label: "Instagram",
+      value: "instagram",
+    },
+    {
+      label: "Twitter",
+      value: "twitter",
+    },
+    {
+      label: "Dev.to",
+      value: "dev",
+    },
+    {
+      label: "Hashnode",
+      value: "hashnode",
+    },
+    {
+      label: "Linkedin",
+      value: "linkedin",
+    },
+  ],
+  pageLimit: 25,
+  cardSmStyles: {},
+  defaultDisplayType: "CARD",
+  defaultCollectionId: "", // collection to load on siginin
+};
+
 export {
   statusFilter,
   socialStatusFilter,
@@ -44,4 +115,5 @@ export {
   sortFilter,
   visibilityFilter,
   ratingsFilter,
+  DEFAULT_SETTING_STATE,
 };
