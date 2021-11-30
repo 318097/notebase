@@ -17,7 +17,7 @@ const Login = ({ history, setSession, session }) => {
   const [form, setForm] = useState(initialState);
 
   useEffect(() => {
-    if (session && session.loggedIn) history.push("/");
+    if (session?.isAuthenticated) history.push("/");
   }, []);
 
   const handleInput =
@@ -32,7 +32,7 @@ const Login = ({ history, setSession, session }) => {
 
       sessionManager.set(data);
       await setSession({
-        loggedIn: true,
+        isAuthenticated: true,
         info: "LOGIN",
         ...data,
       });

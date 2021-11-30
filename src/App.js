@@ -40,7 +40,7 @@ const App = ({
   activePage,
   viewNoteMeta,
 }) => {
-  const hasAccess = _.get(session, "loggedIn");
+  const isAuthenticated = _.get(session, "isAuthenticated");
 
   const [loading, setLoading] = useState(true);
   const viewNoteMetaRef = useRef();
@@ -57,7 +57,7 @@ const App = ({
         try {
           const token = sessionManager.getToken();
           const { data } = await axios.post(`/auth/account-status`, { token });
-          setSession({ loggedIn: true, info: "ON_LOAD", ...data });
+          setSession({ isAuthenticated: true, info: "ON_LOAD", ...data });
           getChains();
           setActivePage();
         } catch (err) {
@@ -125,10 +125,12 @@ const App = ({
       <div className="contentWrapper">
         <Header />
         <div className="content">
-          {!loading && <Routes session={session} hasAccess={hasAccess} />}
+          {!loading && (
+            <Routes session={session} isAuthenticated={isAuthenticated} />
+          )}
         </div>
       </div>
-      {hasAccess && (
+      {isAuthenticated && (
         <Fragment>
           {addModalVisibility && <AddNote />}
           {quickAddModalVisibility && <QuickAdd />}

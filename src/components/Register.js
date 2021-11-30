@@ -26,7 +26,7 @@ const Register = ({ history }) => {
   const handleRegister = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post("/auth/register", form);
+      await axios.post("/auth/register", form);
       history.push("/login");
     } catch (err) {
       const { response: { data: errorMessage = "Error." } = {} } = err;

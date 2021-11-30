@@ -9,19 +9,19 @@ import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
 import Stats from "./components/Stats";
 
-const routes = ({ hasAccess }) => {
+const routes = ({ isAuthenticated }) => {
   return (
     <Switch>
       <Route path="/register" exact component={Register} />
       <Route path="/login" exact component={Login} />
-      <ProtectedRoute hasAccess={hasAccess}>
+      <Route path="/" exact render={() => <Redirect to="/home" />} />
+      <ProtectedRoute isAuthenticated={isAuthenticated}>
         <Route path="/home" exact component={Notes} />
         <Route path="/note/:id" exact component={NoteView} />
         <Route path="/upload" exact component={UploadContent} />
         <Route path="/stats" exact component={Stats} />
       </ProtectedRoute>
-      <Route path="/" exact render={() => <Redirect to="/home" />} />
-      <Route component={NotFound} />
+      {/* <Route component={NotFound} /> */}
     </Switch>
   );
 };
