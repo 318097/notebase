@@ -16,7 +16,7 @@ import colors, { Icon } from "@codedrops/react-ui";
 import SelectCollection from "../SelectCollection";
 import { md } from "../../lib/utils";
 import { generateSlug } from "@codedrops/lib";
-import { noteType } from "../../constants";
+import { POST_TYPE_OPTIONS } from "../../constants";
 import axios from "axios";
 
 const StyledContainer = styled.div`
@@ -317,7 +317,7 @@ const AddNote = ({
                 })
               }
             >
-              {noteType.map(({ value }) => (
+              {POST_TYPE_OPTIONS.map(({ value }) => (
                 <Radio.Button key={value} value={value}>
                   {value}
                 </Radio.Button>

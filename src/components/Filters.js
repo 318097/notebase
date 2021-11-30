@@ -6,14 +6,14 @@ import { setFilter, setKey } from "../store/actions";
 import SelectCollection from "./SelectCollection";
 import config from "../config";
 import {
-  statusFilter,
-  socialStatusFilter,
-  noteType,
-  sortFilter,
-  visibilityFilter,
-  ratingsFilter,
+  STATUS_OPTIONS,
+  SOCIAL_STATUS_OPTIONS,
+  POST_TYPE_OPTIONS,
+  SORT_OPTIONS,
+  VISIBILITY_OPTIONS,
+  RATING_OPTIONS,
 } from "../constants";
-import { initialState } from "../store/reducer";
+import { INITIAL_STATE } from "../store/reducer";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -77,7 +77,7 @@ const Filters = ({
       style={{ margin: "2px" }}
       collection={activeCollection}
       resetFilter={true}
-      setFilterValues={() => setFilterValues({ ...initialState.filters })}
+      setFilterValues={() => setFilterValues({ ...INITIAL_STATE.filters })}
     />
   );
 
@@ -119,7 +119,7 @@ const Filters = ({
       value={filters.type}
       onChange={(value) => setFilterValues({ type: value })}
     >
-      {noteType.map(({ label, value }) => (
+      {POST_TYPE_OPTIONS.map(({ label, value }) => (
         <Option key={value} value={value}>
           {label}
         </Option>
@@ -136,7 +136,7 @@ const Filters = ({
       value={filters.rating}
       onChange={(value) => setFilterValues({ rating: value })}
     >
-      {ratingsFilter.map(({ label, value }) => (
+      {RATING_OPTIONS.map(({ label, value }) => (
         <Option key={value} value={value}>
           {label}
         </Option>
@@ -154,7 +154,7 @@ const Filters = ({
       style={{ minWidth: "100px", width: "auto" }}
       onChange={(value) => setFilterValues({ status: value })}
     >
-      {statusFilter.map(({ label, value }) => (
+      {STATUS_OPTIONS.map(({ label, value }) => (
         <Option key={value} value={value}>
           {label}
         </Option>
@@ -170,7 +170,7 @@ const Filters = ({
       value={filters.socialStatus}
       onChange={(value) => setFilterValues({ socialStatus: value })}
     >
-      {socialStatusFilter.map(({ label, value }) => (
+      {SOCIAL_STATUS_OPTIONS.map(({ label, value }) => (
         <Option key={value} value={value}>
           {label}
         </Option>
@@ -186,7 +186,7 @@ const Filters = ({
       value={filters.sortFilter}
       onChange={(value) => setFilterValues({ sortFilter: value })}
     >
-      {sortFilter.map(({ label, value }) => (
+      {SORT_OPTIONS.map(({ label, value }) => (
         <Option key={value} value={value}>
           {label}
         </Option>
@@ -202,7 +202,7 @@ const Filters = ({
       value={filters.visibility}
       onChange={(value) => setFilterValues({ visibility: value })}
     >
-      {visibilityFilter.map(({ label, value }) => (
+      {VISIBILITY_OPTIONS.map(({ label, value }) => (
         <Option key={value} value={value}>
           {label}
         </Option>

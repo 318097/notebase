@@ -1,5 +1,4 @@
 export const SET_SESSION = "SET_SESSION";
-export const SET_SETTINGS = "SET_SETTINGS";
 export const SET_APP_LOADING = "SET_APP_LOADING";
 export const TOGGLE_SETTINGS_DRAWER = "TOGGLE_SETTINGS_DRAWER";
 export const LOAD_NOTES = "LOAD_NOTES";

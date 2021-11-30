@@ -7,14 +7,14 @@ import { StyledSection } from "../lib/styled";
 import { setSession } from "../store/actions";
 import { connect } from "react-redux";
 
-const initialState = {
+const INITIAL_STATE = {
   password: "",
   username: "",
 };
 
 const Login = ({ history, setSession, session }) => {
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState(initialState);
+  const [form, setForm] = useState(INITIAL_STATE);
 
   useEffect(() => {
     if (session?.isAuthenticated) history.push("/");

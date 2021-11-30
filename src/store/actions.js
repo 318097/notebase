@@ -4,7 +4,6 @@ import { message } from "antd";
 import { getNextNote } from "../lib/utils";
 import {
   SET_SESSION,
-  SET_SETTINGS,
   SET_APP_LOADING,
   UPDATE_FILTER,
   LOAD_NOTES,
@@ -222,21 +221,6 @@ export const setActiveCollection = (id) => async (dispatch) => {
   });
   await dispatch(setFilter());
 };
-
-// export const setSettings =
-//   (updatedSettings, updateOnServer = false) =>
-//   async (dispatch, getState) => {
-//     const { settings = {}, session } = getState();
-
-//     if (updateOnServer) await axios.put(`/users/app-settings`, updatedSettings);
-
-//     const newSettings = { ...settings, ...updatedSettings };
-
-//     dispatch({
-//       type: SET_SETTINGS,
-//       payload: newSettings,
-//     });
-//   };
 
 export const toggleSettingsDrawer = (status) => ({
   type: TOGGLE_SETTINGS_DRAWER,

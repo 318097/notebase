@@ -7,7 +7,7 @@ import axios from "axios";
 // import { setSession } from "../store/actions";
 // import { connect } from "react-redux";
 
-const initialState = {
+const INITIAL_STATE = {
   name: "",
   username: "",
   password: "",
@@ -16,7 +16,7 @@ const initialState = {
 
 const Register = ({ history }) => {
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState(initialState);
+  const [form, setForm] = useState(INITIAL_STATE);
 
   const handleInput =
     (key) =>

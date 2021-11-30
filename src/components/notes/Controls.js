@@ -22,7 +22,7 @@ import colors, { Icon, Tag, EmptyState } from "@codedrops/react-ui";
 import { saveSettings, setAppLoading, updateNote } from "../../store/actions";
 import { copyToClipboard, generateFormData } from "../../lib/utils";
 import short from "short-uuid";
-import { statusFilter } from "../../constants";
+import { STATUS_OPTIONS } from "../../constants";
 import ImageCard from "../../lib/ImageCard";
 import UploadButton from "../../lib/UploadButton";
 
@@ -603,7 +603,7 @@ const Controls = ({
         }
         value={status}
       >
-        {statusFilter.map(({ label, value }) => (
+        {STATUS_OPTIONS.map(({ label, value }) => (
           <Radio className="block status-tag" key={value} value={value}>
             {label.toLowerCase()}
           </Radio>

@@ -1,35 +1,35 @@
-const statusFilter = [
+const STATUS_OPTIONS = [
   { label: "QUICK ADD", value: "QUICK_ADD" },
   { label: "DRAFT", value: "DRAFT" },
   { label: "READY", value: "READY" },
   { label: "POSTED", value: "POSTED" },
 ];
 
-const socialStatusFilter = [
+const SOCIAL_STATUS_OPTIONS = [
   { label: "READY", value: "READY" },
   { label: "POSTED", value: "POSTED" },
 ];
 
-const noteType = [
+const POST_TYPE_OPTIONS = [
   { label: "DROP", value: "DROP" },
   { label: "POST", value: "POST" },
   { label: "QUIZ", value: "QUIZ" },
   { label: "CHAIN", value: "CHAIN" },
 ];
 
-const sortFilter = [
+const SORT_OPTIONS = [
   { label: "INDEX", value: "index" },
   { label: "RATING", value: "rating" },
   { label: "LIVE ID", value: "liveId" },
   { label: "CREATED", value: "createdAt" },
 ];
 
-const visibilityFilter = [
+const VISIBILITY_OPTIONS = [
   { label: "VISIBLE", value: "visible" },
   { label: "INVISIBLE", value: "invisible" },
 ];
 
-const ratingsFilter = [
+const RATING_OPTIONS = [
   { label: "5", value: "5" },
   { label: "4", value: "4" },
   { label: "3", value: "3" },
@@ -109,11 +109,11 @@ const DEFAULT_SETTING_STATE = {
 };
 
 export {
-  statusFilter,
-  socialStatusFilter,
-  noteType,
-  sortFilter,
-  visibilityFilter,
-  ratingsFilter,
+  STATUS_OPTIONS,
+  SOCIAL_STATUS_OPTIONS,
+  POST_TYPE_OPTIONS,
+  SORT_OPTIONS,
+  VISIBILITY_OPTIONS,
+  RATING_OPTIONS,
   DEFAULT_SETTING_STATE,
 };

@@ -8,7 +8,7 @@ import uuid from "uuid";
 import _ from "lodash";
 import SelectCollection from "../SelectCollection";
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
-import { initialUploadingDataState } from "../../store/reducer";
+import { INITIAL_UPLOADING_DATA_STATE } from "../../store/reducer";
 import { md } from "../../lib/utils";
 import axios from "axios";
 import ImageCard from "../../lib/ImageCard";
@@ -228,7 +228,7 @@ const UploadContent = ({
       console.log(err);
     } finally {
       setLoading(false);
-      setUploadingData(initialUploadingDataState);
+      setUploadingData(INITIAL_UPLOADING_DATA_STATE);
     }
   };
 

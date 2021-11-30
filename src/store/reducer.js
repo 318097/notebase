@@ -3,7 +3,6 @@ import config from "../config";
 import { getNextNote } from "../lib/utils";
 import {
   SET_SESSION,
-  SET_SETTINGS,
   SET_APP_LOADING,
   TOGGLE_SETTINGS_DRAWER,
   UPDATE_FILTER,
@@ -23,7 +22,7 @@ import {
   FETCH_CHAINS,
 } from "./constants";
 
-const initialUploadingDataState = {
+const INITIAL_UPLOADING_DATA_STATE = {
   rawData: null,
   data: [],
   dataType: "POST",
@@ -32,8 +31,7 @@ const initialUploadingDataState = {
   tags: [],
 };
 
-const initialState = {
-  appLoading: false,
+const INITIAL_STATE = {
   modalMeta: {
     visibility: false,
     mode: undefined,
@@ -52,29 +50,30 @@ const initialState = {
     page: 1,
     limit: config.LIMIT,
   },
-  activeCollection: undefined,
-  notes: [],
-  meta: undefined,
-  session: undefined,
-  settings: {},
-  viewNote: undefined,
-  settingsDrawerVisibility: false,
-  stats: {},
-  displayType: "CARD",
-  uploadingData: initialUploadingDataState,
   quickaddModalMeta: {
     visibility: false,
   },
+  settings: {},
+  stats: {},
+  notes: [],
+  chains: [],
+  appLoading: false,
+  settingsDrawerVisibility: false,
   retainPage: false,
   showAllFilters: false,
-  chains: [],
+  activeCollection: undefined,
+  meta: undefined,
+  session: undefined,
+  viewNote: undefined,
   activePage: undefined,
   viewNoteMeta: undefined,
+  displayType: "CARD",
+  uploadingData: INITIAL_UPLOADING_DATA_STATE,
 };
 
 const getSettings = (list, _id) => _.find(list, { _id }) || {};
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SET_SESSION:
       const { activeCollection, session } = state;
@@ -93,11 +92,6 @@ const reducer = (state = initialState, action) => {
         activeCollection: newActiveCollectionId,
         settings,
       };
-    case SET_SETTINGS:
-      return {
-        ...state,
-        settings: action.payload,
-      };
     case SET_APP_LOADING:
       return {
         ...state,
@@ -106,7 +100,7 @@ const reducer = (state = initialState, action) => {
     case LOGOUT:
       sessionStorage.clear();
       localStorage.clear();
-      return initialState;
+      return INITIAL_STATE;
     case SET_ACTIVE_COLLECTION:
       return {
         ...state,
@@ -239,4 +233,4 @@ const reducer = (state = initialState, action) => {
 };
 
 export default reducer;
-export { initialState, initialUploadingDataState };
+export { INITIAL_STATE, INITIAL_UPLOADING_DATA_STATE };
