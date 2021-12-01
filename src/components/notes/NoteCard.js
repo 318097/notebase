@@ -4,6 +4,7 @@ import { Icon as AntIcon } from "antd";
 import moment from "moment";
 import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
 import _ from "lodash";
+import classnames from "classnames";
 // import Dropdown from "../lib/Dropdown";
 import { md } from "../../lib/utils";
 
@@ -101,15 +102,20 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
   // const [showDropdown, setShowDropdown] = useState(false);
   const isCreatedToday = moment().isSame(moment(createdAt), "day");
   const createdTimeAgo = moment(createdAt).fromNow();
+  const postStatus =
+    status === "POSTED"
+      ? `Live Id: ${liveId}`
+      : status.replace("_", " ").toLowerCase();
 
+  const cardClasses = classnames("card", { today: !!isCreatedToday });
+  const titleClasses = classnames("title", {
+    "post-title": type !== "DROP",
+  });
   return (
     <StyledCard>
-      <Card
-        onClick={(e) => handleClick(e, _id)}
-        className={`card${isCreatedToday ? " today" : ""}`}
-      >
+      <Card onClick={(e) => handleClick(e, _id)} className={cardClasses}>
         <h3
-          className={`title ${type === "DROP" ? "" : "post-title"}`}
+          className={titleClasses}
           dangerouslySetInnerHTML={{ __html: md.renderInline(title) }}
         />
 
@@ -131,7 +137,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
           onDelete={() => onDelete(_id)}
         /> */}
       </Card>
-      <Card className={`action-row${isCreatedToday ? " today" : ""}`}>
+      <Card className={classnames("action-row", { today: !!isCreatedToday })}>
         <div className="status-row">
           <div className="tags">
             {tags.map((tag) => (
@@ -145,9 +151,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
             className="status-tag"
             color={status === "POSTED" ? "cdGreen" : "watermelon"}
           >
-            {status === "POSTED"
-              ? `Live Id: ${liveId}`
-              : status.replace("_", " ").toLowerCase()}
+            {postStatus}
           </Tag>
         </div>
 

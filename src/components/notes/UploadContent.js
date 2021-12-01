@@ -13,6 +13,7 @@ import { md } from "../../lib/utils";
 import axios from "axios";
 import ImageCard from "../../lib/ImageCard";
 import UploadButton from "../../lib/UploadButton";
+import classnames from "classnames";
 
 const config = {
   POST: {
@@ -400,7 +401,7 @@ const UploadContent = ({
             const { title = "", content = "", tags = [], viewed } = item;
             return (
               <div
-                className={`card-wrapper${viewed ? " viewed" : ""}`}
+                className={classnames("card-wrapper", { viewed: !!viewed })}
                 key={item.tempId}
                 onClick={editItem(item)}
               >

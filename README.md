@@ -4,7 +4,7 @@
 
 [Public URL](https://notebase.netlify.com)
 
-### Features
+### Tasks
 
 - [x] Create collection
 - [x] Choose collection while uploading
@@ -31,7 +31,14 @@
 - [x] Add social platform status
 - [x] Add suffix for file names
 - [x] Show/Edit Social Platform captions
-- [ ] Trash - show deleted notes
+- [x] Upload resources
+- [x] Upload resources from a post
+- [x] Show resources for every post view
+- [x] Highlight resources & file names for which files are detected on cloudinary
+- [x] Edit note JSON
+- [x] Add reload button & reload after adding data
+- [x] `Status` should be multi select
+- [ ] Auto deployment to Social handles - Dev.to/Codenewbies.to, Hashnode, FB, Instagram, Twitter, Linkedin
 - [ ] Create graphics for posts
 - [ ] Chaining posts
   - [x] Add post to a chain
@@ -42,24 +49,11 @@
   - [ ] Post types based on collection
   - [ ] Default values, Fields required based on type
   - [ ] Default filters
-- [ ] Auto deployment to Social handles
-  - [ ] Dev.to/Codenewbies.to
-  - [ ] Hashnode
-  - [ ] FB
-  - [ ] Instagram
-  - [ ] Twitter
-  - [ ] Linkedin
-- [x] Upload resources
-- [x] Upload resources from a post
-- [x] Show resources for every post view
-- [x] Highlight resources & file names for which files are detected on cloudinary
 - [ ] Parse external data
   - [x] Toby
   - [ ] Chrome bookmarks
-- [x] Edit note JSON
-- [x] Add reload button & reload after adding data
+- [ ] Trash - show deleted notes
 - [ ] Lazy loading
-- [x] `Status` should be multi select
 - [ ] Save & retrive draft
 
 ### Bugs
@@ -67,5 +61,5 @@
 - [x] When added, it shows yesterday
 - [x] Keyboard events dont work when a note is opened for the first time. It works after going back and then opening a note again
 - [x] Hide filters when empty dropdown (ex., tags)
-- [ ] Fix autocomplete
 - [x] Debounce for filters
+- [ ] Fix autocomplete

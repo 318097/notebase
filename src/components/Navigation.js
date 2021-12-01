@@ -11,6 +11,7 @@ import {
   setModalMeta,
   setQuickAddModalMeta,
 } from "../store/actions";
+import classnames from "classnames";
 
 const StyledNavigation = styled.div`
   display: flex;
@@ -126,7 +127,9 @@ const Navigation = ({
           if (type === "divider") return <Divider key={`divider-${idx}`} />;
           return (
             <AntIcon
-              className={`icon icon-bg ${activePage === key ? "active" : ""}`}
+              className={classnames("icon", "icon-bg", {
+                active: activePage === key,
+              })}
               type={type}
               key={key}
               onClick={() => handleNavigation(key)}

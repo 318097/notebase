@@ -350,7 +350,7 @@ const Controls = ({
         ) : null}
       </div>
       <div className="notes-container">
-        <EmptyState input={personalNotes}>
+        <EmptyState input={personalNotes} size="sm">
           {personalNotes.map((note, index) => (
             <div key={note._id} className="note">
               {`${index + 1}. ${note.content}`}
@@ -435,7 +435,7 @@ const Controls = ({
         />
       </div>
 
-      <EmptyState input={resources}>
+      <EmptyState input={resources} size="sm">
         {resources.map((resource, index) => {
           const hasFile = _.get(resource, "media");
 
@@ -471,7 +471,7 @@ const Controls = ({
             />
           </div>
 
-          <EmptyState input={fileNames}>
+          <EmptyState input={fileNames} size="sm">
             {fileNames.map((item, index) => {
               const hasFile = _.get(item, "media");
 

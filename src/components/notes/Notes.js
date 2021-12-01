@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Button, Table, Tag, Pagination, Badge } from "antd";
 import colors, { EmptyState } from "@codedrops/react-ui";
 import NoteCard from "./NoteCard";
+import _ from "lodash";
 import {
   setNoteToEdit,
   deleteNote,
@@ -69,6 +70,7 @@ const Notes = ({
   notes,
   dispatch,
   filters,
+  hasCollections,
   ...others
 }) => {
   const scrollRef = useRef();
@@ -98,7 +100,7 @@ const Notes = ({
 
   return (
     <section ref={scrollRef} style={{ paddingBottom: "30px" }}>
-      {appLoading ? null : (
+      {appLoading ? null : hasCollections ? (
         <EmptyState input={notes}>
           {displayType === "CARD" ? (
             <CardView
@@ -125,6 +127,8 @@ const Notes = ({
             />
           )}
         </EmptyState>
+      ) : (
+        <p style={{ textAlign: "center" }}>Create a new collection.</p>
       )}
     </section>
   );
@@ -300,6 +304,7 @@ const mapStateToProps = ({
   filters,
   settings,
   displayType,
+  session,
 }) => ({
   notes,
   appLoading,
@@ -307,6 +312,7 @@ const mapStateToProps = ({
   meta,
   tagsCodes: extractTagCodes(settings.tags),
   displayType,
+  hasCollections: _.get(session, "notebase.length", false),
 });
 
 export default withRouter(connect(mapStateToProps)(Notes));
