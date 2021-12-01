@@ -106,29 +106,27 @@ const QuickAdd = ({
     }
   };
 
-  const handleChange = ({ key, value, index }) => {
-    let addNewRow = false;
-    const updatedInput = _.map(input, (data, i) => {
-      if (index === i) {
-        const updatedData = { ...data, [key]: value };
-        if (key === "url" && value && !data.title) {
-          const { host } = new URL(value);
-          const title = host.replace(/www\./, "").split(".").shift();
-          if (title) {
-            addNewRow = true;
-            updatedData["title"] = `${title[0].toUpperCase()}${title.slice(1)}`;
-          }
-        }
-        return updatedData;
+  const handleURLParsing = ({ value, index }) => {
+    // generate title when a valid url is entered
+    try {
+      if (value) {
+        const { host } = new URL(value);
+        const title = host.replace(/www\./, "").split(".").shift();
+        handleInputChange({ key: "title", value: _.capitalize(title), index });
       }
-      return data;
-    });
+    } catch (err) {}
+  };
+
+  const handleInputChange = ({ key, value, index, addNewRow = false }) => {
+    const updatedInput = _.map(input, (data, i) =>
+      index === i ? { ...data, [key]: value } : data
+    );
 
     if (
       addNewRow ||
       (key === "title" &&
-        activeTab === "DETAILS" &&
         value &&
+        activeTab === "DETAILS" &&
         updatedInput.length - 1 === index)
     ) {
       updatedInput.push(INITIAL_STATE);
@@ -213,7 +211,7 @@ const QuickAdd = ({
                 onKeyDown={handleKeyDown}
                 onBlur={addTagToInput}
                 onChange={({ target: { value } }) =>
-                  handleChange({ key: "title", value, index: 0 })
+                  handleInputChange({ key: "title", value, index: 0 })
                 }
               />
             </div>
@@ -242,21 +240,27 @@ const QuickAdd = ({
                     placeholder="Title"
                     value={title}
                     onChange={({ target: { value } }) =>
-                      handleChange({ key: "title", value, index })
+                      handleInputChange({ key: "title", value, index })
                     }
                   />
                   <Input
                     placeholder="Content"
                     value={content}
                     onChange={({ target: { value } }) =>
-                      handleChange({ key: "content", value, index })
+                      handleInputChange({ key: "content", value, index })
                     }
                   />
                   <Input
                     placeholder="URL"
                     value={url}
                     onChange={({ target: { value } }) =>
-                      handleChange({ key: "url", value, index })
+                      handleInputChange({ key: "url", value, index })
+                    }
+                    onBlur={({ target: { value } }) =>
+                      handleURLParsing({ value, index })
+                    }
+                    onKeyDown={({ which, target: { value } }) =>
+                      which === 13 && handleURLParsing({ value, index })
                     }
                   />
                 </div>
