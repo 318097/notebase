@@ -171,7 +171,7 @@ const QuickAdd = ({
           Cancel
         </Button>,
         <Popconfirm
-          title={`Add ${totalItems} item(s) to '${activeSettings.Name}'`}
+          title={`Add ${totalItems} item(s) to '${activeSettings.name}'`}
           onConfirm={handleOk}
           // onCancel={cancel}
           okText="Yes"
