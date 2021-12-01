@@ -109,7 +109,7 @@ const UploadContent = ({
   const [viewRawData, setViewRawData] = useState(false);
   const [requireParsing, setRequireParsing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [collection, setCollection] = useState(activeCollectionId);
+  const [activeId, setActiveId] = useState(activeCollectionId);
   // const [fileParsing, setFileParsing] = useState();
 
   useEffect(() => {
@@ -118,9 +118,9 @@ const UploadContent = ({
 
   useEffect(() => {
     if (status === "PROCESSED") setRequireParsing(true);
-  }, [collection, tags, dataType]);
+  }, [activeId, tags, dataType]);
 
-  const parseItem = (item, { isCustomSource, collection } = {}) => {
+  const parseItem = (item, { isCustomSource, activeId } = {}) => {
     const parsed = {
       tags,
       type: "POST",
@@ -152,7 +152,7 @@ const UploadContent = ({
       case "TOBY": {
         parsed.title = item.title;
         parsed.url = item.url;
-        parsed.sourceInfo["collection"] = collection;
+        parsed.sourceInfo["collection"] = activeId;
         break;
       }
       default:
@@ -180,7 +180,7 @@ const UploadContent = ({
         const { title, cards } = collection;
 
         const collectionParsed = cards.map((item) =>
-          parseItem(item, { isCustomSource, collection: title })
+          parseItem(item, { isCustomSource, activeId: title })
         );
         parsedContent.push(...collectionParsed);
       });
@@ -221,7 +221,7 @@ const UploadContent = ({
               id: _.get(transactionResponse, "data.0.url"),
             },
           })),
-          collection
+          activeId
         );
       }
       message.success(`${data.length} items added.`);
@@ -268,7 +268,7 @@ const UploadContent = ({
       visible: !isResourceUpload,
       component: (
         <Fragment>
-          <SelectCollection value={collection} handleChange={setCollection} />
+          <SelectCollection value={activeId} handleChange={setActiveId} />
 
           <Select
             style={{ minWidth: "80px" }}
@@ -304,11 +304,11 @@ const UploadContent = ({
             ))}
           </OptGroup>
           <OptGroup label="External">
-            <Option value={"TOBY"}>TOBY</Option>
-            <Option value={"CHROME"}>CHROME</Option>
+            <Option value={"TOBY"}>Toby</Option>
+            <Option value={"CHROME"}>Chrome</Option>
           </OptGroup>
           <OptGroup label="Assets">
-            <Option value={"RESOURCES"}>RESOURCES</Option>
+            <Option value={"RESOURCES"}>Resources</Option>
           </OptGroup>
         </Select>
       ),

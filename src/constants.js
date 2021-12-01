@@ -1,32 +1,32 @@
 const STATUS_OPTIONS = [
-  { label: "QUICK ADD", value: "QUICK_ADD" },
-  { label: "DRAFT", value: "DRAFT" },
-  { label: "READY", value: "READY" },
-  { label: "POSTED", value: "POSTED" },
+  { label: "Quick add", value: "QUICK_ADD" },
+  { label: "Draft", value: "DRAFT" },
+  { label: "Ready", value: "READY" },
+  { label: "Posted", value: "POSTED" },
 ];
 
 const SOCIAL_STATUS_OPTIONS = [
-  { label: "READY", value: "READY" },
-  { label: "POSTED", value: "POSTED" },
+  { label: "Ready", value: "READY" },
+  { label: "Posted", value: "POSTED" },
 ];
 
 const POST_TYPE_OPTIONS = [
-  { label: "DROP", value: "DROP" },
-  { label: "POST", value: "POST" },
-  { label: "QUIZ", value: "QUIZ" },
-  { label: "CHAIN", value: "CHAIN" },
+  { label: "Drop", value: "DROP" },
+  { label: "Post", value: "POST" },
+  { label: "Quiz", value: "QUIZ" },
+  { label: "Chain", value: "CHAIN" },
 ];
 
 const SORT_OPTIONS = [
-  { label: "INDEX", value: "index" },
-  { label: "RATING", value: "rating" },
-  { label: "LIVE ID", value: "liveId" },
-  { label: "CREATED", value: "createdAt" },
+  { label: "Index", value: "index" },
+  { label: "Rating", value: "rating" },
+  { label: "Live id", value: "liveId" },
+  { label: "Created", value: "createdAt" },
 ];
 
 const VISIBILITY_OPTIONS = [
-  { label: "VISIBLE", value: "visible" },
-  { label: "INVISIBLE", value: "invisible" },
+  { label: "Visible", value: "visible" },
+  { label: "Invisible", value: "invisible" },
 ];
 
 const RATING_OPTIONS = [
@@ -45,37 +45,37 @@ const DEFAULT_SETTING_STATE = {
   tags: [],
   postTypes: [
     {
-      label: "POST",
+      label: "Post",
       value: "POST",
       fields: ["TITLE", "CONTENT"],
       required: ["TITLE", "CONTENT"],
     },
     {
-      label: "DROP",
+      label: "Drop",
       value: "DROP",
       required: ["TITLE"],
     },
   ],
-  fields: [
-    {
-      label: "TITLE",
-      value: "TITLE",
-      type: "TEXT",
-      defaultValue: "",
-    },
-    {
-      label: "CONTENT",
-      value: "CONTENT",
-      type: "RICH_TEXT",
-      defaultValue: "",
-    },
-    {
-      label: "URL",
-      value: "URL",
-      type: "TEXT",
-      defaultValue: "",
-    },
-  ],
+  // fields: [
+  //   {
+  //     label: "TITLE",
+  //     value: "TITLE",
+  //     type: "TEXT",
+  //     defaultValue: "",
+  //   },
+  //   {
+  //     label: "CONTENT",
+  //     value: "CONTENT",
+  //     type: "RICH_TEXT",
+  //     defaultValue: "",
+  //   },
+  //   {
+  //     label: "URL",
+  //     value: "URL",
+  //     type: "TEXT",
+  //     defaultValue: "",
+  //   },
+  // ],
   socialPlatforms: [
     {
       label: "FB",
@@ -103,7 +103,7 @@ const DEFAULT_SETTING_STATE = {
     },
   ],
   pageLimit: 25,
-  cardSmStyles: {},
+  // cardSmStyles: {},
   defaultDisplayType: "CARD",
   defaultCollectionId: "", // collection to load on siginin
 };

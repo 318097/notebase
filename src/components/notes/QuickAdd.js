@@ -157,7 +157,7 @@ const QuickAdd = ({
   return (
     <Modal
       wrapClassName="react-ui"
-      title="QUICK ADD"
+      title="Quick Add"
       centered={true}
       maskClosable={false}
       destroyOnClose={true}
@@ -203,7 +203,7 @@ const QuickAdd = ({
         }
         onChange={(value) => setActiveTab(value)}
       >
-        <TabPane tab="Quick Add" key="TITLE_ONLY">
+        <TabPane tab="Title only" key="TITLE_ONLY">
           <StyledQuickAdd>
             <div className="quick-add-header">
               <Input
@@ -233,7 +233,7 @@ const QuickAdd = ({
             </div>
           </StyledQuickAdd>
         </TabPane>
-        <TabPane tab="Quick Add Info" key="DETAILS">
+        <TabPane tab="Detailed" key="DETAILS">
           <StyledQuickGroup>
             {_.map(input, ({ title, content, url }, index) => {
               return (

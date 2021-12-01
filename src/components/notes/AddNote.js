@@ -114,7 +114,7 @@ const AddNote = ({
   const [showPreview, setShowPreview] = useState(true);
   const [createAnotherPost, setCreateAnotherPost] = useState(false);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
-  const [collection, setCollection] = useState();
+  const [activeId, setActiveId] = useState();
   const [note, setNote] = useState(INITIAL_STATE);
 
   const [searchResults, setSearchResults] = useState([]);
@@ -127,14 +127,14 @@ const AddNote = ({
   useEffect(() => {
     if (modalVisibility) {
       if (mode === "add") {
-        setCollection(activeCollectionId);
+        setActiveId(activeCollectionId);
       } else {
         const clone = { ...selectedNote };
         delete clone.updatedAt;
         delete clone.createdAt;
         setNote(clone);
 
-        setCollection(selectedNote.collectionId);
+        setActiveId(selectedNote.collectionId);
       }
     }
   }, [mode, selectedNote, modalVisibility]);
@@ -162,7 +162,7 @@ const AddNote = ({
             userId: session.uid,
             content: isContentEmpty ? "" : note.content,
           },
-          collection
+          activeId
         );
       } else await updateUploadNote({ ...note, viewed: true });
     } finally {
@@ -325,9 +325,9 @@ const AddNote = ({
             </Radio.Group>
 
             <SelectCollection
-              value={collection}
+              value={activeId}
               handleChange={(value) => {
-                setCollection(value);
+                setActiveId(value);
                 // if (mode !== "add") setData({ collectionId: value });
               }}
             />
