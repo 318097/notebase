@@ -86,6 +86,7 @@ export const addNote = (notes, collection) => async (dispatch, getState) => {
       payload: filters,
     });
     refetch(dispatch);
+    if (_.get(data, "0.type") === "CHAIN") dispatch(getChains());
     message.success(`Success.`);
   } finally {
     dispatch(setAppLoading(false));
