@@ -85,6 +85,7 @@ export const addNote = (notes, collection) => async (dispatch, getState) => {
       type: UPDATE_FILTER,
       payload: filters,
     });
+    refetch(dispatch);
     message.success(`Success.`);
   } finally {
     dispatch(setAppLoading(false));
