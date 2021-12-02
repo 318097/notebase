@@ -93,6 +93,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
     visible,
     index,
     liveId,
+    url,
     createdAt,
     rating,
     chainedPosts = [],
@@ -100,6 +101,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
     chainedTo = [],
   } = note;
   // const [showDropdown, setShowDropdown] = useState(false);
+  const onlyTitleAndURL = title && url && !content;
   const isCreatedToday = moment().isSame(moment(createdAt), "day");
   const createdTimeAgo = moment(createdAt).fromNow();
   const postStatus =
@@ -107,10 +109,24 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
       ? `Live Id: ${liveId}`
       : status.replace("_", " ").toLowerCase();
 
-  const cardClasses = classnames("card", { today: !!isCreatedToday });
+  const cardClasses = classnames("card", {
+    today: !!isCreatedToday,
+  });
   const titleClasses = classnames("title", {
     "post-title": type !== "DROP",
   });
+
+  const goToLink = () => window.open(url);
+
+  const getDomain = (url) => {
+    try {
+      const { host } = new URL(url);
+      return host;
+    } catch (err) {
+      return "Invalid URL";
+    }
+  };
+
   return (
     <StyledCard>
       <Card onClick={(e) => handleClick(e, _id)} className={cardClasses}>
@@ -118,13 +134,14 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
           className={titleClasses}
           dangerouslySetInnerHTML={{ __html: md.renderInline(title) }}
         />
-
-        {["DROP", "QUIZ"].includes(type) && (
+        {["DROP", "QUIZ"].includes(type) && content && (
           <div
             className="content"
             dangerouslySetInnerHTML={{ __html: md.render(content) }}
           ></div>
         )}
+        {onlyTitleAndURL && <div>{getDomain(url)}</div>}
+
         {!!index && (
           <div className="index-wrapper">
             <span className="index">{`#${index}`}</span>
@@ -178,6 +195,8 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
             ) : !_.isEmpty(chainedTo) ? (
               <Tag>{`In ${chainedTo.length} chains`}</Tag>
             ) : null}
+
+            {onlyTitleAndURL && <AntIcon type="link" onClick={goToLink} />}
 
             {!visible && <AntIcon type="eye-invisible" />}
             {type === "DROP" ? (
