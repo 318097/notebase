@@ -100,7 +100,7 @@ const Notes = ({
 
   return (
     <section ref={scrollRef} style={{ paddingBottom: "30px" }}>
-      {appLoading ? null : hasCollections ? (
+      {hasCollections ? (
         <EmptyState input={notes}>
           {displayType === "CARD" ? (
             <CardView
