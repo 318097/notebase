@@ -18,8 +18,12 @@ const Settings = ({
 }) => {
   const [collectionList, setCollectionList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [activeId, setActiveId] = useState(activeCollectionId);
+  const [activeId, setActiveId] = useState();
   const [showJSON, setShowJSON] = useState(true);
+
+  useEffect(() => {
+    if (activeCollectionId) setActiveId(activeCollectionId);
+  }, [activeCollectionId]);
 
   useEffect(() => {
     if (!session.notebase) return;
