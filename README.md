@@ -56,7 +56,10 @@
 - [ ] Lazy loading
 - [ ] Save & retrive draft
 - [x] Show source of addition (toby, direct, post/drop file upload, flash etc) in noteview
-- [ ] Upload content - card design
+- [ ] Upload content
+  - [ ] Empty state for upload page, different for POST, TOBY
+  - [x] Card design
+  - [ ] Media card design
 - [ ] Page loading hoc
 - [ ] Fix designs (card view & note view) for
   - [ ] Only title (configure card height using css styles)

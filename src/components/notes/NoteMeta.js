@@ -7,9 +7,10 @@ const NoteMeta = ({ sourceInfo, inPopup }) => {
   const obj = _.pick(sourceInfo || {}, [
     "fileName",
     "fileType",
-    "tobyCollectionName",
-    "batchSize",
     "batchId",
+    "batchSize",
+    "tobyCollectionName",
+    "tobyCollectionSize",
   ]);
   const entries = Object.entries(obj);
   const entriesLength = entries.length;

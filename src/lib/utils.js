@@ -17,6 +17,15 @@ export const md = markdown({
   },
 });
 
+export const getDomain = (url) => {
+  try {
+    const { host } = new URL(url);
+    return host;
+  } catch (err) {
+    return "Invalid URL";
+  }
+};
+
 export const copyToClipboard = (text) => {
   _copyToClipboard(text);
   message.info(`Copied - ${text}`);

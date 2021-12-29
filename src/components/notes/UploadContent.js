@@ -1,6 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, Fragment } from "react";
-import { Button, message, Tag, Select, Divider, Modal } from "antd";
+import {
+  Button,
+  message,
+  Tag,
+  Select,
+  Divider,
+  Modal,
+  Icon as AntIcon,
+} from "antd";
 import { Card, Icon, EmptyState } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -14,7 +22,7 @@ import {
   setActiveCollection,
 } from "../../store/actions";
 import { INITIAL_UPLOADING_DATA_STATE } from "../../store/reducer";
-import { extractTagCodes, md } from "../../lib/utils";
+import { extractTagCodes, md, getDomain } from "../../lib/utils";
 import axios from "axios";
 import ImageCard from "../../lib/ImageCard";
 import UploadButton from "../../lib/UploadButton";
@@ -159,9 +167,13 @@ const UploadContent = ({
       json.lists.forEach((collection) => {
         const { title, cards } = collection;
 
-        parsedContent = cards.map((item) =>
-          parseItem(item, { tobyCollectionName: title })
+        const parsedCollection = cards.map((item) =>
+          parseItem(item, {
+            tobyCollectionName: title,
+            tobyCollectionSize: cards.length,
+          })
         );
+        parsedContent.push(...parsedCollection);
       });
     }
 
@@ -387,6 +399,7 @@ const UploadContent = ({
                     removeItem={removeItem}
                     idx={idx}
                     tagsCodes={tagsCodes}
+                    dataType={dataType}
                   />
                 );
             }
@@ -408,20 +421,42 @@ const UploadContent = ({
   );
 };
 
-const UploadCard = ({ item, editItem, removeItem, idx, tagsCodes }) => {
-  const { title = "", content = "", tags = [], viewed, sourceInfo } = item;
+const UploadCard = ({
+  item,
+  editItem,
+  removeItem,
+  idx,
+  tagsCodes,
+  dataType,
+}) => {
+  const { title = "", content = "", tags = [], viewed, sourceInfo, url } = item;
   const cardClasses = classnames("card", {
     today: !!viewed,
   });
-
+  const onlyTitleAndURL = dataType === "TOBY";
+  const collectionName = `Collection: ${_.get(
+    sourceInfo,
+    "tobyCollectionName"
+  )}`;
+  const goToLink = () => window.open(url);
   return (
     <StyledNoteCard>
       <Card className={cardClasses} onClick={() => editItem(item)}>
         <h3 className="title">{title}</h3>
-        <div
-          className="content"
-          dangerouslySetInnerHTML={{ __html: md.render(content) }}
-        ></div>
+        {!!content && (
+          <div
+            className="content"
+            dangerouslySetInnerHTML={{ __html: md.render(content) }}
+          ></div>
+        )}
+
+        {onlyTitleAndURL && (
+          <>
+            <div>{getDomain(url)}</div>
+            <div>---</div>
+            <div className="mt">{collectionName}</div>
+          </>
+        )}
         {!!idx && (
           <div className="index-wrapper">
             <span className="index">{`#${idx}`}</span>
@@ -436,6 +471,7 @@ const UploadCard = ({ item, editItem, removeItem, idx, tagsCodes }) => {
                 {tag}
               </Tag>
             ))}
+            {onlyTitleAndURL && <AntIcon type="link" onClick={goToLink} />}
           </div>
 
           <div className="fcc">

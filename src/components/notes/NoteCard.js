@@ -5,7 +5,7 @@ import { Card, Icon, Tag } from "@codedrops/react-ui";
 import _ from "lodash";
 import classnames from "classnames";
 // import Dropdown from "../lib/Dropdown";
-import { md } from "../../lib/utils";
+import { md, getDomain } from "../../lib/utils";
 import { StyledNoteCard } from "./styled";
 import NoteMeta from "./NoteMeta";
 
@@ -45,15 +45,6 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
   });
 
   const goToLink = () => window.open(url);
-
-  const getDomain = (url) => {
-    try {
-      const { host } = new URL(url);
-      return host;
-    } catch (err) {
-      return "Invalid URL";
-    }
-  };
 
   return (
     <StyledNoteCard>
