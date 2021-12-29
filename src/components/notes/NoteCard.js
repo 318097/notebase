@@ -1,86 +1,12 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { Icon as AntIcon } from "antd";
 import moment from "moment";
-import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
+import { Card, Icon, Tag } from "@codedrops/react-ui";
 import _ from "lodash";
 import classnames from "classnames";
 // import Dropdown from "../lib/Dropdown";
 import { md } from "../../lib/utils";
-
-const StyledCard = styled.div`
-  height: 300px;
-  max-height: 300px;
-  display: flex;
-  flex-direction: column;
-  /* break-inside: avoid-column; */
-  .card,
-  .action-row {
-    border: 1px solid ${colors.bg};
-    box-shadow: ${colors.bg} 3px 3px 3px;
-    position: relative;
-    width: 100%;
-    min-height: unset;
-    overflow: visible;
-    &:hover {
-      background: ${colors.featherDark};
-    }
-  }
-  .card {
-    flex: 1 1 auto;
-    overflow: hidden;
-    margin: 0 0 2px 0;
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 24px 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    .title {
-      font-size: 1.2rem;
-      text-align: center;
-    }
-    .post-title {
-      font-size: 1.6rem;
-    }
-    .content {
-      font-size: inherit;
-      width: 100%;
-      margin-top: 8px;
-      overflow-x: auto;
-      padding: 0;
-      pre,
-      code {
-        font-size: 1rem;
-      }
-    }
-  }
-  .card.today,
-  .action-row.today {
-    background: ${colors.feather};
-  }
-  .action-row {
-    padding: 6px;
-    top: 0px;
-    flex: 0 0 auto;
-    &:hover {
-      background: ${colors.white};
-    }
-    .status-row {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .status-tag {
-        text-transform: capitalize;
-      }
-      .anticon {
-        margin: 0 2px;
-      }
-    }
-  }
-`;
+import { StyledNoteCard } from "./styled";
 
 const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
   const {
@@ -128,7 +54,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
   };
 
   return (
-    <StyledCard>
+    <StyledNoteCard>
       <Card onClick={(e) => handleClick(e, _id)} className={cardClasses}>
         <h3
           className={titleClasses}
@@ -209,7 +135,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
           <Tag>{createdTimeAgo}</Tag>
         </div>
       </Card>
-    </StyledCard>
+    </StyledNoteCard>
   );
 };
 

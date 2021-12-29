@@ -55,13 +55,12 @@
 - [ ] Trash - show deleted notes
 - [ ] Lazy loading
 - [ ] Save & retrive draft
-- [ ] Show source of addition (toby, direct, flash etc) in noteview
+- [ ] Show source of addition (toby, direct, post/drop file upload, flash etc) in noteview
 - [ ] Upload content - card design
 - [ ] Page loading hoc
 - [ ] Fix designs (card view & note view) for
-  - [ ] Only title
+  - [ ] Only title (configure card height using css styles)
   - [ ] Title + URL
-  - [ ] Types - Drop, post, etc
 - [ ] Empty states for media
 - [ ] Enhance search technique
 

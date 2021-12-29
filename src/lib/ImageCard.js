@@ -6,12 +6,15 @@ import colors from "@codedrops/react-ui";
 
 const StyledCard = styled(Card)`
   display: flex;
-  height: 300px;
+  height: 240px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 10px;
+  padding: 0px;
   position: relative;
+  .ant-card-body {
+    padding: 0;
+  }
   img {
     max-width: 100%;
     max-height: inherit;
