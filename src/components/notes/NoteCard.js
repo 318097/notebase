@@ -7,6 +7,7 @@ import classnames from "classnames";
 // import Dropdown from "../lib/Dropdown";
 import { md } from "../../lib/utils";
 import { StyledNoteCard } from "./styled";
+import NoteMeta from "./NoteMeta";
 
 const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
   const {
@@ -25,6 +26,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
     chainedPosts = [],
     chainedItems = [],
     chainedTo = [],
+    sourceInfo,
   } = note;
   // const [showDropdown, setShowDropdown] = useState(false);
   const onlyTitleAndURL = title && url && !content;
@@ -124,7 +126,9 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
 
             {onlyTitleAndURL && <AntIcon type="link" onClick={goToLink} />}
 
+            <NoteMeta sourceInfo={sourceInfo} inPopup={true} />
             {!visible && <AntIcon type="eye-invisible" />}
+
             {type === "DROP" ? (
               <Icon type="bulb" size={12} />
             ) : type === "CHAIN" ? (

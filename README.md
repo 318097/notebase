@@ -55,7 +55,7 @@
 - [ ] Trash - show deleted notes
 - [ ] Lazy loading
 - [ ] Save & retrive draft
-- [ ] Show source of addition (toby, direct, post/drop file upload, flash etc) in noteview
+- [x] Show source of addition (toby, direct, post/drop file upload, flash etc) in noteview
 - [ ] Upload content - card design
 - [ ] Page loading hoc
 - [ ] Fix designs (card view & note view) for

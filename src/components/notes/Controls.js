@@ -25,6 +25,7 @@ import short from "short-uuid";
 import { STATUS_OPTIONS } from "../../constants";
 import ImageCard from "../../lib/ImageCard";
 import UploadButton from "../../lib/UploadButton";
+import NoteMeta from "./NoteMeta";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -136,6 +137,7 @@ const Controls = ({
     chainedTo = [],
     socialPlatforms = [],
     directUpload = [],
+    sourceInfo,
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
   const [showCaptionDrawer, setCaptionDrawerVisibility] = useState(false);
@@ -389,6 +391,8 @@ const Controls = ({
           Published: <span className="bold">{publishedOn}</span>
         </div>
       )}
+
+      <NoteMeta sourceInfo={sourceInfo} />
     </ControlsWrapper>
   );
 
