@@ -7,13 +7,20 @@ import styled from "styled-components";
 import uuid from "uuid";
 import _ from "lodash";
 import SelectCollection from "../SelectCollection";
-import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
+import {
+  setModalMeta,
+  setUploadingData,
+  addNote,
+  setActiveCollection,
+} from "../../store/actions";
 import { INITIAL_UPLOADING_DATA_STATE } from "../../store/reducer";
-import { md } from "../../lib/utils";
+import { extractTagCodes, md } from "../../lib/utils";
 import axios from "axios";
 import ImageCard from "../../lib/ImageCard";
 import UploadButton from "../../lib/UploadButton";
 import classnames from "classnames";
+import { StyledNoteCard } from "./styled";
+import NoteMeta from "./NoteMeta";
 
 const config = {
   POST: {
@@ -58,36 +65,6 @@ const Wrapper = styled.div`
   grid-template-columns: repeat(auto-fill, 300px);
   gap: 12px;
   padding: 0 28px;
-  .card-wrapper {
-    height: 300px;
-    margin: 3px 0;
-    position: relative;
-    .card {
-      height: 100%;
-      width: 100%;
-      padding: 20px 12px;
-      cursor: pointer;
-      .title {
-        margin-bottom: 10px;
-      }
-      .content {
-        overflow: auto;
-      }
-    }
-    .index-number {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      text-decoration: underline;
-      font-style: italics;
-      font-size: 1rem;
-    }
-    .actions {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-    }
-  }
 `;
 
 const UploadContent = ({
@@ -105,12 +82,15 @@ const UploadContent = ({
   addNote,
   activeCollectionId,
   settings,
+  setActiveCollection,
+  tagsCodes,
 }) => {
   const [viewRawData, setViewRawData] = useState(false);
   const [requireParsing, setRequireParsing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [activeId, setActiveId] = useState(activeCollectionId);
   // const [fileParsing, setFileParsing] = useState();
+  const currentDataTypeConfig = _.get(config, dataType, {});
+  const isCustomSource = _.includes(["POST", "DROP"], dataType);
 
   useEffect(() => {
     if (status === "PROCESS_DATA") processData();
@@ -118,23 +98,25 @@ const UploadContent = ({
 
   useEffect(() => {
     if (status === "PROCESSED") setRequireParsing(true);
-  }, [activeId, tags, dataType]);
+  }, [activeCollectionId, tags, dataType]);
 
-  const parseItem = (item, { isCustomSource, activeId } = {}) => {
+  const parseItem = (item, metaInfo = {}) => {
     const parsed = {
       tags,
       type: "POST",
       status: "QUICK_ADD",
       tempId: uuid(),
       viewed: false,
+      collectionId: activeCollectionId,
       sourceInfo: {
+        ...metaInfo,
         // cloudinary url is added later
         fileName,
-        type: dataType,
+        fileType: dataType,
       },
     };
 
-    const { itemSplitter, titleRegex, contentRegex } = _.get(config, dataType);
+    const { itemSplitter, titleRegex, contentRegex } = currentDataTypeConfig;
 
     switch (dataType) {
       case "POST": {
@@ -147,12 +129,12 @@ const UploadContent = ({
         let [title, content] = item.split(itemSplitter);
         parsed.title = title.replace(titleRegex, "");
         parsed.content = `${title} - ${content}`;
+        parsed.type = "DROP";
         break;
       }
       case "TOBY": {
         parsed.title = item.title;
         parsed.url = item.url;
-        parsed.sourceInfo["collection"] = activeId;
         break;
       }
       default:
@@ -164,25 +146,22 @@ const UploadContent = ({
   const processData = () => {
     if (!rawData) return;
 
-    const isCustomSource = _.includes(["POST", "DROP"], dataType);
     let parsedContent = [];
 
     if (isCustomSource) {
       const dataSplit = rawData.split(
-        new RegExp(_.get(config, [dataType, "itemSeperator"]))
+        new RegExp(_.get(currentDataTypeConfig, "itemSeperator"))
       );
-      parsedContent = dataSplit.map((item) =>
-        parseItem(item.trim(), { isCustomSource })
-      );
+      parsedContent = dataSplit.map((item) => parseItem(item.trim()));
     } else {
+      // TOBY
       const json = JSON.parse(rawData);
       json.lists.forEach((collection) => {
         const { title, cards } = collection;
 
-        const collectionParsed = cards.map((item) =>
-          parseItem(item, { isCustomSource, activeId: title })
+        parsedContent = cards.map((item) =>
+          parseItem(item, { tobyCollectionName: title })
         );
-        parsedContent.push(...collectionParsed);
       });
     }
 
@@ -191,6 +170,20 @@ const UploadContent = ({
       status: "PROCESSED",
     });
     setRequireParsing(false);
+  };
+
+  const onFileRead = (files) => {
+    if (dataType === "RESOURCES")
+      setUploadingData({
+        ...files,
+        data: [...files.data, ...data],
+      });
+    // uploaded 'md' files
+    else
+      setUploadingData({
+        ...files,
+        status: "PROCESS_DATA",
+      });
   };
 
   const addData = async () => {
@@ -213,15 +206,21 @@ const UploadContent = ({
       });
 
       if (dataType !== "RESOURCES") {
+        const uploadedFileInfo = _.get(transactionResponse, "data.0");
+        const batchId = new Date().getTime();
         await addNote(
           data.map((item) => ({
             ...item,
             sourceInfo: {
               ...item.sourceInfo,
-              id: _.get(transactionResponse, "data.0.url"),
+              fileURL: _.get(uploadedFileInfo, "url"),
+              uploadedOn: _.get(uploadedFileInfo, "created_at"),
+              id: _.get(uploadedFileInfo, "asset_id"),
+              batchSize: data.length,
+              batchId,
             },
           })),
-          activeId
+          activeCollectionId
         );
       }
       message.success(`${data.length} items added.`);
@@ -233,29 +232,16 @@ const UploadContent = ({
     }
   };
 
-  const editItem = (item) => () =>
+  const editItem = (selectedNote) =>
     setModalMeta({
-      selectedNote: item,
+      selectedNote,
       mode: "edit-upload",
       visibility: true,
     });
 
-  const removeItem = (tempId) => (e) => {
+  const removeItem = (e, tempId) => {
     e.stopPropagation();
     setUploadingData({ data: data.filter((item) => item.tempId !== tempId) });
-  };
-
-  const onFileRead = (files) => {
-    if (dataType === "RESOURCES")
-      setUploadingData({
-        ...files,
-        data: [...files.data, ...data],
-      });
-    else
-      setUploadingData({
-        ...files,
-        status: "PROCESS_DATA",
-      });
   };
 
   const clearData = () =>
@@ -268,7 +254,10 @@ const UploadContent = ({
       visible: !isResourceUpload,
       component: (
         <Fragment>
-          <SelectCollection value={activeId} handleChange={setActiveId} />
+          <SelectCollection
+            value={activeCollectionId}
+            handleChange={setActiveCollection}
+          />
 
           <Select
             style={{ minWidth: "80px" }}
@@ -298,7 +287,7 @@ const UploadContent = ({
         >
           <OptGroup label="Custom">
             {_.get(settings, "postTypes", []).map(({ label, value }) => (
-              <Option key={label} value={label}>
+              <Option key={value} value={value}>
                 {label}
               </Option>
             ))}
@@ -339,7 +328,7 @@ const UploadContent = ({
       ) : (
         <UploadButton
           label="Select File"
-          accept={_.get(config, [dataType, "accept"])}
+          accept={_.get(currentDataTypeConfig, "accept")}
           onFileRead={onFileRead}
         />
       ),
@@ -352,7 +341,7 @@ const UploadContent = ({
           <Divider type="vertical" />
           <UploadButton
             label="Add files"
-            accept={_.get(config, [dataType, "accept"])}
+            accept={_.get(currentDataTypeConfig, "accept")}
             onFileRead={onFileRead}
           />
 
@@ -378,72 +367,90 @@ const UploadContent = ({
             .map((item) => (
               <Fragment key={item.id}>{item.component}</Fragment>
             ))}
-
-          {/* <Input
-            key="file-splitter"
-            style={{ width: "110px" }}
-            placeholder="File splitter"
-            value={JSON.stringify(fileParsing)}
-            onChange={({ target: { value } }) =>
-              setFileParsing(JSON.parse(value))
-            }
-          /> */}
         </div>
       </StyledPageHeader>
 
       <EmptyState input={data}>
         <Wrapper>
-          {data.map((item, i) => {
-            if (dataType === "RESOURCES") {
-              // const title = _.get(item, "file.name", "");
-              return <ImageCard key={i} {...item} />;
-            }
-            const { title = "", content = "", tags = [], viewed } = item;
-            return (
-              <div
-                className={classnames("card-wrapper", { viewed: !!viewed })}
-                key={item.tempId}
-                onClick={editItem(item)}
-              >
-                <Card>
-                  <h3 className="title">{title}</h3>
-                  <div
-                    className="content"
-                    dangerouslySetInnerHTML={{ __html: md.render(content) }}
-                  ></div>
-                  <div className="tags">
-                    {tags.map((tag) => (
-                      <Tag key={tag}>{tag.toUpperCase()}</Tag>
-                    ))}
-                  </div>
-                </Card>
-                <span className="index-number">#{i + 1}</span>
-                <div className="actions">
-                  <Icon
-                    hover
-                    size={12}
-                    onClick={removeItem(item.tempId)}
-                    className="icon"
-                    type="delete"
+          {data.map((item, idx) => {
+            idx++;
+            switch (dataType) {
+              case "RESOURCES":
+                // const title = _.get(item, "file.name", "");
+                return <ImageCard key={idx} {...item} />;
+              default:
+                return (
+                  <UploadCard
+                    key={item.tempId}
+                    item={item}
+                    editItem={editItem}
+                    removeItem={removeItem}
+                    idx={idx}
+                    tagsCodes={tagsCodes}
                   />
-                </div>
-              </div>
-            );
+                );
+            }
           })}
-          <Modal
-            title={"Raw data"}
-            centered={true}
-            // width={"50vw"}
-            wrapClassName="react-ui"
-            visible={viewRawData}
-            footer={null}
-            onCancel={() => setViewRawData(false)}
-          >
-            <div dangerouslySetInnerHTML={{ __html: rawData }} />
-          </Modal>
         </Wrapper>
       </EmptyState>
+      <Modal
+        title={"Raw data"}
+        centered={true}
+        // width={"50vw"}
+        wrapClassName="react-ui"
+        visible={viewRawData}
+        footer={null}
+        onCancel={() => setViewRawData(false)}
+      >
+        <div dangerouslySetInnerHTML={{ __html: rawData }} />
+      </Modal>
     </section>
+  );
+};
+
+const UploadCard = ({ item, editItem, removeItem, idx, tagsCodes }) => {
+  const { title = "", content = "", tags = [], viewed, sourceInfo } = item;
+  const cardClasses = classnames("card", {
+    today: !!viewed,
+  });
+
+  return (
+    <StyledNoteCard>
+      <Card className={cardClasses} onClick={() => editItem(item)}>
+        <h3 className="title">{title}</h3>
+        <div
+          className="content"
+          dangerouslySetInnerHTML={{ __html: md.render(content) }}
+        ></div>
+        {!!idx && (
+          <div className="index-wrapper">
+            <span className="index">{`#${idx}`}</span>
+          </div>
+        )}
+      </Card>
+      <Card className={classnames("action-row", { today: !!viewed })}>
+        <div className="status-row">
+          <div className="tags">
+            {tags.map((tag) => (
+              <Tag key={tag} color={tagsCodes[tag]}>
+                {tag}
+              </Tag>
+            ))}
+          </div>
+
+          <div className="fcc">
+            <NoteMeta sourceInfo={sourceInfo} inPopup={true} />
+            <Icon
+              hover
+              size={12}
+              onClick={(e) => removeItem(e, item.tempId)}
+              className="icon"
+              type="delete"
+            />
+          </div>
+        </div>
+      </Card>
+    </StyledNoteCard>
   );
 };
 
@@ -451,8 +458,14 @@ const mapStateToProps = ({ uploadingData, activeCollectionId, settings }) => ({
   uploadingData,
   activeCollectionId,
   settings,
+  tagsCodes: extractTagCodes(settings.tags),
 });
 
-const mapDispatchToProps = { setModalMeta, setUploadingData, addNote };
+const mapDispatchToProps = {
+  setModalMeta,
+  setUploadingData,
+  addNote,
+  setActiveCollection,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UploadContent);
