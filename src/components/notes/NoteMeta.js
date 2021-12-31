@@ -3,15 +3,10 @@ import { Popover } from "antd";
 import { Icon } from "@codedrops/react-ui";
 import _ from "lodash";
 
-const NoteMeta = ({ sourceInfo, inPopup }) => {
-  const obj = _.pick(sourceInfo || {}, [
-    "fileName",
-    "fileType",
-    "batchId",
-    "batchSize",
-    "tobyCollectionName",
-    "tobyCollectionSize",
-  ]);
+const NoteMeta = ({ sourceInfo = {}, inPopup }) => {
+  const obj = { ...(sourceInfo || {}) };
+  delete obj.uploadedFileId;
+
   const entries = Object.entries(obj);
   const entriesLength = entries.length;
 

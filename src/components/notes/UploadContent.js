@@ -37,18 +37,21 @@ const config = {
     titleRegex: /###/gi,
     contentRegex: "\n",
     accept: ".md",
+    collectionType: "POST_FILE",
   },
   DROP: {
     itemSeperator: "\n",
     itemSplitter: "=>",
     titleRegex: /-/,
     accept: ".md",
+    collectionType: "DROP_FILE",
   },
   RESOURCES: {
     accept: ".png",
   },
   TOBY: {
     accept: ".json",
+    collectionType: "TOBY",
   },
 };
 
@@ -163,8 +166,8 @@ const UploadContent = ({
       json.lists.forEach((collection) => {
         const { title, cards } = collection;
         const metaInfo = {
-          tobyCollectionName: title,
-          tobyCollectionSize: cards.length,
+          collectionName: title,
+          collectionSize: cards.length,
         };
         const parsedCollection = cards.map((item) => parseItem(item, metaInfo));
         parsedContent.push(...parsedCollection);
@@ -218,7 +221,8 @@ const UploadContent = ({
           uploadedFileOn: _.get(uploadedFileInfo, "created_at"),
           uploadedFileId: _.get(uploadedFileInfo, "asset_id"),
           fileName,
-          fileType: dataType,
+          collectionType: currentDataTypeConfig.collectionType,
+          method: "FILE_UPLOAD",
         };
 
         await addNote(data, { collectionId: activeCollectionId, sourceInfo });

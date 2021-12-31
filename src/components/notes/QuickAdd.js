@@ -97,8 +97,12 @@ const QuickAdd = ({
         status: "QUICK_ADD",
         tags,
       }));
+      const sourceInfo = {
+        collectionType: activeTab,
+        method: "QUICK_ADD",
+      };
 
-      await addNote(inputData, { collectionId: activeId });
+      await addNote(inputData, { collectionId: activeId, sourceInfo });
       clearData();
     } finally {
       setLoading(false);
