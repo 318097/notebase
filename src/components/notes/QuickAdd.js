@@ -98,7 +98,7 @@ const QuickAdd = ({
         tags,
       }));
 
-      await addNote(inputData, activeId);
+      await addNote(inputData, { collectionId: activeId });
       clearData();
     } finally {
       setLoading(false);

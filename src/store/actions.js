@@ -73,25 +73,30 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
   dispatch(setAppLoading(false));
 };
 
-export const addNote = (notes, collection) => async (dispatch, getState) => {
-  try {
-    dispatch(setAppLoading(true));
-    const { activeCollectionId, filters } = getState();
-    const addToCollection = collection || activeCollectionId;
+export const addNote =
+  (notes, { collectionId, sourceInfo } = {}) =>
+  async (dispatch, getState) => {
+    try {
+      dispatch(setAppLoading(true));
+      const { activeCollectionId, filters } = getState();
+      const addToCollection = collectionId || activeCollectionId;
 
-    const data = [].concat(notes);
-    await axios.post(`/posts?collectionId=${addToCollection}`, { data });
-    dispatch({
-      type: UPDATE_FILTER,
-      payload: filters,
-    });
-    refetch(dispatch);
-    if (_.get(data, "0.type") === "CHAIN") dispatch(getChains());
-    message.success(`Success.`);
-  } finally {
-    dispatch(setAppLoading(false));
-  }
-};
+      const data = [].concat(notes);
+      await axios.post(`/posts?collectionId=${addToCollection}`, {
+        data,
+        sourceInfo,
+      });
+      dispatch({
+        type: UPDATE_FILTER,
+        payload: filters,
+      });
+      refetch(dispatch);
+      if (_.get(data, "0.type") === "CHAIN") dispatch(getChains());
+      message.success(`Success.`);
+    } finally {
+      dispatch(setAppLoading(false));
+    }
+  };
 
 export const setNoteToEdit =
   (noteId, mode = "edit") =>

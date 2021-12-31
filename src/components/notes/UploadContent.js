@@ -77,6 +77,7 @@ const Wrapper = styled.div`
 
 const UploadContent = ({
   setModalMeta,
+  history,
   uploadingData: {
     rawData,
     data,
@@ -116,12 +117,7 @@ const UploadContent = ({
       tempId: uuid(),
       viewed: false,
       collectionId: activeCollectionId,
-      sourceInfo: {
-        ...metaInfo,
-        // cloudinary url is added later
-        fileName,
-        fileType: dataType,
-      },
+      sourceInfo: metaInfo,
     };
 
     const { itemSplitter, titleRegex, contentRegex } = currentDataTypeConfig;
@@ -166,13 +162,11 @@ const UploadContent = ({
       const json = JSON.parse(rawData);
       json.lists.forEach((collection) => {
         const { title, cards } = collection;
-
-        const parsedCollection = cards.map((item) =>
-          parseItem(item, {
-            tobyCollectionName: title,
-            tobyCollectionSize: cards.length,
-          })
-        );
+        const metaInfo = {
+          tobyCollectionName: title,
+          tobyCollectionSize: cards.length,
+        };
+        const parsedCollection = cards.map((item) => parseItem(item, metaInfo));
         parsedContent.push(...parsedCollection);
       });
     }
@@ -219,23 +213,18 @@ const UploadContent = ({
 
       if (dataType !== "RESOURCES") {
         const uploadedFileInfo = _.get(transactionResponse, "data.0");
-        const batchId = new Date().getTime();
-        await addNote(
-          data.map((item) => ({
-            ...item,
-            sourceInfo: {
-              ...item.sourceInfo,
-              fileURL: _.get(uploadedFileInfo, "url"),
-              uploadedOn: _.get(uploadedFileInfo, "created_at"),
-              id: _.get(uploadedFileInfo, "asset_id"),
-              batchSize: data.length,
-              batchId,
-            },
-          })),
-          activeCollectionId
-        );
+        const sourceInfo = {
+          uploadedFileURL: _.get(uploadedFileInfo, "url"),
+          uploadedFileOn: _.get(uploadedFileInfo, "created_at"),
+          uploadedFileId: _.get(uploadedFileInfo, "asset_id"),
+          fileName,
+          fileType: dataType,
+        };
+
+        await addNote(data, { collectionId: activeCollectionId, sourceInfo });
       }
       message.success(`${data.length} items added.`);
+      history.push("/");
     } catch (err) {
       console.log(err);
     } finally {

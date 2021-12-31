@@ -159,10 +159,9 @@ const AddNote = ({
         await addNote(
           {
             ...note,
-            userId: session.uid,
             content: isContentEmpty ? "" : note.content,
           },
-          activeId
+          { collectionId: activeId }
         );
       } else await updateUploadNote({ ...note, viewed: true });
     } finally {
