@@ -4,21 +4,25 @@ import { Icon } from "@codedrops/react-ui";
 import _ from "lodash";
 
 const NoteMeta = ({ sourceInfo = {}, inPopup }) => {
-  const obj = { ...(sourceInfo || {}) };
-  delete obj.uploadedFileId;
-
-  const entries = Object.entries(obj);
+  const entries = Object.entries(sourceInfo || {});
   const entriesLength = entries.length;
 
   const SourceInfo = (
     <div>
-      {entries.map(([key, value]) => {
-        return (
-          <div className="mb">
-            {key}:<span className="bold">{value}</span>
-          </div>
-        );
-      })}
+      {entries
+        .filter(
+          ([key]) =>
+            !["uploadedFileURL", "uploadedFileOn", "uploadedFileId"].includes(
+              key
+            )
+        )
+        .map(([key, value]) => {
+          return (
+            <div>
+              {key}:<span className="bold">{value}</span>
+            </div>
+          );
+        })}
     </div>
   );
 
