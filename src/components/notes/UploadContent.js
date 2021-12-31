@@ -38,6 +38,19 @@ const config = {
     contentRegex: "\n",
     accept: ".md",
     collectionType: "POST_FILE",
+    emptyState: `
+      <div>
+      <h4>Upload Post</h4>
+        Create a .md file with the following format..<br/><br/>
+        <div>
+          ### Title 1...<br/>
+          content...<br/>
+          ---<br/>
+          ### Title 2...<br/>
+          content...
+        </div>
+      </div>
+    `,
   },
   DROP: {
     itemSeperator: "\n",
@@ -45,6 +58,16 @@ const config = {
     titleRegex: /-/,
     accept: ".md",
     collectionType: "DROP_FILE",
+    emptyState: `
+      <div>
+      <h4>Upload Drop</h4>
+        Create a .md file with the following format..<br/><br/>
+        <div>
+          - Title 1 -> content...<br/>
+          - Title 2 -> content...<br/>
+        </div>
+      </div>
+    `,
   },
   RESOURCES: {
     accept: ".png",
@@ -52,6 +75,12 @@ const config = {
   TOBY: {
     accept: ".json",
     collectionType: "TOBY",
+    emptyState: `
+      <div>
+      <h4>Upload Toby links</h4>
+        Export Toby as .json & upload
+      </div>
+    `,
   },
 };
 
@@ -375,7 +404,7 @@ const UploadContent = ({
         </div>
       </StyledPageHeader>
 
-      <EmptyState input={data}>
+      {data.length ? (
         <Wrapper>
           {data.map((item, idx) => {
             idx++;
@@ -398,7 +427,17 @@ const UploadContent = ({
             }
           })}
         </Wrapper>
-      </EmptyState>
+      ) : (
+        <div
+          style={{
+            background: "#fbfbfb",
+            borderRadius: "2px",
+            margin: "0 auto",
+            padding: "30px 60px",
+          }}
+          dangerouslySetInnerHTML={{ __html: currentDataTypeConfig.emptyState }}
+        />
+      )}
       <Modal
         title={"Raw data"}
         centered={true}
