@@ -76,6 +76,7 @@
   - [ ] Deleting
   - [ ] Visibility
   - [ ] Generate tags/slugs
+- [x] Collection view for upload
 
 ### Bugs
 

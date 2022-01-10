@@ -263,4 +263,24 @@ const StyledNoteView = styled.div`
   }
 `;
 
-export { StyledNoteCard, StyledNoteView };
+const StyledCollection = styled.div`
+  border: 2px solid ${colors.strokeOne};
+  border-radius: 2px;
+  background: ${colors.feather};
+  margin-bottom: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  .collection-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h3 {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
+`;
+
+export { StyledNoteCard, StyledNoteView, StyledCollection };

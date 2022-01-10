@@ -15,6 +15,7 @@ import styled from "styled-components";
 import uuid from "uuid";
 import _ from "lodash";
 import SelectCollection from "../SelectCollection";
+import { useObject } from "@codedrops/lib";
 import {
   setModalMeta,
   setUploadingData,
@@ -27,7 +28,7 @@ import axios from "axios";
 import ImageCard from "../../lib/ImageCard";
 import UploadButton from "../../lib/UploadButton";
 import classnames from "classnames";
-import { StyledNoteCard } from "./styled";
+import { StyledNoteCard, StyledCollection } from "./styled";
 import NoteMeta from "./NoteMeta";
 
 const config = {
@@ -102,7 +103,7 @@ const StyledPageHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 8px 28px 12px;
+  padding: 8px 0px 12px;
   .actions {
     margin-left: 20px;
     display: grid;
@@ -116,7 +117,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 300px);
   gap: 12px;
-  padding: 0 28px;
+  padding: 0;
 `;
 
 const UploadContent = ({
@@ -139,11 +140,14 @@ const UploadContent = ({
   tagsCodes,
 }) => {
   const [viewRawData, setViewRawData] = useState(false);
+  const [collectionVisibilityObj, updateCollectionVisibilityObj] = useObject();
   const [requireParsing, setRequireParsing] = useState(false);
   const [loading, setLoading] = useState(false);
   // const [fileParsing, setFileParsing] = useState();
+
   const currentDataTypeConfig = _.get(config, dataType, {});
   const isCustomSource = _.includes(["POST", "DROP"], dataType);
+  const isExternalData = ["TOBY", "CHROME"].includes(dataType);
 
   useEffect(() => {
     if (status === "PROCESS_DATA") processData();
@@ -153,7 +157,7 @@ const UploadContent = ({
     if (status === "PROCESSED") setRequireParsing(true);
   }, [activeCollectionId, tags, dataType]);
 
-  const parseItem = (item, metaInfo = {}) => {
+  const parseItem = (item, sourceInfo = {}) => {
     const parsed = {
       tags,
       type: "POST",
@@ -161,7 +165,7 @@ const UploadContent = ({
       tempId: uuid(),
       viewed: false,
       collectionId: activeCollectionId,
-      sourceInfo: metaInfo,
+      sourceInfo,
     };
 
     const { itemSplitter, titleRegex, contentRegex } = currentDataTypeConfig;
@@ -210,27 +214,30 @@ const UploadContent = ({
       const json = JSON.parse(rawData);
       json.lists.forEach((collection) => {
         const { title, cards } = collection;
-        const metaInfo = {
+        const sourceInfo = {
           collectionName: title,
           collectionSize: cards.length,
+          id: uuid(),
         };
-        const parsedCollection = cards.map((item) => parseItem(item, metaInfo));
+        const parsedCollection = cards.map((item) =>
+          parseItem(item, sourceInfo)
+        );
         parsedContent.push(...parsedCollection);
       });
     } else if (dataType === "CHROME") {
       const json = JSON.parse(rawData);
 
-      const recursiveFetch = (items, metaInfo) => {
+      const recursiveFetch = (items, sourceInfo) => {
         items.forEach((item) => {
           if (item.type === "folder") {
             const { title, items: childItems } = item;
-            const metaInfo = {
+            const sourceInfo = {
               collectionName: title,
               collectionSize: items.length,
             };
-            recursiveFetch(childItems, metaInfo);
+            recursiveFetch(childItems, sourceInfo);
           } else {
-            const parsedItem = parseItem(item, metaInfo);
+            const parsedItem = parseItem(item, sourceInfo);
             parsedContent.push(parsedItem);
           }
         });
@@ -290,7 +297,10 @@ const UploadContent = ({
           method: "FILE_UPLOAD",
         };
 
-        await addNote(data, { collectionId: activeCollectionId, sourceInfo });
+        await addNote(data, {
+          collectionId: activeCollectionId,
+          sourceInfo,
+        });
       }
       message.success(`${data.length} items added.`);
       history.push("/");
@@ -427,8 +437,46 @@ const UploadContent = ({
     },
   ];
 
+  const getData = ({ data }) => {
+    return (
+      <Fragment>
+        {data.map((item, idx) => {
+          idx++;
+          switch (dataType) {
+            case "RESOURCES":
+              // const title = _.get(item, "file.name", "");
+              return <ImageCard key={idx} {...item} />;
+            default:
+              return (
+                <UploadCard
+                  key={item.tempId}
+                  item={item}
+                  editItem={editItem}
+                  removeItem={removeItem}
+                  idx={idx}
+                  tagsCodes={tagsCodes}
+                  isExternalData={isExternalData}
+                />
+              );
+          }
+        })}
+      </Fragment>
+    );
+  };
+
+  const generateViewData = isExternalData
+    ? Object.entries(_.groupBy(data, "sourceInfo.id")).map(
+        ([tempId, posts]) => ({
+          tempId,
+          posts,
+          size: posts.length,
+          title: _.get(_.first(posts), "sourceInfo.collectionName"),
+        })
+      )
+    : data;
+
   return (
-    <section>
+    <section style={{ padding: "0 28px" }}>
       <StyledPageHeader>
         <h3>File Upload</h3>
         <div className="actions">
@@ -440,29 +488,40 @@ const UploadContent = ({
         </div>
       </StyledPageHeader>
 
-      {data.length ? (
-        <Wrapper>
-          {data.map((item, idx) => {
-            idx++;
-            switch (dataType) {
-              case "RESOURCES":
-                // const title = _.get(item, "file.name", "");
-                return <ImageCard key={idx} {...item} />;
-              default:
-                return (
-                  <UploadCard
-                    key={item.tempId}
-                    item={item}
-                    editItem={editItem}
-                    removeItem={removeItem}
-                    idx={idx}
-                    tagsCodes={tagsCodes}
-                    dataType={dataType}
-                  />
-                );
-            }
-          })}
-        </Wrapper>
+      {generateViewData.length ? (
+        <Fragment>
+          {isExternalData ? (
+            generateViewData.map((item) => {
+              const { title, posts = [], size, tempId } = item;
+              const showCollection = collectionVisibilityObj[title];
+              return (
+                <StyledCollection>
+                  <div className="collection-header" key={tempId}>
+                    <h3>{title}</h3>
+                    <div className="fcc gap-4">
+                      <span>Size: {size}</span> |
+                      <Icon
+                        type="caret"
+                        size="10"
+                        direction={showCollection ? "up" : "down"}
+                        onClick={() =>
+                          updateCollectionVisibilityObj({
+                            [title]: !showCollection,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  {showCollection && (
+                    <Wrapper>{getData({ data: posts })}</Wrapper>
+                  )}
+                </StyledCollection>
+              );
+            })
+          ) : (
+            <Wrapper>{getData({ data })}</Wrapper>
+          )}
+        </Fragment>
       ) : (
         <div
           style={{
@@ -495,14 +554,13 @@ const UploadCard = ({
   removeItem,
   idx,
   tagsCodes,
-  dataType,
+  isExternalData,
 }) => {
   const { title = "", content = "", tags = [], viewed, sourceInfo, url } = item;
   const cardClasses = classnames("card", {
     today: !!viewed,
   });
-  const onlyTitleAndURL = ["TOBY", "CHROME"].includes(dataType);
-  const collectionName = `Collection: ${_.get(sourceInfo, "collectionName")}`;
+  const onlyTitleAndURL = isExternalData;
   const goToLink = () => window.open(url);
   return (
     <StyledNoteCard>
@@ -515,13 +573,7 @@ const UploadCard = ({
           ></div>
         )}
 
-        {onlyTitleAndURL && (
-          <>
-            <div>{getDomain(url)}</div>
-            <div>---</div>
-            <div className="mt">{collectionName}</div>
-          </>
-        )}
+        {onlyTitleAndURL && <div>{getDomain(url)}</div>}
         {!!idx && (
           <div className="index-wrapper">
             <span className="index">{`#${idx}`}</span>
