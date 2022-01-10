@@ -71,6 +71,7 @@
 - [ ] Auto generate tags
 - [ ] Move post to another collection
   - [ ] Store history of source -> destination moving
+  - [ ] Sym link
 - [ ] Bulk actions
   - [ ] Moving
   - [ ] Deleting
