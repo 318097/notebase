@@ -227,15 +227,18 @@ const UploadContent = ({
     } else if (dataType === "CHROME") {
       const json = JSON.parse(rawData);
 
-      const recursiveFetch = (items, sourceInfo) => {
+      const recursiveFetch = (items, sourceInfo = {}) => {
         items.forEach((item) => {
           if (item.type === "folder") {
             const { title, items: childItems } = item;
-            const sourceInfo = {
-              collectionName: title,
+            const newSourceInfo = {
+              collectionName: sourceInfo.collectionName
+                ? `${sourceInfo.collectionName}/${title}`
+                : title,
               collectionSize: items.length,
+              id: uuid(),
             };
-            recursiveFetch(childItems, sourceInfo);
+            recursiveFetch(childItems, newSourceInfo);
           } else {
             const parsedItem = parseItem(item, sourceInfo);
             parsedContent.push(parsedItem);
