@@ -50,14 +50,16 @@
   - [ ] Default values, Fields required based on type
   - [ ] Default filters
 - [ ] Parse external data
+  - [ ] Group & show data by collection & size
   - [x] Toby
-  - [ ] Chrome bookmarks
-- [ ] Trash - show deleted notes
+  - [x] Chrome bookmarks
+    - [ ] Append full path for bookmarks in sub folders
+- [ ] Trash & Hidden section
 - [ ] Lazy loading
 - [ ] Save & retrive draft
 - [x] Show source of addition (toby, direct, post/drop file upload, flash etc) in noteview
-- [ ] Upload content
-  - [ ] Empty state for upload page, different for POST, TOBY
+- [x] Upload content
+  - [x] Empty state for upload page, different for POST, TOBY
   - [x] Card design
   - [ ] Media card design
 - [ ] Page loading hoc
@@ -66,6 +68,14 @@
   - [ ] Title + URL
 - [ ] Empty states for media
 - [ ] Enhance search technique
+- [ ] Auto generate tags
+- [ ] Move post to another collection
+  - [ ] Store history of source -> destination moving
+- [ ] Bulk actions
+  - [ ] Moving
+  - [ ] Deleting
+  - [ ] Visibility
+  - [ ] Generate tags/slugs
 
 ### Bugs
 

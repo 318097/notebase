@@ -9,7 +9,7 @@ import {
   Modal,
   Icon as AntIcon,
 } from "antd";
-import { Card, Icon, EmptyState } from "@codedrops/react-ui";
+import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import uuid from "uuid";
@@ -79,6 +79,18 @@ const config = {
       <div>
       <h4>Upload Toby links</h4>
         Export Toby as .json & upload
+      </div>
+    `,
+  },
+  CHROME: {
+    accept: ".json",
+    collectionType: "CHROME",
+    emptyState: `
+      <div>
+      <h4>Upload Chrome bookmarks</h4>
+        1. Export bookmarks as html file<br/>
+        2. Convert bookmarks to JSON from <a target="_blank" href="https://chrome-bookmarks-converter.netlify.app/">https://chrome-bookmarks-converter.netlify.app/</a><br/>
+        3. Download JSON file content and upload
       </div>
     `,
   },
@@ -173,6 +185,11 @@ const UploadContent = ({
         parsed.url = item.url;
         break;
       }
+      case "CHROME": {
+        parsed.title = item.title;
+        parsed.url = item.href;
+        break;
+      }
       default:
         break;
     }
@@ -189,8 +206,7 @@ const UploadContent = ({
         new RegExp(_.get(currentDataTypeConfig, "itemSeperator"))
       );
       parsedContent = dataSplit.map((item) => parseItem(item.trim()));
-    } else {
-      // TOBY
+    } else if (dataType === "TOBY") {
       const json = JSON.parse(rawData);
       json.lists.forEach((collection) => {
         const { title, cards } = collection;
@@ -201,6 +217,26 @@ const UploadContent = ({
         const parsedCollection = cards.map((item) => parseItem(item, metaInfo));
         parsedContent.push(...parsedCollection);
       });
+    } else if (dataType === "CHROME") {
+      const json = JSON.parse(rawData);
+
+      const recursiveFetch = (items, metaInfo) => {
+        items.forEach((item) => {
+          if (item.type === "folder") {
+            const { title, items: childItems } = item;
+            const metaInfo = {
+              collectionName: title,
+              collectionSize: items.length,
+            };
+            recursiveFetch(childItems, metaInfo);
+          } else {
+            const parsedItem = parseItem(item, metaInfo);
+            parsedContent.push(parsedItem);
+          }
+        });
+      };
+
+      recursiveFetch(_.get(json, "folders.0.items", []));
     }
 
     setUploadingData({
@@ -465,11 +501,8 @@ const UploadCard = ({
   const cardClasses = classnames("card", {
     today: !!viewed,
   });
-  const onlyTitleAndURL = dataType === "TOBY";
-  const collectionName = `Collection: ${_.get(
-    sourceInfo,
-    "tobyCollectionName"
-  )}`;
+  const onlyTitleAndURL = ["TOBY", "CHROME"].includes(dataType);
+  const collectionName = `Collection: ${_.get(sourceInfo, "collectionName")}`;
   const goToLink = () => window.open(url);
   return (
     <StyledNoteCard>
