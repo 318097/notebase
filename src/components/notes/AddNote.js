@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";

@@ -1,7 +1,6 @@
 import React from "react";
 import { Popover } from "antd";
 import { Icon } from "@codedrops/react-ui";
-import _ from "lodash";
 
 const NoteMeta = ({ sourceInfo = {}, inPopup }) => {
   const entries = Object.entries(sourceInfo || {});
@@ -18,7 +17,7 @@ const NoteMeta = ({ sourceInfo = {}, inPopup }) => {
         )
         .map(([key, value]) => {
           return (
-            <div>
+            <div key={key}>
               {key}:<span className="bold">{value}</span>
             </div>
           );

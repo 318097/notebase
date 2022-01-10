@@ -495,8 +495,8 @@ const UploadContent = ({
               const { title, posts = [], size, tempId } = item;
               const showCollection = collectionVisibilityObj[title];
               return (
-                <StyledCollection>
-                  <div className="collection-header" key={tempId}>
+                <StyledCollection key={tempId}>
+                  <div className="collection-header">
                     <h3>{title}</h3>
                     <div className="fcc gap-4">
                       <span>Size: {size}</span> |

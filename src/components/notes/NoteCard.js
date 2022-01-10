@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Icon as AntIcon } from "antd";
 import moment from "moment";
 import { Card, Icon, Tag } from "@codedrops/react-ui";
