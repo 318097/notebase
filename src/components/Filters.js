@@ -25,7 +25,7 @@ const RESET_FILTER = {
   search: undefined,
   rating: undefined,
   type: undefined,
-  visibility: "visible",
+  visible: true,
   sortOrder: "DESC",
   sortFilter: "index",
 };
@@ -198,8 +198,8 @@ const Filters = ({
       allowClear
       className="form-field"
       placeholder="Visibility"
-      value={filters.visibility}
-      onChange={(value) => setFilterValues({ visibility: value })}
+      value={filters.visible}
+      onChange={(value) => setFilterValues({ visible: value })}
     >
       {VISIBILITY_OPTIONS.map(({ label, value }) => (
         <Option key={value} value={value}>
