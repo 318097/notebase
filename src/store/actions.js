@@ -1,7 +1,7 @@
 import axios from "axios";
 import _ from "lodash";
 import { message } from "antd";
-import { getNextNote } from "../lib/utils";
+import { getNextNote, getSettingsById } from "../lib/utils";
 import {
   SET_SESSION,
   SET_APP_LOADING,
@@ -22,6 +22,7 @@ import {
   SET_KEY,
   FETCH_CHAINS,
 } from "./constants";
+import { INITIAL_STATE } from "./reducer";
 
 export const setAppLoading = (status) => ({
   type: SET_APP_LOADING,
@@ -221,13 +222,24 @@ export const setSession = (session) => ({
   payload: session,
 });
 
-export const setActiveCollection = (id) => async (dispatch) => {
-  await dispatch({
-    type: SET_ACTIVE_COLLECTION,
-    payload: id,
-  });
-  await dispatch(setFilter());
-};
+export const setActiveCollection =
+  (_id, resetFilters = false) =>
+  async (dispatch, getState) => {
+    await dispatch({
+      type: SET_ACTIVE_COLLECTION,
+      payload: _id,
+    });
+
+    const { session } = getState();
+    const collection = getSettingsById(session.notebase, _id);
+    const defaultFilters = _.get(collection, "defaultFilters", {});
+
+    await dispatch(
+      setFilter(
+        resetFilters ? { ...INITIAL_STATE.filters, ...defaultFilters } : {}
+      )
+    );
+  };
 
 export const toggleSettingsDrawer = (status) => ({
   type: TOGGLE_SETTINGS_DRAWER,

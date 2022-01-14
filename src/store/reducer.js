@@ -1,6 +1,6 @@
 import _ from "lodash";
 import config from "../config";
-import { getNextNote } from "../lib/utils";
+import { getNextNote, getSettingsById } from "../lib/utils";
 import {
   SET_SESSION,
   SET_APP_LOADING,
@@ -40,7 +40,7 @@ const INITIAL_STATE = {
   filters: {
     tags: undefined,
     socialStatus: undefined,
-    status: ["QUICK_ADD", "DRAFT"],
+    status: [],
     search: undefined,
     rating: undefined,
     type: undefined,
@@ -71,8 +71,6 @@ const INITIAL_STATE = {
   uploadingData: INITIAL_UPLOADING_DATA_STATE,
 };
 
-const getSettings = (list, _id) => _.find(list, { _id }) || {};
-
 const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SET_SESSION:
@@ -81,16 +79,16 @@ const reducer = (state = INITIAL_STATE, action) => {
       const newActiveCollectionId =
         activeCollectionId || _.get(updatedSession, "notebase.0._id", "");
 
-      const settings = getSettings(
+      const settings = getSettingsById(
         updatedSession.notebase,
         newActiveCollectionId
       );
-
       return {
         ...state,
         session: updatedSession,
         activeCollectionId: newActiveCollectionId,
         settings,
+        filters: { ...state.filters, ...(settings.defaultFilters || {}) },
       };
     case SET_APP_LOADING:
       return {
@@ -105,7 +103,7 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         activeCollectionId: action.payload,
-        settings: getSettings(state.session.notebase, action.payload),
+        settings: getSettingsById(state.session.notebase, action.payload),
       };
     case TOGGLE_SETTINGS_DRAWER:
       return {

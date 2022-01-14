@@ -12,12 +12,10 @@ const SelectCollection = ({
   setActiveCollection,
   handleChange,
   style = {},
-  resetFilter,
+  resetFilters = false,
 }) => {
-  const onChange = (_id) => {
-    handleChange ? handleChange(_id) : setActiveCollection(_id);
-    if (resetFilter) resetFilter();
-  };
+  const onChange = (_id) =>
+    handleChange ? handleChange(_id) : setActiveCollection(_id, resetFilters);
 
   return (
     <Select

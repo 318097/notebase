@@ -71,6 +71,7 @@ const Notes = ({
   dispatch,
   filters,
   hasCollections,
+  settings,
   ...others
 }) => {
   const scrollRef = useRef();
@@ -98,6 +99,8 @@ const Notes = ({
 
   const onDelete = (_id) => dispatch(deleteNote(_id));
 
+  const pageSize = filters?.limit || config.LIMIT;
+
   return (
     <section ref={scrollRef} style={{ paddingBottom: "30px" }}>
       {hasCollections ? (
@@ -112,6 +115,8 @@ const Notes = ({
               dispatch={dispatch}
               filters={filters}
               appLoading={appLoading}
+              pageSize={pageSize}
+              settings={settings}
               {...others}
             />
           ) : (
@@ -123,6 +128,8 @@ const Notes = ({
               dispatch={dispatch}
               filters={filters}
               scrollRef={scrollRef}
+              pageSize={pageSize}
+              settings={settings}
               {...others}
             />
           )}
@@ -144,11 +151,13 @@ const CardView = ({
   filters,
   appLoading,
   dispatch,
+  settings,
+  pageSize,
 }) => {
-  const noteChunks = Array(Math.ceil(notes.length / config.LIMIT))
+  const noteChunks = Array(Math.ceil(notes.length / pageSize))
     .fill(null)
     .map((_, index) =>
-      notes.slice(index * config.LIMIT, index * config.LIMIT + config.LIMIT)
+      notes.slice(index * pageSize, index * pageSize + pageSize)
     );
 
   return (
@@ -158,6 +167,7 @@ const CardView = ({
           <div className="notes-wrapper">
             {chunk.map((note) => (
               <NoteCard
+                settings={settings}
                 key={note._id}
                 note={note}
                 handleClick={handleClick}
@@ -200,6 +210,7 @@ const TableView = ({
   dispatch,
   filters,
   scrollRef,
+  pageSize,
 }) => {
   const onPageChange = (page) => {
     dispatch(setFilter({ page }, false));
@@ -291,7 +302,7 @@ const TableView = ({
         onChange={onPageChange}
         size="small"
         total={meta.count}
-        pageSize={config.LIMIT}
+        pageSize={pageSize}
       />
     </div>
   );
@@ -313,6 +324,7 @@ const mapStateToProps = ({
   tagsCodes: extractTagCodes(settings.tags),
   displayType,
   hasCollections: _.get(session, "notebase.length", false),
+  settings,
 });
 
 export default withRouter(connect(mapStateToProps)(Notes));

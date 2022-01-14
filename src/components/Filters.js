@@ -13,7 +13,6 @@ import {
   VISIBILITY_OPTIONS,
   RATING_OPTIONS,
 } from "../constants";
-import { INITIAL_STATE } from "../store/reducer";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -74,9 +73,9 @@ const Filters = ({
 
   const ActiveCollection = (
     <SelectCollection
+      resetFilters={true}
       style={{ margin: "2px" }}
       value={activeCollectionId}
-      resetFilter={() => setFilterValues({ ...INITIAL_STATE.filters })}
     />
   );
 

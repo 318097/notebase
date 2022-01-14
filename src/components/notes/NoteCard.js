@@ -9,7 +9,14 @@ import { md, getDomain } from "../../lib/utils";
 import { StyledNoteCard } from "./styled";
 import NoteMeta from "./NoteMeta";
 
-const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
+const NoteCard = ({
+  note,
+  handleClick,
+  onEdit,
+  onDelete,
+  tagsCodes,
+  settings,
+}) => {
   const {
     title = "",
     content = "",
@@ -28,6 +35,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
     chainedTo = [],
     sourceInfo,
   } = note;
+
   // const [showDropdown, setShowDropdown] = useState(false);
   const onlyTitleAndURL = title && url && !content;
   const isCreatedToday = moment().isSame(moment(createdAt), "day");
@@ -47,7 +55,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
   const goToLink = () => window.open(url);
 
   return (
-    <StyledNoteCard>
+    <StyledNoteCard size={settings?.cardSize}>
       <Card onClick={(e) => handleClick(e, _id)} className={cardClasses}>
         <h3
           className={titleClasses}

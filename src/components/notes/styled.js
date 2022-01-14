@@ -3,8 +3,8 @@ import colors from "@codedrops/react-ui";
 import { fadeInDownAnimation } from "../../lib/animations";
 
 const StyledNoteCard = styled.div`
-  height: ${(props) => (props.onlyTitleAndURL ? "180px" : "300px")};
-  max-height: ${(props) => (props.onlyTitleAndURL ? "180px" : "300px")};
+  height: ${(props) => (props.size === "sm" ? "180px" : "300px")};
+  max-height: ${(props) => (props.size === "sm" ? "180px" : "300px")};
   display: flex;
   flex-direction: column;
   /* break-inside: avoid-column; */

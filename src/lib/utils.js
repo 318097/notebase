@@ -105,3 +105,5 @@ export const generateFormData = (data) => {
 
   return formData;
 };
+
+export const getSettingsById = (list, _id) => _.find(list, { _id }) || {};

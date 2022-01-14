@@ -102,10 +102,11 @@ const DEFAULT_SETTING_STATE = {
       value: "linkedin",
     },
   ],
-  pageLimit: 25,
-  // cardSmStyles: {},
   defaultDisplayType: "CARD",
-  defaultCollectionId: "", // collection to load on siginin
+  cardSize: "sm",
+  defaultFilters: {
+    limit: 25,
+  },
 };
 
 export {
