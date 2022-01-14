@@ -72,11 +72,7 @@ const Filters = ({
   const { tags = [] } = settings;
 
   const ActiveCollection = (
-    <SelectCollection
-      resetFilters={true}
-      style={{ margin: "2px" }}
-      value={activeCollectionId}
-    />
+    <SelectCollection resetFilters={true} value={activeCollectionId} />
   );
 
   const SearchBox = (
@@ -266,7 +262,7 @@ const Filters = ({
   ];
 
   return (
-    <div className="flex center wrap">
+    <div className="flex center wrap gap-2">
       {menuList
         .filter((item) =>
           item.visible && showAllFilters ? true : item.showInMinimized
@@ -277,15 +273,18 @@ const Filters = ({
 
       {!!validateFilters(filters) && (
         <Icon
-          style={{ margin: "0 4px" }}
           className="icon icon-bg"
           type="close"
-          onClick={() => setFilterValues(RESET_FILTER)}
+          onClick={() =>
+            setFilterValues({
+              ...RESET_FILTER,
+              ...(settings?.defaultFilters || {}),
+            })
+          }
         />
       )}
 
       <Icon
-        style={{ margin: "0 4px" }}
         className="icon icon-bg"
         onClick={() =>
           setFilterValues({
@@ -298,7 +297,6 @@ const Filters = ({
       />
 
       <Icon
-        style={{ margin: "0 4px" }}
         className="icon icon-bg"
         type={displayType === "CARD" ? "table" : "border"}
         onClick={() =>

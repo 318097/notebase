@@ -38,6 +38,11 @@
 - [x] Edit note JSON
 - [x] Add reload button & reload after adding data
 - [x] `Status` should be multi select
+- [x] Parse external data
+  - [x] Group & show data by collection & size
+  - [x] Toby
+  - [x] Chrome bookmarks
+    - [x] Append full path for bookmarks in sub folders
 - [ ] Auto deployment to Social handles - Dev.to/Codenewbies.to, Hashnode, FB, Instagram, Twitter, Linkedin
 - [ ] Create graphics for posts
 - [ ] Chaining posts
@@ -45,23 +50,19 @@
   - [x] View chain
   - [ ] Create chain post
   - [ ] D&G
-- [ ] Dynamic template/config - Show JSON settings
-  - [ ] Post types based on collection
-  - [ ] Default values, Fields required based on type
-  - [ ] Default filters
-- [ ] Parse external data
-  - [ ] Group & show data by collection & size
-  - [x] Toby
-  - [x] Chrome bookmarks
-    - [ ] Append full path for bookmarks in sub folders
-- [ ] Trash & Hidden section
-- [ ] Lazy loading
-- [ ] Save & retrive draft
 - [x] Show source of addition (toby, direct, post/drop file upload, flash etc) in noteview
+- [x] Collection view for upload
 - [x] Upload content
   - [x] Empty state for upload page, different for POST, TOBY
   - [x] Card design
   - [ ] Media card design
+- [ ] Dynamic template/config - Show JSON settings
+  - [ ] Post types based on collection
+  - [ ] Default values, Fields required based on type
+  - [x] Default filters
+- [ ] Trash & Hidden section
+- [ ] Lazy loading
+- [ ] Save & retrive draft
 - [ ] Page loading hoc
 - [ ] Fix designs (card view & note view) for
   - [ ] Only title (configure card height using css styles)
@@ -77,7 +78,6 @@
   - [ ] Deleting
   - [ ] Visibility
   - [ ] Generate tags/slugs
-- [x] Collection view for upload
 
 ### Bugs
 

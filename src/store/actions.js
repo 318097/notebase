@@ -225,7 +225,7 @@ export const setSession = (session) => ({
 export const setActiveCollection =
   (_id, resetFilters = false) =>
   async (dispatch, getState) => {
-    await dispatch({
+    dispatch({
       type: SET_ACTIVE_COLLECTION,
       payload: _id,
     });
@@ -234,7 +234,10 @@ export const setActiveCollection =
     const collection = getSettingsById(session.notebase, _id);
     const defaultFilters = _.get(collection, "defaultFilters", {});
 
-    await dispatch(
+    if (resetFilters)
+      dispatch({ type: LOAD_NOTES, payload: { notes: [], meta: {} } }); // empty the screen on switching collections
+
+    dispatch(
       setFilter(
         resetFilters ? { ...INITIAL_STATE.filters, ...defaultFilters } : {}
       )
