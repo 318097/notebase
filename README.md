@@ -75,7 +75,7 @@
   - [ ] Sym link
 - [ ] Bulk actions
   - [ ] Moving
-  - [ ] Deleting
+  - [ ] Parsed flag
   - [ ] Visibility
   - [ ] Generate tags/slugs
 

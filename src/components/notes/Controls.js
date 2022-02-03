@@ -702,7 +702,7 @@ const Controls = ({
       ) : (
         <div className="social-platform-caption-container">
           {_.map(socialPlatformsList, ({ value, label, caption }) => (
-            <div className="social-caption-item-wrapper">
+            <div key={value} className="social-caption-item-wrapper">
               {editCaptionId === value ? (
                 <TextArea
                   rows={8}

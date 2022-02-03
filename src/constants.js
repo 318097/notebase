@@ -25,8 +25,8 @@ const SORT_OPTIONS = [
 ];
 
 const VISIBILITY_OPTIONS = [
-  { label: "Visible", value: true },
-  { label: "Hidden", value: false },
+  { label: "Visible", value: "true" },
+  { label: "Hidden", value: "false" },
 ];
 
 const RATING_OPTIONS = [
