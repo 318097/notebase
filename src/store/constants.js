@@ -16,3 +16,4 @@ export const LOGOUT = "LOGOUT";
 export const SET_QUICK_ADD_MODAL_META = "SET_QUICK_ADD_MODAL_META";
 export const SET_KEY = "SET_KEY";
 export const FETCH_CHAINS = "FETCH_CHAINS";
+export const TOGGLE_SELECTED_ITEMS = "TOGGLE_SELECTED_ITEMS";

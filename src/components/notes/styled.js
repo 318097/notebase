@@ -20,6 +20,10 @@ const StyledNoteCard = styled.div`
       background: ${colors.featherDark};
     }
   }
+  .card.selected .select-item,
+  .card:hover .select-item {
+    display: inline;
+  }
   .card {
     flex: 1 1 auto;
     overflow: hidden;
@@ -49,6 +53,13 @@ const StyledNoteCard = styled.div`
         font-size: 1rem;
       }
     }
+    .select-item {
+      display: none;
+      position: absolute;
+      top: 8px;
+      left: 16px;
+      z-index: 2;
+    }
   }
   .card.today,
   .action-row.today {
@@ -73,6 +84,18 @@ const StyledNoteCard = styled.div`
         margin: 0 2px;
       }
     }
+  }
+  .card.selected:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: ${colors.strokeOne};
+    opacity: 0.4;
+    z-index: 1;
   }
 `;
 

@@ -8,7 +8,14 @@ import reducer from "./reducer";
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["appLoading", "notes", "session", "retainPage", "chains"],
+  blacklist: [
+    "appLoading",
+    "notes",
+    "session",
+    "retainPage",
+    "chains",
+    // "selectedItems",
+  ],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

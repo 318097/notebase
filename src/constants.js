@@ -105,7 +105,8 @@ const DEFAULT_SETTING_STATE = {
   defaultDisplayType: "CARD",
   cardSize: "sm",
   defaultFilters: {
-    limit: 25,
+    limit: 50,
+    status: ["QUICK_ADD", "DRAFT"],
   },
 };
 

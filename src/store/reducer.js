@@ -20,6 +20,7 @@ import {
   SET_QUICK_ADD_MODAL_META,
   SET_KEY,
   FETCH_CHAINS,
+  TOGGLE_SELECTED_ITEMS,
 } from "./constants";
 
 const INITIAL_UPLOADING_DATA_STATE = {
@@ -69,6 +70,7 @@ const INITIAL_STATE = {
   viewNoteMeta: undefined,
   displayType: "CARD",
   uploadingData: INITIAL_UPLOADING_DATA_STATE,
+  selectedItems: [],
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -225,6 +227,16 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         chains: [...action.payload],
       };
+    case TOGGLE_SELECTED_ITEMS: {
+      const { _id } = action.payload;
+      const { selectedItems = [] } = state;
+      return {
+        ...state,
+        selectedItems: _.includes(selectedItems, _id)
+          ? _.filter(selectedItems, (id) => id !== _id)
+          : [...selectedItems, _id],
+      };
+    }
     default:
       return state;
   }

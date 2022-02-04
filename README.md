@@ -74,9 +74,9 @@
   - [ ] Store history of source -> destination moving
   - [ ] Sym link
 - [ ] Bulk actions
+  - [x] Status update
+  - [x] Visibility
   - [ ] Moving
-  - [ ] Parsed flag
-  - [ ] Visibility
   - [ ] Generate tags/slugs
 
 ### Bugs

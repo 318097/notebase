@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
-import { Input, Select, Icon } from "antd";
+import { Input, Select, Icon, Button } from "antd";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { setFilter, setKey } from "../store/actions";
+import { setFilter, setKey, bulkUpdate } from "../store/actions";
 import SelectCollection from "./SelectCollection";
 import config from "../config";
+import { useObject } from "@codedrops/lib";
 import {
   STATUS_OPTIONS,
   SOCIAL_STATUS_OPTIONS,
@@ -46,6 +47,26 @@ const validateFilters = ({
   rating ||
   type;
 
+const StatusDropdown = (props) => (
+  <Select allowClear className="form-field" placeholder="Status" {...props}>
+    {STATUS_OPTIONS.map(({ label, value }) => (
+      <Option key={value} value={value}>
+        {label}
+      </Option>
+    ))}
+  </Select>
+);
+
+const VisibilityDropdown = (props) => (
+  <Select allowClear className="form-field" placeholder="Visibility" {...props}>
+    {VISIBILITY_OPTIONS.map(({ label, value }) => (
+      <Option key={value} value={value}>
+        {label}
+      </Option>
+    ))}
+  </Select>
+);
+
 const Filters = ({
   dispatch,
   filters,
@@ -55,6 +76,7 @@ const Filters = ({
   settings,
   displayType,
   showAllFilters,
+  hasSelectedItems,
 }) => {
   const setFilterValues = (filter) => {
     const props = Object.entries(filter);
@@ -139,21 +161,12 @@ const Filters = ({
   );
 
   const Status = (
-    <Select
-      allowClear
-      className="form-field"
-      placeholder="Status"
+    <StatusDropdown
       value={filters.status}
       mode="multiple"
       style={{ minWidth: "100px", width: "auto" }}
       onChange={(value) => setFilterValues({ status: value })}
-    >
-      {STATUS_OPTIONS.map(({ label, value }) => (
-        <Option key={value} value={value}>
-          {label}
-        </Option>
-      ))}
-    </Select>
+    />
   );
 
   const SocialStatus = (
@@ -189,19 +202,10 @@ const Filters = ({
   );
 
   const Visibility = (
-    <Select
-      allowClear
-      className="form-field"
-      placeholder="Visibility"
+    <VisibilityDropdown
       value={filters.visible}
       onChange={(value) => setFilterValues({ visible: value })}
-    >
-      {VISIBILITY_OPTIONS.map(({ label, value }) => (
-        <Option key={value} value={value}>
-          {label}
-        </Option>
-      ))}
-    </Select>
+    />
   );
 
   const menuList = [
@@ -328,6 +332,53 @@ const Filters = ({
   );
 };
 
+const Actions = ({ selectedItems, dispatch }) => {
+  const [data, setData] = useObject();
+
+  const totalSelectedItems = `${selectedItems.length} items selected`;
+  const showUpdateButton = Object.entries(data).length > 0;
+
+  const handleUpdate = () => {
+    const input = {
+      ids: selectedItems,
+      ...data,
+    };
+    dispatch(bulkUpdate(input));
+  };
+
+  const clearSelection = () => dispatch(setKey({ selectedItems: [] }));
+
+  return (
+    <div className="flex center space-between gap-2">
+      <StatusDropdown
+        value={data.status}
+        onChange={(value) => setData({ status: value })}
+      />
+      <VisibilityDropdown
+        value={data.visible}
+        onChange={(value) => setData({ visible: value })}
+      />
+      {showUpdateButton && (
+        <Button onClick={handleUpdate} type="primary">
+          Update
+        </Button>
+      )}
+      <Icon className="icon icon-bg" type="close" onClick={clearSelection} />
+      <Icon
+        type={"reload"}
+        className="icon icon-bg"
+        onClick={() => dispatch(setFilter())}
+      />
+      <span className="showing-count">{totalSelectedItems}</span>
+    </div>
+  );
+};
+
+const FiltersWrapper = (props) => {
+  const { hasSelectedItems } = props;
+  return hasSelectedItems ? <Actions {...props} /> : <Filters {...props} />;
+};
+
 const mapStateToProps = ({
   filters,
   notes,
@@ -336,6 +387,7 @@ const mapStateToProps = ({
   settings,
   displayType,
   showAllFilters,
+  selectedItems,
 }) => ({
   filters,
   notes,
@@ -344,6 +396,8 @@ const mapStateToProps = ({
   settings,
   displayType,
   showAllFilters,
+  selectedItems,
+  hasSelectedItems: _.size(selectedItems) > 0,
 });
 
-export default connect(mapStateToProps)(Filters);
+export default connect(mapStateToProps)(FiltersWrapper);

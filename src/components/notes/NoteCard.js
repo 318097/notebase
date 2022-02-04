@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon as AntIcon } from "antd";
+import { Icon as AntIcon, Checkbox } from "antd";
 import moment from "moment";
 import { Card, Icon, Tag } from "@codedrops/react-ui";
 import _ from "lodash";
@@ -8,6 +8,7 @@ import classnames from "classnames";
 import { md, getDomain } from "../../lib/utils";
 import { StyledNoteCard } from "./styled";
 import NoteMeta from "./NoteMeta";
+import { toggleSelectedItems } from "../../store/actions";
 
 const NoteCard = ({
   note,
@@ -16,6 +17,8 @@ const NoteCard = ({
   onDelete,
   tagsCodes,
   settings,
+  selectedItems,
+  dispatch,
 }) => {
   const {
     title = "",
@@ -45,9 +48,13 @@ const NoteCard = ({
       ? `Live Id: ${liveId}`
       : status.replace("_", " ").toLowerCase();
 
+  const isSelected = _.includes(selectedItems, _id);
+
   const cardClasses = classnames("card", {
     today: !!isCreatedToday,
+    selected: !!isSelected,
   });
+
   const titleClasses = classnames("title", {
     "post-title": type !== "DROP",
   });
@@ -74,6 +81,13 @@ const NoteCard = ({
             <span className="index">{`#${index}`}</span>
           </div>
         )}
+        <span className="select-item">
+          <Checkbox
+            checked={isSelected}
+            onClick={(e) => e.stopPropagation()}
+            onChange={(e) => dispatch(toggleSelectedItems({ _id }))}
+          />
+        </span>
         {/* <Dropdown
           showDropdown={showDropdown}
           setShowDropdown={setShowDropdown}

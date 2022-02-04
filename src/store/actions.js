@@ -21,12 +21,18 @@ import {
   SET_QUICK_ADD_MODAL_META,
   SET_KEY,
   FETCH_CHAINS,
+  TOGGLE_SELECTED_ITEMS,
 } from "./constants";
 import { INITIAL_STATE } from "./reducer";
 
 export const setAppLoading = (status) => ({
   type: SET_APP_LOADING,
   payload: status,
+});
+
+export const toggleSelectedItems = (payload) => ({
+  type: TOGGLE_SELECTED_ITEMS,
+  payload,
 });
 
 export const setKey = (obj) => ({
@@ -124,6 +130,23 @@ export const updateNote = (note, action) => async (dispatch, getState) => {
     );
 
     dispatch({ type: UPDATE_NOTE, payload: result });
+    message.success(`Updated.`);
+  } finally {
+    dispatch(setAppLoading(false));
+  }
+};
+
+export const bulkUpdate = (data, action) => async (dispatch, getState) => {
+  try {
+    dispatch(setAppLoading(true));
+    const { activeCollectionId } = getState();
+    await axios.put(
+      `/posts?collectionId=${activeCollectionId}&action=${action}`,
+      data
+    );
+
+    dispatch({ type: SET_KEY, payload: { selectedItems: [] } });
+    refetch(dispatch);
     message.success(`Updated.`);
   } finally {
     dispatch(setAppLoading(false));

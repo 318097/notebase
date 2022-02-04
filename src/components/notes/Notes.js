@@ -153,6 +153,7 @@ const CardView = ({
   dispatch,
   settings,
   pageSize,
+  selectedItems,
 }) => {
   const noteChunks = Array(Math.ceil(notes.length / pageSize))
     .fill(null)
@@ -174,6 +175,8 @@ const CardView = ({
                 onEdit={onEdit}
                 onDelete={onDelete}
                 tagsCodes={tagsCodes}
+                dispatch={dispatch}
+                selectedItems={selectedItems}
               />
             ))}
           </div>
@@ -316,6 +319,7 @@ const mapStateToProps = ({
   settings,
   displayType,
   session,
+  selectedItems,
 }) => ({
   notes,
   appLoading,
@@ -325,6 +329,7 @@ const mapStateToProps = ({
   displayType,
   hasCollections: _.get(session, "notebase.length", false),
   settings,
+  selectedItems,
 });
 
 export default withRouter(connect(mapStateToProps)(Notes));
