@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon as AntIcon, Checkbox } from "antd";
+import { Icon as AntIcon, Checkbox, Popover } from "antd";
 import moment from "moment";
 import { Card, Icon, Tag } from "@codedrops/react-ui";
 import _ from "lodash";
@@ -137,7 +137,11 @@ const NoteCard = ({
               <Tag>{`In ${chainedTo.length} chains`}</Tag>
             ) : null}
 
-            {onlyTitleAndURL && <AntIcon type="link" onClick={goToLink} />}
+            {onlyTitleAndURL && (
+              <Popover placement="bottomLeft" content={url}>
+                <AntIcon type="link" onClick={goToLink} />
+              </Popover>
+            )}
 
             <NoteMeta sourceInfo={sourceInfo} inPopup={true} />
             {!visible && <AntIcon type="eye-invisible" />}
