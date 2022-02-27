@@ -235,18 +235,24 @@ const UploadContent = ({
               collectionName: sourceInfo.collectionName
                 ? `${sourceInfo.collectionName}/${title}`
                 : title,
-              collectionSize: items.length,
               id: uuid(),
             };
-            recursiveFetch(childItems, newSourceInfo);
+            recursiveFetch(childItems, { ...sourceInfo, ...newSourceInfo });
           } else {
-            const parsedItem = parseItem(item, sourceInfo);
+            const updatedSourceInfo = {
+              ...sourceInfo,
+              collectionName: sourceInfo.collectionName || "Uncategorized",
+              collectionSize: _.size(
+                _.filter(items, (i) => i.type !== "folder")
+              ),
+            };
+            const parsedItem = parseItem(item, updatedSourceInfo);
             parsedContent.push(parsedItem);
           }
         });
       };
 
-      recursiveFetch(_.get(json, "folders.0.items", []));
+      recursiveFetch(_.get(json, "folders.0.items", []), {});
     }
 
     setUploadingData({
