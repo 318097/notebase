@@ -55,17 +55,13 @@ const NoteCard = ({
     selected: !!isSelected,
   });
 
-  const titleClasses = classnames("title", {
-    "post-title": type !== "DROP",
-  });
-
   const goToLink = () => window.open(url);
 
   return (
-    <StyledNoteCard size={settings?.cardSize}>
+    <StyledNoteCard collectionType={settings?.collectionType}>
       <Card onClick={(e) => handleClick(e, _id)} className={cardClasses}>
         <h3
-          className={titleClasses}
+          className={"title"}
           dangerouslySetInnerHTML={{ __html: md.renderInline(title) }}
         />
         {["DROP", "QUIZ"].includes(type) && content && (

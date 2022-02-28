@@ -78,6 +78,7 @@
   - [x] Visibility
   - [ ] Moving
   - [ ] Generate tags/slugs
+- [ ] Add custom field when uploading data
 
 ### Bugs
 

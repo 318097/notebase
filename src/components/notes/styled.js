@@ -2,9 +2,29 @@ import styled from "styled-components";
 import colors from "@codedrops/react-ui";
 import { fadeInDownAnimation } from "../../lib/animations";
 
+const collectionType = ({ collectionType }) => {
+  switch (collectionType) {
+    case "LINK":
+      return {
+        height: "220px",
+        fontSize: "1.2rem",
+      };
+    case "WORD":
+      return {
+        height: "180px",
+        fontSize: "1.6rem",
+      };
+    default:
+      return {
+        height: "300px",
+        fontSize: "1.2rem",
+      };
+  }
+};
+
 const StyledNoteCard = styled.div`
-  height: ${(props) => (props.size === "sm" ? "180px" : "300px")};
-  max-height: ${(props) => (props.size === "sm" ? "180px" : "300px")};
+  height: ${(props) => collectionType(props).height};
+  max-height: ${(props) => collectionType(props).height};
   display: flex;
   flex-direction: column;
   /* break-inside: avoid-column; */
@@ -36,11 +56,8 @@ const StyledNoteCard = styled.div`
     align-items: center;
     justify-content: center;
     .title {
-      font-size: 1.2rem;
+      font-size: ${(props) => collectionType(props).fontSize};
       text-align: center;
-    }
-    .post-title {
-      font-size: 1.6rem;
     }
     .content {
       font-size: inherit;

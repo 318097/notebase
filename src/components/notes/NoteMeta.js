@@ -28,8 +28,8 @@ const NoteMeta = ({ sourceInfo = {}, inPopup }) => {
   if (!entriesLength) return null;
 
   return inPopup ? (
-    <Popover content={SourceInfo} trigger="click">
-      <Icon hover size={12} className="icon" type="circle" />
+    <Popover content={SourceInfo} placement="bottomLeft">
+      <Icon size={12} className="icon" type="circle" />
     </Popover>
   ) : (
     SourceInfo

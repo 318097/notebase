@@ -572,7 +572,7 @@ const UploadCard = ({
   const onlyTitleAndURL = isExternalData;
   const goToLink = () => window.open(url);
   return (
-    <StyledNoteCard size={onlyTitleAndURL ? "sm" : ""}>
+    <StyledNoteCard collectionType={onlyTitleAndURL ? "LINK" : ""}>
       <Card className={cardClasses} onClick={() => editItem(item)}>
         <h3 className="title">{title}</h3>
         {!!content && (
