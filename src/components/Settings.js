@@ -146,7 +146,7 @@ const CollectionSetting = ({ data, handleSave, loading }) => {
             </Tag>
           ))}
         </div>
-        <div className="add-tag">
+        {/* <div className="add-tag">
           <div className="add-tag-form">
             <Input
               size="small"
@@ -168,7 +168,7 @@ const CollectionSetting = ({ data, handleSave, loading }) => {
           <Button size="small" onClick={addNewTag}>
             Add
           </Button>
-        </div>
+        </div> */}
       </div>
       <div className="setting-group">
         <h6>Caption</h6>
