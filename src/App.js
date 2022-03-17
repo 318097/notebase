@@ -119,7 +119,7 @@ const App = ({
   };
 
   return (
-    <div className="container" id="react-ui">
+    <div className="container react-ui">
       <Navigation />
       <div className="contentWrapper">
         <Header />
