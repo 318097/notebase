@@ -42,7 +42,6 @@ const DEFAULT_SETTING_STATE = {
   caption: "",
   index: 1,
   liveId: 1,
-  tags: [],
   postTypes: [
     {
       label: "Post",
@@ -102,7 +101,7 @@ const DEFAULT_SETTING_STATE = {
       value: "linkedin",
     },
   ],
-  defaultDisplayType: "CARD",
+  collectionType: "DEFAULT",
   defaultFilters: {
     limit: 50,
     status: ["QUICK_ADD", "DRAFT"],

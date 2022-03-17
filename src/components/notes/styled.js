@@ -14,6 +14,7 @@ const collectionType = ({ collectionType }) => {
         height: "180px",
         fontSize: "1.6rem",
       };
+    case "DEFAULT":
     default:
       return {
         height: "300px",

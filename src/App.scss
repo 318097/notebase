@@ -219,7 +219,9 @@ body {
 
 .nested-container {
   .button,
+  .select-text,
+  .dropdown > .dropdown-item,
   .title {
-    font-size: 1rem;
+    font-size: 1rem !important;
   }
 }

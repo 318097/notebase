@@ -320,6 +320,9 @@ export const saveSettings = (input) => async (dispatch) => {
   try {
     dispatch(setAppLoading(true));
     const action = input._id === "NEW_COLLECTION" ? "CREATE" : "UPDATE";
+
+    delete input.tags; // tags is in a seperate collection
+
     const { data } = await axios.put(
       `/user/settings?action=${action}&key=notebase`,
       input
