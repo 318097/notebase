@@ -2,10 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Drawer, Tag, Input, Button } from "antd";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { toggleSettingsDrawer, saveSettings } from "../store/actions";
+import {
+  toggleSettingsDrawer,
+  saveSettings,
+  fetchSession,
+} from "../store/actions";
 import SelectCollection from "./SelectCollection";
 import JSONEditor from "../lib/JSONEditor";
 import { DEFAULT_SETTING_STATE } from "../constants";
+import { NestedNodes } from "@codedrops/react-ui";
+import axios from "axios";
 
 const { TextArea } = Input;
 
@@ -15,6 +21,7 @@ const Settings = ({
   activeCollectionId,
   toggleSettingsDrawer,
   saveSettings,
+  fetchSession,
 }) => {
   const [collectionList, setCollectionList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -72,6 +79,7 @@ const Settings = ({
           data={activeSettings}
           handleSave={handleSave}
           loading={loading}
+          fetchSession={fetchSession}
         />
       )}
     </Drawer>
@@ -108,9 +116,8 @@ const Header = ({
   );
 };
 
-const CollectionSetting = ({ data, handleSave, loading }) => {
+const CollectionSetting = ({ data, handleSave, loading, fetchSession }) => {
   const [localData, setLocalData] = useState({});
-  const [newTag, setNewTag] = useState({ label: "", color: "" });
 
   useEffect(() => {
     if (!data) return;
@@ -120,10 +127,15 @@ const CollectionSetting = ({ data, handleSave, loading }) => {
   const handleChange = (update) =>
     setLocalData((prev) => ({ ...prev, ...update }));
 
-  const addNewTag = () => {
-    const tags = _.get(localData, "tags");
-    handleChange({ tags: [...tags, newTag] });
-    setNewTag({ label: "", color: "" });
+  const updateSetting = async (data, { action }) => {
+    await axios.post(
+      `/tags/operations`,
+      { ...data, moduleName: "COLLECTION" },
+      {
+        params: { action },
+      }
+    );
+    await fetchSession();
   };
 
   const { name = "", tags = [] } = localData;
@@ -146,29 +158,8 @@ const CollectionSetting = ({ data, handleSave, loading }) => {
             </Tag>
           ))}
         </div>
-        {/* <div className="add-tag">
-          <div className="add-tag-form">
-            <Input
-              size="small"
-              placeholder="Tag name"
-              value={newTag.label}
-              onChange={({ target: { value } }) =>
-                setNewTag((prev) => ({ ...prev, label: value }))
-              }
-            />
-            <input
-              type="color"
-              className="color-input"
-              value={newTag.color}
-              onChange={({ target: { value } }) =>
-                setNewTag((prev) => ({ ...prev, color: value }))
-              }
-            />
-          </div>
-          <Button size="small" onClick={addNewTag}>
-            Add
-          </Button>
-        </div> */}
+
+        <NestedNodes nodes={tags} onChange={updateSetting} />
       </div>
       <div className="setting-group">
         <h6>Caption</h6>
@@ -204,4 +195,5 @@ const mapStateToProps = ({
 export default connect(mapStateToProps, {
   toggleSettingsDrawer,
   saveSettings,
+  fetchSession,
 })(Settings);

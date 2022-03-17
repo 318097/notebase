@@ -24,6 +24,7 @@ import {
   TOGGLE_SELECTED_ITEMS,
 } from "./constants";
 import { INITIAL_STATE } from "./reducer";
+import sessionManager from "../lib/sessionManager";
 
 export const setAppLoading = (status) => ({
   type: SET_APP_LOADING,
@@ -244,6 +245,12 @@ export const setSession = (session) => ({
   type: SET_SESSION,
   payload: session,
 });
+
+export const fetchSession = () => async (dispatch) => {
+  const token = sessionManager.getToken();
+  const { data } = await axios.post(`/auth/account-status`, { token });
+  dispatch(setSession({ isAuthenticated: true, info: "ON_LOAD", ...data }));
+};
 
 export const setActiveCollection =
   (_id, resetFilters = false) =>

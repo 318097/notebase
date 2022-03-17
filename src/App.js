@@ -5,11 +5,11 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import "./App.scss";
 import {
-  setSession,
   getChains,
   setKey,
   setModalMeta,
   setQuickAddModalMeta,
+  fetchSession,
 } from "./store/actions";
 import { Loading } from "@codedrops/react-ui";
 import Header from "./components/Header";
@@ -27,7 +27,6 @@ axios.defaults.headers.common["authorization"] = sessionManager.getToken();
 axios.defaults.headers.common["external-source"] = "NOTEBASE";
 
 const App = ({
-  setSession,
   session,
   appLoading,
   quickAddModalVisibility,
@@ -40,6 +39,7 @@ const App = ({
   history,
   activePage,
   viewNoteMeta,
+  fetchSession,
 }) => {
   const isAuthenticated = _.get(session, "isAuthenticated");
 
@@ -56,10 +56,8 @@ const App = ({
     const isAccountActive = async () => {
       if (sessionManager.hasToken()) {
         try {
-          const token = sessionManager.getToken();
-          const { data } = await axios.post(`/auth/account-status`, { token });
-          setSession({ isAuthenticated: true, info: "ON_LOAD", ...data });
-          getChains();
+          await fetchSession();
+          await getChains();
           setActivePage();
         } catch (err) {
           console.log("Error:", err);
@@ -164,11 +162,11 @@ const mapStateToProps = ({
 });
 
 const mapActionToProps = {
-  setSession,
   getChains,
   setKey,
   setModalMeta,
   setQuickAddModalMeta,
+  fetchSession,
 };
 
 export default withRouter(connect(mapStateToProps, mapActionToProps)(App));
