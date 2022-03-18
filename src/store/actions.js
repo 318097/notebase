@@ -316,18 +316,21 @@ export const getChains = () => async (dispatch, getState) => {
   }
 };
 
-export const saveSettings = (input) => async (dispatch) => {
+export const saveSettings = (updatedSettings) => async (dispatch) => {
   try {
     dispatch(setAppLoading(true));
-    const action = input._id === "NEW_COLLECTION" ? "CREATE" : "UPDATE";
+    delete updatedSettings.tags; // tags is in a seperate collection
 
-    delete input.tags; // tags is in a seperate collection
-
-    const { data } = await axios.put(
-      `/user/settings?action=${action}&key=notebase`,
-      input
-    );
-    await dispatch({ type: SET_SESSION, payload: data.result });
+    if (updatedSettings._id === "NEW_COLLECTION") {
+      delete updatedSettings._id;
+      await axios.post(`/modules`, {
+        ...updatedSettings,
+        moduleType: "COLLECTION",
+      });
+    } else {
+      await axios.put(`/modules/${updatedSettings._id}`, updatedSettings);
+    }
+    await dispatch(fetchSession());
     message.success(`Settings updated.`);
   } catch (err) {
     console.log(err);

@@ -41,7 +41,7 @@ const Settings = ({
 
   const handleClose = () => toggleSettingsDrawer(false);
 
-  const handleSave = (data) => {
+  const saveCollectionSettings = (data) => {
     try {
       setLoading(true);
       saveSettings(data);
@@ -71,13 +71,13 @@ const Settings = ({
       {showJSON ? (
         <JSONEditor
           data={activeSettings}
-          handleSave={handleSave}
+          saveCollectionSettings={saveCollectionSettings}
           loading={loading}
         />
       ) : (
         <CollectionSetting
           data={activeSettings}
-          handleSave={handleSave}
+          saveCollectionSettings={saveCollectionSettings}
           loading={loading}
           fetchSession={fetchSession}
         />
@@ -116,7 +116,12 @@ const Header = ({
   );
 };
 
-const CollectionSetting = ({ data, handleSave, loading, fetchSession }) => {
+const CollectionSetting = ({
+  data,
+  saveCollectionSettings,
+  loading,
+  fetchSession,
+}) => {
   const [localData, setLocalData] = useState({});
 
   useEffect(() => {
@@ -127,7 +132,7 @@ const CollectionSetting = ({ data, handleSave, loading, fetchSession }) => {
   const handleChange = (update) =>
     setLocalData((prev) => ({ ...prev, ...update }));
 
-  const updateSetting = async (data, { action }) => {
+  const updateTagSettings = async (data, { action }) => {
     await axios.post(
       `/tags/operations`,
       { ...data, moduleName: "COLLECTION" },
@@ -159,7 +164,7 @@ const CollectionSetting = ({ data, handleSave, loading, fetchSession }) => {
           ))}
         </div>
 
-        <NestedNodes nodes={tags} onChange={updateSetting} />
+        <NestedNodes nodes={tags} onChange={updateTagSettings} />
       </div>
       <div className="setting-group">
         <h6>Caption</h6>
@@ -174,7 +179,7 @@ const CollectionSetting = ({ data, handleSave, loading, fetchSession }) => {
         disabled={loading}
         type="primary"
         style={{ marginTop: "20px" }}
-        onClick={() => handleSave(localData)}
+        onClick={() => saveCollectionSettings(localData)}
       >
         Save
       </Button>
