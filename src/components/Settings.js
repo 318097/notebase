@@ -26,7 +26,7 @@ const Settings = ({
   const [collectionList, setCollectionList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeId, setActiveId] = useState();
-  const [showJSON, setShowJSON] = useState(true);
+  const [showJSON, setShowJSON] = useState(false);
 
   useEffect(() => {
     if (activeCollectionId) setActiveId(activeCollectionId);
@@ -80,6 +80,7 @@ const Settings = ({
           saveCollectionSettings={saveCollectionSettings}
           loading={loading}
           fetchSession={fetchSession}
+          activeId={activeId}
         />
       )}
     </Drawer>
@@ -121,6 +122,7 @@ const CollectionSetting = ({
   saveCollectionSettings,
   loading,
   fetchSession,
+  activeId,
 }) => {
   const [localData, setLocalData] = useState({});
 
@@ -135,7 +137,7 @@ const CollectionSetting = ({
   const updateTagSettings = async (data, { action }) => {
     await axios.post(
       `/tags/operations`,
-      { ...data, moduleName: "COLLECTION" },
+      { ...data, moduleName: "COLLECTION", moduleId: activeId },
       {
         params: { action },
       }
