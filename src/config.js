@@ -1,11 +1,13 @@
 import { getServerURL } from "@codedrops/lib";
 
-const { REACT_APP_NODE_ENV, REACT_APP_SERVER_TYPE } = process.env;
+const { REACT_APP_NODE_ENV } = process.env;
 const isProd = REACT_APP_NODE_ENV === "production";
+
+const serverType = localStorage.getItem("serverType") || "heroku"; // lambda|heroku
 
 const config = {
   LIMIT: 25,
-  SERVER_URL: getServerURL({ isProd, serverType: REACT_APP_SERVER_TYPE }),
+  SERVER_URL: getServerURL({ isProd, serverType }),
 };
 
 export default config;
