@@ -203,6 +203,34 @@ const CardView = ({
   );
 };
 
+const getCustomColumns = ({ customColumns }) => {
+  return _.map(customColumns, (column) => {
+    switch (column) {
+      case "URL":
+        return {
+          title: "URL",
+          key: "url",
+          dataIndex: "url",
+          width: "300px",
+          render: (url) => {
+            return (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: "90%" }}
+              >
+                {url}
+              </a>
+            );
+          },
+        };
+      default:
+        return null;
+    }
+  });
+};
+
 const TableView = ({
   notes,
   handleClick,
@@ -214,11 +242,14 @@ const TableView = ({
   filters,
   scrollRef,
   pageSize,
+  settings,
 }) => {
   const onPageChange = (page) => {
     dispatch(setFilter({ page }, false));
     scrollRef.current.scrollTop = 0;
   };
+
+  const customColumns = _.get(settings, "customColumns", []);
 
   const columns = [
     {
@@ -231,7 +262,7 @@ const TableView = ({
       title: "Title",
       dataIndex: "title",
       key: "title",
-      width: "50%",
+      width: "40%",
       render: (title, row) => (
         <div style={{ display: "flex", alignItems: "center" }}>
           {title}&nbsp;
@@ -239,11 +270,8 @@ const TableView = ({
         </div>
       ),
     },
-    // {
-    //   title: "Content",
-    //   dataIndex: "content",
-    //   key: "content",
-    // },
+
+    ...getCustomColumns({ customColumns }),
     {
       title: "Tags",
       dataIndex: "tags",
@@ -265,7 +293,6 @@ const TableView = ({
       key: "status",
       dataIndex: "status",
       align: "center",
-      render: (status) => <Tag>{status}</Tag>,
     },
     {
       title: "Created",
@@ -290,7 +317,6 @@ const TableView = ({
       <Table
         size="middle"
         tableLayout="fixed"
-        // bordered
         columns={columns}
         dataSource={notes}
         onRow={(record) => ({
