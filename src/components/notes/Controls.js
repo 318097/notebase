@@ -662,7 +662,7 @@ const Controls = ({
       id: "Naming",
     },
     {
-      view: "RIGHT",
+      view: "LEFT",
       visible: !_.isEmpty(socialPlatformsList),
       component: SocialPlatforms,
       id: "SocialPlatforms",
