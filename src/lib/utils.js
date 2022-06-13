@@ -111,6 +111,16 @@ const parseTags = (settings) => {
   }));
 };
 
+const scrollToPosition = (ref, offset) => {
+  let position = 0;
+  const increment = offset / 10;
+  const interval = setInterval(() => {
+    ref.scrollTop = position;
+    position += increment;
+    if (position >= offset) clearInterval(interval);
+  }, 50);
+};
+
 export {
   md,
   getDomain,
@@ -121,4 +131,5 @@ export {
   generateFormData,
   getSettingsById,
   parseTags,
+  scrollToPosition,
 };

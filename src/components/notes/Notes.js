@@ -1,10 +1,7 @@
-import React, { useEffect, useRef, Fragment } from "react";
+import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import styled from "styled-components";
-import { Button, Table, Tag, Pagination, Badge } from "antd";
-import colors, { EmptyState } from "@codedrops/react-ui";
-import NoteCard from "./NoteCard";
+import { EmptyState } from "@codedrops/react-ui";
 import _ from "lodash";
 import {
   setNoteToEdit,
@@ -12,56 +9,10 @@ import {
   setFilter,
   setKey,
 } from "../../store/actions";
-import { extractTagCodes } from "../../lib/utils";
+import { extractTagCodes, scrollToPosition } from "../../lib/utils";
 import config from "../../config";
-import moment from "moment";
-
-const PageWrapper = styled.div`
-  margin-bottom: 25px;
-  .page-splitter {
-    display: block;
-    width: 80%;
-    margin: 20px 30px 25px;
-    position: relative;
-    span {
-      padding: 0 12px;
-      display: inline-block;
-      position: relative;
-      left: 20px;
-      background: ${colors.iron};
-      font-size: 1rem;
-      color: white;
-    }
-    &:after {
-      content: "";
-      z-index: -1;
-      display: block;
-      width: 100%;
-      height: 1px;
-      position: absolute;
-      top: 50%;
-      background: ${colors.iron};
-    }
-  }
-  .notes-wrapper {
-    padding: 0 28px;
-    /* columns: 240px; */
-    /* column-gap: 12px; */
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    grid-gap: 16px;
-  }
-`;
-
-const scrollToPosition = (ref, offset) => {
-  let position = 0;
-  const increment = offset / 10;
-  const interval = setInterval(() => {
-    ref.scrollTop = position;
-    position += increment;
-    if (position >= offset) clearInterval(interval);
-  }, 50);
-};
+import CardView from "./CardView";
+import NotesTable from "./NotesTable";
 
 const Notes = ({
   displayType,
@@ -120,7 +71,7 @@ const Notes = ({
               {...others}
             />
           ) : (
-            <TableView
+            <NotesTable
               notes={notes}
               handleClick={handleClick}
               onEdit={onEdit}
@@ -138,202 +89,6 @@ const Notes = ({
         <p style={{ textAlign: "center" }}>Create a new collection.</p>
       )}
     </section>
-  );
-};
-
-const CardView = ({
-  notes,
-  handleClick,
-  onEdit,
-  onDelete,
-  tagsCodes,
-  meta,
-  filters,
-  appLoading,
-  dispatch,
-  settings,
-  pageSize,
-  selectedItems,
-}) => {
-  const noteChunks = Array(Math.ceil(notes.length / pageSize))
-    .fill(null)
-    .map((_, index) =>
-      notes.slice(index * pageSize, index * pageSize + pageSize)
-    );
-
-  return (
-    <Fragment>
-      {noteChunks.map((chunk, index) => (
-        <PageWrapper key={index}>
-          <div className="notes-wrapper">
-            {chunk.map((note) => (
-              <NoteCard
-                settings={settings}
-                key={note._id}
-                note={note}
-                handleClick={handleClick}
-                onEdit={onEdit}
-                onDelete={onDelete}
-                tagsCodes={tagsCodes}
-                dispatch={dispatch}
-                selectedItems={selectedItems}
-              />
-            ))}
-          </div>
-          {index < noteChunks.length - 1 && (
-            <div className="page-splitter">
-              <span>{`Page: ${index + 2}`}</span>
-            </div>
-          )}
-        </PageWrapper>
-      ))}
-      {notes.length && notes.length < meta.count && (
-        <div className="fcc">
-          <Button
-            disabled={appLoading}
-            onClick={() =>
-              dispatch(setFilter({ page: filters.page + 1 }, false))
-            }
-          >
-            Load
-          </Button>
-        </div>
-      )}
-    </Fragment>
-  );
-};
-
-const getCustomColumns = ({ customColumns }) => {
-  return _.map(customColumns, (column) => {
-    switch (column) {
-      case "URL":
-        return {
-          title: "URL",
-          key: "url",
-          dataIndex: "url",
-          width: "300px",
-          render: (url) => {
-            return (
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ fontSize: "90%" }}
-              >
-                {url}
-              </a>
-            );
-          },
-        };
-      default:
-        return null;
-    }
-  });
-};
-
-const TableView = ({
-  notes,
-  handleClick,
-  onEdit,
-  onDelete,
-  tagsCodes,
-  meta,
-  dispatch,
-  filters,
-  scrollRef,
-  pageSize,
-  settings,
-}) => {
-  const onPageChange = (page) => {
-    dispatch(setFilter({ page }, false));
-    scrollRef.current.scrollTop = 0;
-  };
-
-  const customColumns = _.get(settings, "customColumns", []);
-
-  const columns = [
-    {
-      title: "Id",
-      dataIndex: "index",
-      key: "index",
-      width: "50px",
-    },
-    {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
-      width: "40%",
-      render: (title, row) => (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {title}&nbsp;
-          {row.status === "POSTED" && <Badge status="success" />}
-        </div>
-      ),
-    },
-
-    ...getCustomColumns({ customColumns }),
-    {
-      title: "Tags",
-      dataIndex: "tags",
-      key: "tags",
-      align: "center",
-      width: "150px",
-      render: (tags) => (
-        <Fragment>
-          {tags.map((tag) => (
-            <Tag color={tagsCodes[tag]} style={{ marginBottom: "4px" }}>
-              {tag}
-            </Tag>
-          ))}
-        </Fragment>
-      ),
-    },
-    {
-      title: "Status",
-      key: "status",
-      dataIndex: "status",
-      align: "center",
-    },
-    {
-      title: "Created",
-      key: "createdAt",
-      dataIndex: "createdAt",
-      align: "center",
-      render: (createdAt) => {
-        const addedDays = moment().diff(moment(createdAt), "days");
-        return <Tag>{addedDays ? `${addedDays}d ago` : "Today"}</Tag>;
-      },
-    },
-  ];
-  return (
-    <div
-      style={{
-        width: "90%",
-        margin: "0 auto",
-        background: "white",
-        paddingBottom: "10px",
-      }}
-    >
-      <Table
-        size="middle"
-        tableLayout="fixed"
-        columns={columns}
-        dataSource={notes}
-        onRow={(record) => ({
-          onClick: (e) => handleClick(e, record._id),
-        })}
-        pagination={false}
-        rowClassName="table-row"
-      />
-      <br />
-      <Pagination
-        current={filters.page}
-        onChange={onPageChange}
-        size="small"
-        total={meta.count}
-        pageSize={pageSize}
-      />
-    </div>
   );
 };
 
