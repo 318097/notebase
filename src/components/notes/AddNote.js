@@ -15,7 +15,7 @@ import {
 } from "../../store/actions";
 import colors, { Icon } from "@codedrops/react-ui";
 import SelectCollection from "../SelectCollection";
-import { md } from "../../lib/utils";
+import { md, parseTags } from "../../lib/utils";
 import { generateSlug } from "@codedrops/lib";
 import { POST_TYPE_OPTIONS } from "../../constants";
 import axios from "axios";
@@ -458,10 +458,7 @@ const mapStateToProps = ({
   selectedNote,
   mode,
   session,
-  tags: _.map(_.get(settings, "tags", []), ({ label }) => ({
-    label,
-    value: label,
-  })),
+  tags: parseTags(settings),
   activeCollectionId,
   appLoading,
 });

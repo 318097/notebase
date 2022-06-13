@@ -5,7 +5,7 @@ import hljs from "highlight.js";
 import markdown from "markdown-it";
 import { copyToClipboard as _copyToClipboard } from "@codedrops/lib";
 
-export const md = markdown({
+const md = markdown({
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
@@ -17,7 +17,7 @@ export const md = markdown({
   },
 });
 
-export const getDomain = (url) => {
+const getDomain = (url) => {
   try {
     const { host } = new URL(url);
     return host;
@@ -26,23 +26,18 @@ export const getDomain = (url) => {
   }
 };
 
-export const copyToClipboard = (text) => {
+const copyToClipboard = (text) => {
   _copyToClipboard(text);
   message.info(`Copied - ${text}`);
 };
 
-export const getNextNote = ({
-  data,
-  id,
-  increment = 1,
-  matchKey = "_id",
-} = {}) => {
+const getNextNote = ({ data, id, increment = 1, matchKey = "_id" } = {}) => {
   const currentNoteIndex = data.findIndex((note) => note[matchKey] === id);
   const newIndex = currentNoteIndex + increment;
   return newIndex >= 0 && newIndex < data.length ? data[newIndex] : null;
 };
 
-export const extractTagCodes = (tags = []) =>
+const extractTagCodes = (tags = []) =>
   _.reduce(
     tags,
     (acc, { label, color }) => ({
@@ -52,7 +47,7 @@ export const extractTagCodes = (tags = []) =>
     { uncategorized: colors.red }
   );
 
-export const readFileContent = (event, { onFileRead } = {}) => {
+const readFileContent = (event, { onFileRead } = {}) => {
   const { files } = event.target;
   const isImage = _.get(files, "0.type", "").startsWith("image/");
 
@@ -91,7 +86,7 @@ export const readFileContent = (event, { onFileRead } = {}) => {
   event.target.value = null;
 };
 
-export const generateFormData = (data) => {
+const generateFormData = (data) => {
   const formData = new FormData();
 
   for (const key in data) {
@@ -106,4 +101,24 @@ export const generateFormData = (data) => {
   return formData;
 };
 
-export const getSettingsById = (list, _id) => _.find(list, { _id }) || {};
+const getSettingsById = (list, _id) => _.find(list, { _id }) || {};
+
+const parseTags = (settings) => {
+  console.log(settings);
+  return _.map(_.get(settings, "tags", []), ({ label }) => ({
+    label,
+    value: label,
+  }));
+};
+
+export {
+  md,
+  getDomain,
+  copyToClipboard,
+  getNextNote,
+  extractTagCodes,
+  readFileContent,
+  generateFormData,
+  getSettingsById,
+  parseTags,
+};

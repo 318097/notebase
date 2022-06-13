@@ -19,7 +19,7 @@ import moment from "moment";
 import _ from "lodash";
 import colors, { Icon, Tag, EmptyState } from "@codedrops/react-ui";
 import { saveSettings, setAppLoading, updateNote } from "../../store/actions";
-import { copyToClipboard, generateFormData } from "../../lib/utils";
+import { copyToClipboard, generateFormData, parseTags } from "../../lib/utils";
 import short from "short-uuid";
 import { STATUS_OPTIONS } from "../../constants";
 import ImageCard from "../../lib/ImageCard";
@@ -118,6 +118,7 @@ const Controls = ({
   saveSettings,
   updateNote,
   setAppLoading,
+  tagList,
 }) => {
   const {
     tags = [],
@@ -615,6 +616,19 @@ const Controls = ({
     </ControlsWrapper>
   );
 
+  const Tags = (
+    <ControlsWrapper>
+      <div className="header">
+        <h4>Tags</h4>
+      </div>
+      <Checkbox.Group
+        options={tagList}
+        value={note.tags}
+        onChange={(value) => updateProperties({ tags: value })}
+      />
+    </ControlsWrapper>
+  );
+
   const menuList = [
     // {
     //   view: "LEFT",
@@ -657,6 +671,12 @@ const Controls = ({
       visible: true,
       component: Status,
       id: "Status",
+    },
+    {
+      view: "RIGHT",
+      visible: !_.isEmpty(note.tags),
+      component: Tags,
+      id: "Tags",
     },
   ];
 
@@ -763,6 +783,7 @@ const Controls = ({
 
 const mapStateToProps = ({ settings }) => ({
   ..._.pick(settings, ["socialPlatforms"]),
+  tagList: parseTags(settings),
 });
 
 export default connect(mapStateToProps, {
