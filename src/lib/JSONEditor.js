@@ -3,7 +3,7 @@ import { Button, message, Input } from "antd";
 
 const { TextArea } = Input;
 
-const JSONEditor = ({ data, handleSave, loading }) => {
+const JSONEditor = ({ data, saveCollectionSettings, loading }) => {
   const [localData, setLocalData] = useState({});
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const JSONEditor = ({ data, handleSave, loading }) => {
         disabled={loading}
         type="primary"
         className="mt"
-        onClick={() => handleSave(JSON.parse(localData))}
+        onClick={() => saveCollectionSettings(JSON.parse(localData))}
       >
         Save
       </Button>
