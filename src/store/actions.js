@@ -338,3 +338,23 @@ export const saveSettings = (updatedSettings) => async (dispatch) => {
     dispatch(setAppLoading(false));
   }
 };
+
+export const updateTagSettings =
+  (data, { action }, collectionId) =>
+  async (dispatch) => {
+    try {
+      dispatch(setAppLoading(true));
+      await axios.post(
+        `/tags/operations`,
+        { ...data, moduleName: "COLLECTION", moduleId: collectionId },
+        {
+          params: { action },
+        }
+      );
+      await dispatch(fetchSession());
+    } catch (err) {
+      console.log(err);
+    } finally {
+      dispatch(setAppLoading(false));
+    }
+  };

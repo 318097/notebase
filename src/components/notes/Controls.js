@@ -18,7 +18,12 @@ import { connect } from "react-redux";
 import moment from "moment";
 import _ from "lodash";
 import colors, { Icon, Tag, EmptyState } from "@codedrops/react-ui";
-import { saveSettings, setAppLoading, updateNote } from "../../store/actions";
+import {
+  saveSettings,
+  setAppLoading,
+  updateNote,
+  updateTagSettings,
+} from "../../store/actions";
 import { copyToClipboard, generateFormData, parseTags } from "../../lib/utils";
 import short from "short-uuid";
 import { getStatusOptions } from "../../constants";
@@ -44,10 +49,10 @@ const ControlsWrapper = styled.div`
     justify-content: space-between;
     margin-bottom: 4px;
   }
-  .hashtag {
+  /* .hashtag {
     font-size: 1rem;
     font-family: Cascadia-SemiBold;
-  }
+  } */
   .name-id {
     background: ${colors.strokeThree};
     color: white;
@@ -120,6 +125,8 @@ const Controls = ({
   setAppLoading,
   tagList,
   settings,
+  updateTagSettings,
+  activeCollectionId,
 }) => {
   const {
     tags = [],
@@ -147,6 +154,7 @@ const Controls = ({
   const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
   const [files, setFiles] = useState({});
+  const [searchedTag, setSearchedTag] = useState("");
   const [blockSocialPlatforms, setBlockSocialPlatforms] = useState(true);
   const [uploadingStatus, setUploading] = useState(false);
   const [socialPlatformCaptionCheckAll, setSocialPlatformCaptionCheckAll] =
@@ -196,7 +204,7 @@ const Controls = ({
   const toggleChain = (value) =>
     updateProperties({ updatedChainedTo: value, chainedTo });
 
-  const hashtags = tags.map((tag) => `#${tag}`).join(" ");
+  // const hashtags = tags.map((tag) => `#${tag}`).join(" ");
 
   const createdAtFormatted = moment(createdAt).format("DD MMM, YY");
   const updatedAtFormatted = moment(updatedAt).format("DD MMM, YY");
@@ -527,7 +535,7 @@ const Controls = ({
         </Button>
       </div>
 
-      {!!hashtags && (
+      {/* {!!hashtags && (
         <Fragment>
           <div className="divider"></div>
           <div className="header">
@@ -536,7 +544,7 @@ const Controls = ({
           </div>
           <div className="hashtag">{hashtags}</div>
         </Fragment>
-      )}
+      )} */}
 
       {!_.isEmpty(socialPlatformsList) && (
         <Button
@@ -617,11 +625,44 @@ const Controls = ({
     </ControlsWrapper>
   );
 
+  const tagOptions = tagList.map((d) => (
+    <Option key={d.value}>{d.label}</Option>
+  ));
   const Tags = (
     <ControlsWrapper>
       <div className="header">
         <h4>Tags</h4>
       </div>
+      <Select
+        showSearch
+        options={tagList}
+        value={note.tags}
+        mode="multiple"
+        placeholder={"Tags"}
+        style={{ width: "100%" }}
+        defaultActiveFirstOption={false}
+        onChange={(value) => {
+          updateProperties({ tags: value });
+          setSearchedTag("");
+        }}
+        onSearch={(search) => setSearchedTag(search)}
+        notFoundContent={
+          <Button
+            block
+            onClick={() =>
+              updateTagSettings(
+                { label: searchedTag.trim() },
+                { action: "CREATE" },
+                activeCollectionId
+              )
+            }
+          >{`Add '${searchedTag}'`}</Button>
+        }
+      >
+        {tagOptions}
+      </Select>
+      <div className="divider"></div>
+
       <Checkbox.Group
         options={tagList}
         value={note.tags}
@@ -782,14 +823,16 @@ const Controls = ({
   );
 };
 
-const mapStateToProps = ({ settings }) => ({
+const mapStateToProps = ({ settings, activeCollectionId }) => ({
   ..._.pick(settings, ["socialPlatforms"]),
   tagList: parseTags(settings),
   settings,
+  activeCollectionId,
 });
 
 export default connect(mapStateToProps, {
   saveSettings,
   updateNote,
   setAppLoading,
+  updateTagSettings,
 })(Controls);

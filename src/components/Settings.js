@@ -5,13 +5,12 @@ import _ from "lodash";
 import {
   toggleSettingsDrawer,
   saveSettings,
-  fetchSession,
+  updateTagSettings,
 } from "../store/actions";
 import SelectCollection from "./SelectCollection";
 import JSONEditor from "../lib/JSONEditor";
 import { DEFAULT_SETTING_STATE } from "../constants";
 import { NestedNodes } from "@codedrops/react-ui";
-import axios from "axios";
 
 const { TextArea } = Input;
 
@@ -21,7 +20,7 @@ const Settings = ({
   activeCollectionId,
   toggleSettingsDrawer,
   saveSettings,
-  fetchSession,
+  updateTagSettings,
 }) => {
   const [collectionList, setCollectionList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -79,8 +78,8 @@ const Settings = ({
           data={activeSettings}
           saveCollectionSettings={saveCollectionSettings}
           loading={loading}
-          fetchSession={fetchSession}
           activeId={activeId}
+          updateTagSettings={updateTagSettings}
         />
       )}
     </Drawer>
@@ -121,7 +120,7 @@ const CollectionSetting = ({
   data,
   saveCollectionSettings,
   loading,
-  fetchSession,
+  updateTagSettings,
   activeId,
 }) => {
   const [localData, setLocalData] = useState({});
@@ -133,17 +132,6 @@ const CollectionSetting = ({
 
   const handleChange = (update) =>
     setLocalData((prev) => ({ ...prev, ...update }));
-
-  const updateTagSettings = async (data, { action }) => {
-    await axios.post(
-      `/tags/operations`,
-      { ...data, moduleName: "COLLECTION", moduleId: activeId },
-      {
-        params: { action },
-      }
-    );
-    await fetchSession();
-  };
 
   const { name = "", tags = [] } = localData;
   return (
@@ -166,7 +154,10 @@ const CollectionSetting = ({
           ))}
         </div>
 
-        <NestedNodes nodes={tags} onChange={updateTagSettings} />
+        <NestedNodes
+          nodes={tags}
+          onChange={(data, value) => updateTagSettings(data, value, activeId)}
+        />
       </div>
       <div className="setting-group">
         <h6>Caption</h6>
@@ -202,5 +193,5 @@ const mapStateToProps = ({
 export default connect(mapStateToProps, {
   toggleSettingsDrawer,
   saveSettings,
-  fetchSession,
+  updateTagSettings,
 })(Settings);
