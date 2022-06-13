@@ -17,7 +17,10 @@ const NoteMeta = ({ sourceInfo = {}, inPopup }) => {
         )
         .map(([key, value]) => {
           return (
-            <div key={key}>
+            <div
+              key={key}
+              style={{ textOverflow: "ellipsis", overflow: "hidden" }}
+            >
               {key}:<span className="bold">{value}</span>
             </div>
           );

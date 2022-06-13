@@ -7,7 +7,7 @@ import SelectCollection from "./SelectCollection";
 import config from "../config";
 import { useObject } from "@codedrops/lib";
 import {
-  STATUS_OPTIONS,
+  getStatusOptions,
   SOCIAL_STATUS_OPTIONS,
   POST_TYPE_OPTIONS,
   SORT_OPTIONS,
@@ -49,7 +49,7 @@ const validateFilters = ({
 
 const StatusDropdown = (props) => (
   <Select allowClear className="form-field" placeholder="Status" {...props}>
-    {STATUS_OPTIONS.map(({ label, value }) => (
+    {getStatusOptions(props).map(({ label, value }) => (
       <Option key={value} value={value}>
         {label}
       </Option>
@@ -166,6 +166,7 @@ const Filters = ({
       mode="multiple"
       style={{ minWidth: "100px", width: "auto" }}
       onChange={(value) => setFilterValues({ status: value })}
+      settings={settings}
     />
   );
 

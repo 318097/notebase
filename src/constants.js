@@ -1,9 +1,18 @@
-const STATUS_OPTIONS = [
-  { label: "Quick add", value: "QUICK_ADD" },
-  { label: "Draft", value: "DRAFT" },
-  { label: "Ready", value: "READY" },
-  { label: "Posted", value: "POSTED" },
-];
+import _ from "lodash";
+
+const getStatusOptions = ({ settings }) =>
+  _.filter(
+    [
+      { label: "Quick add", value: "QUICK_ADD" },
+      { label: "Draft", value: "DRAFT" },
+      { label: "Ready", value: "READY" },
+      { label: "Posted", value: "POSTED" },
+    ],
+    (option) =>
+      _.get(settings, "enabledStatusOptions")
+        ? _.includes(_.get(settings, "enabledStatusOptions"), option.value)
+        : true
+  );
 
 const SOCIAL_STATUS_OPTIONS = [
   { label: "Ready", value: "READY" },
@@ -109,7 +118,7 @@ const DEFAULT_SETTING_STATE = {
 };
 
 export {
-  STATUS_OPTIONS,
+  getStatusOptions,
   SOCIAL_STATUS_OPTIONS,
   POST_TYPE_OPTIONS,
   SORT_OPTIONS,

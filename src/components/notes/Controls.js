@@ -21,7 +21,7 @@ import colors, { Icon, Tag, EmptyState } from "@codedrops/react-ui";
 import { saveSettings, setAppLoading, updateNote } from "../../store/actions";
 import { copyToClipboard, generateFormData, parseTags } from "../../lib/utils";
 import short from "short-uuid";
-import { STATUS_OPTIONS } from "../../constants";
+import { getStatusOptions } from "../../constants";
 import ImageCard from "../../lib/ImageCard";
 import UploadButton from "../../lib/UploadButton";
 import NoteMeta from "./NoteMeta";
@@ -119,6 +119,7 @@ const Controls = ({
   updateNote,
   setAppLoading,
   tagList,
+  settings,
 }) => {
   const {
     tags = [],
@@ -607,7 +608,7 @@ const Controls = ({
         }
         value={status}
       >
-        {STATUS_OPTIONS.map(({ label, value }) => (
+        {getStatusOptions({ settings }).map(({ label, value }) => (
           <Radio className="block status-tag" key={value} value={value}>
             {label.toLowerCase()}
           </Radio>
@@ -674,7 +675,7 @@ const Controls = ({
     },
     {
       view: "RIGHT",
-      visible: !_.isEmpty(note.tags),
+      visible: !_.isEmpty(tagList),
       component: Tags,
       id: "Tags",
     },
@@ -784,6 +785,7 @@ const Controls = ({
 const mapStateToProps = ({ settings }) => ({
   ..._.pick(settings, ["socialPlatforms"]),
   tagList: parseTags(settings),
+  settings,
 });
 
 export default connect(mapStateToProps, {
