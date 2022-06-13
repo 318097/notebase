@@ -115,6 +115,8 @@ const DEFAULT_SETTING_STATE = {
     limit: 50,
     status: ["QUICK_ADD", "DRAFT"],
   },
+  // customColumns: ["URL"], // columns for table view
+  // enabledStatusOptions: ["QUICK_ADD", "DRAFT", "READY"], // enabled status dropdown options
 };
 
 export {

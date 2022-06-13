@@ -104,11 +104,13 @@ const generateFormData = (data) => {
 const getSettingsById = (list, _id) => _.find(list, { _id }) || {};
 
 const parseTags = (settings) => {
-  console.log(settings);
-  return _.map(_.get(settings, "tags", []), ({ label }) => ({
-    label,
-    value: label,
-  }));
+  return _.sortBy(
+    _.map(_.get(settings, "tags", []), ({ label }) => ({
+      label,
+      value: label,
+    })),
+    "label"
+  );
 };
 
 const scrollToPosition = (ref, offset) => {
