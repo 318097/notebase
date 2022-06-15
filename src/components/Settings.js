@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Drawer, Tag, Input, Button } from "antd";
+import { Drawer, Button } from "antd";
 import { connect } from "react-redux";
 import _ from "lodash";
 import {
@@ -10,9 +10,7 @@ import {
 import SelectCollection from "./SelectCollection";
 import JSONEditor from "../lib/JSONEditor";
 import { DEFAULT_SETTING_STATE } from "../constants";
-import { NestedNodes } from "@codedrops/react-ui";
-
-const { TextArea } = Input;
+import CollectionSetting from "./CollectionSettings";
 
 const Settings = ({
   settingsDrawerVisibility,
@@ -112,70 +110,6 @@ const Header = ({
         </Button>
         <Button onClick={addNewCollection} icon="plus"></Button>
       </div>
-    </div>
-  );
-};
-
-const CollectionSetting = ({
-  data,
-  saveCollectionSettings,
-  loading,
-  updateTagSettings,
-  activeId,
-}) => {
-  const [localData, setLocalData] = useState({});
-
-  useEffect(() => {
-    if (!data) return;
-    setLocalData({ ...data });
-  }, [data]);
-
-  const handleChange = (update) =>
-    setLocalData((prev) => ({ ...prev, ...update }));
-
-  const { name = "", tags = [] } = localData;
-  return (
-    <div className="settings-content">
-      <div className="setting-group">
-        <h6>Name</h6>
-        <Input
-          placeholder="title"
-          value={name}
-          onChange={(e) => handleChange({ name: e.target.value })}
-        />
-      </div>
-      <div className="setting-group">
-        <h6>Tags</h6>
-        <div>
-          {tags.map(({ label, color }) => (
-            <Tag style={{ marginBottom: "6px" }} key={label} color={color}>
-              {label}
-            </Tag>
-          ))}
-        </div>
-
-        <NestedNodes
-          nodes={tags}
-          onChange={(data, value) => updateTagSettings(data, value, activeId)}
-        />
-      </div>
-      <div className="setting-group">
-        <h6>Caption</h6>
-        <TextArea
-          rows={6}
-          placeholder="Caption"
-          value={localData.caption}
-          onChange={(e) => handleChange({ caption: e.target.value })}
-        />
-      </div>
-      <Button
-        disabled={loading}
-        type="primary"
-        style={{ marginTop: "20px" }}
-        onClick={() => saveCollectionSettings(localData)}
-      >
-        Save
-      </Button>
     </div>
   );
 };
