@@ -1,14 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, Fragment } from "react";
-import {
-  Button,
-  message,
-  Tag,
-  Select,
-  Divider,
-  Modal,
-  Icon as AntIcon,
-} from "antd";
+import { Button, message, Select, Divider, Modal, Icon as AntIcon } from "antd";
 import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -23,13 +15,14 @@ import {
   setActiveCollection,
 } from "../../store/actions";
 import { INITIAL_UPLOADING_DATA_STATE } from "../../store/reducer";
-import { extractTagCodes, md, getDomain } from "../../lib/utils";
+import { md, getDomain } from "../../lib/utils";
 import axios from "axios";
 import ImageCard from "../../lib/ImageCard";
 import UploadButton from "../../lib/UploadButton";
 import classnames from "classnames";
 import { StyledNoteCard, StyledCollection } from "./styled";
 import NoteMeta from "./NoteMeta";
+import Tags from "./Tags";
 
 const config = {
   POST: {
@@ -137,7 +130,6 @@ const UploadContent = ({
   activeCollectionId,
   settings,
   setActiveCollection,
-  tagsCodes,
 }) => {
   const [viewRawData, setViewRawData] = useState(false);
   const [collectionVisibilityObj, updateCollectionVisibilityObj] = useObject();
@@ -463,7 +455,6 @@ const UploadContent = ({
                   editItem={editItem}
                   removeItem={removeItem}
                   idx={idx}
-                  tagsCodes={tagsCodes}
                   isExternalData={isExternalData}
                 />
               );
@@ -557,14 +548,7 @@ const UploadContent = ({
   );
 };
 
-const UploadCard = ({
-  item,
-  editItem,
-  removeItem,
-  idx,
-  tagsCodes,
-  isExternalData,
-}) => {
+const UploadCard = ({ item, editItem, removeItem, idx, isExternalData }) => {
   const { title = "", content = "", tags = [], viewed, sourceInfo, url } = item;
   const cardClasses = classnames("card", {
     today: !!viewed,
@@ -592,11 +576,7 @@ const UploadCard = ({
       <Card className={classnames("action-row", { today: !!viewed })}>
         <div className="status-row">
           <div className="tags">
-            {tags.map((tag) => (
-              <Tag key={tag} color={tagsCodes[tag]}>
-                {tag}
-              </Tag>
-            ))}
+            <Tags tags={tags} />
             {onlyTitleAndURL && <AntIcon type="link" onClick={goToLink} />}
           </div>
 
@@ -620,7 +600,6 @@ const mapStateToProps = ({ uploadingData, activeCollectionId, settings }) => ({
   uploadingData,
   activeCollectionId,
   settings,
-  tagsCodes: extractTagCodes(settings.tags),
 });
 
 const mapDispatchToProps = {

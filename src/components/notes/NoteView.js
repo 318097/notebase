@@ -11,6 +11,7 @@ import { getNoteById, setModalMeta, updateNote } from "../../store/actions";
 import { md, copyToClipboard } from "../../lib/utils";
 import JSONEditor from "../../lib/JSONEditor";
 import { StyledNoteView } from "./styled";
+import Tags from "./Tags";
 
 const NoteView = ({
   dispatch,
@@ -232,9 +233,7 @@ const NoteView = ({
           )}
 
           <div className="tags">
-            {tags.map((tag, index) => (
-              <Tag key={index}>{tag.toUpperCase()}</Tag>
-            ))}
+            <Tags tags={tags} />
           </div>
         </div>
 
@@ -312,7 +311,13 @@ const NoteView = ({
   );
 };
 
-const mapStateToProps = ({ viewNote, chains, appLoading, viewNoteMeta }) => ({
+const mapStateToProps = ({
+  viewNote,
+  chains,
+  appLoading,
+  viewNoteMeta,
+  settings,
+}) => ({
   viewNote,
   chains,
   appLoading,

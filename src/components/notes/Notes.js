@@ -9,7 +9,7 @@ import {
   setFilter,
   setKey,
 } from "../../store/actions";
-import { extractTagCodes, scrollToPosition } from "../../lib/utils";
+import { scrollToPosition } from "../../lib/utils";
 import config from "../../config";
 import CardView from "./CardView";
 import NotesTable from "./NotesTable";
@@ -106,7 +106,6 @@ const mapStateToProps = ({
   appLoading,
   filters,
   meta,
-  tagsCodes: extractTagCodes(settings.tags),
   displayType,
   hasCollections: _.get(session, "notebase.length", false),
   settings,

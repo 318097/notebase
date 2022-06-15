@@ -4,6 +4,7 @@ import { Table, Tag, Pagination, Badge } from "antd";
 import _ from "lodash";
 import { setFilter } from "../../store/actions";
 import moment from "moment";
+import Tags from "./Tags";
 
 const getCustomColumns = ({ customColumns }) => {
   return _.map(customColumns, (column) => {
@@ -39,7 +40,6 @@ const NotesTable = ({
   handleClick,
   onEdit,
   onDelete,
-  tagsCodes,
   meta,
   dispatch,
   filters,
@@ -80,19 +80,7 @@ const NotesTable = ({
       key: "tags",
       align: "center",
       width: "150px",
-      render: (tags) => (
-        <Fragment>
-          {tags.map((tag) => (
-            <Tag
-              key={tag}
-              color={tagsCodes[tag]}
-              style={{ marginBottom: "4px" }}
-            >
-              {tag}
-            </Tag>
-          ))}
-        </Fragment>
-      ),
+      render: (tags) => <Tags tags={tags} />,
     },
     {
       title: "Status",

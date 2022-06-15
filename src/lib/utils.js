@@ -37,16 +37,6 @@ const getNextNote = ({ data, id, increment = 1, matchKey = "_id" } = {}) => {
   return newIndex >= 0 && newIndex < data.length ? data[newIndex] : null;
 };
 
-const extractTagCodes = (tags = []) =>
-  _.reduce(
-    tags,
-    (acc, { label, color }) => ({
-      ...acc,
-      [label]: color,
-    }),
-    { uncategorized: colors.red }
-  );
-
 const readFileContent = (event, { onFileRead } = {}) => {
   const { files } = event.target;
   const isImage = _.get(files, "0.type", "").startsWith("image/");
@@ -104,13 +94,21 @@ const generateFormData = (data) => {
 const getSettingsById = (list, _id) => _.find(list, { _id }) || {};
 
 const parseTags = (settings) => {
+  const tagsList = _.get(settings, "tags", []);
   return _.sortBy(
-    _.map(_.get(settings, "tags", []), ({ label }) => ({
-      label,
-      value: label,
-    })),
+    _.map(tagsList, (tag) => {
+      const obj = _.pick(tag, ["label", "value", "_id"]);
+      const color = _.get(tag, "color", getRandomColor());
+
+      return { ...obj, color };
+    }),
     "label"
   );
+};
+
+const getTagsMap = (settings) => {
+  const tags = parseTags(settings);
+  return _.keyBy(tags, "value");
 };
 
 const scrollToPosition = (ref, offset) => {
@@ -123,15 +121,46 @@ const scrollToPosition = (ref, offset) => {
   }, 50);
 };
 
+const getRandomElement = (size) => {
+  const randomElement = Math.floor(Math.random() * 100) % size;
+  return randomElement;
+};
+
+const getRandomColor = () => {
+  const colorList = [
+    "primary",
+    "red",
+    "watermelon",
+    "blue",
+    "orchid",
+    "yellow",
+    "orange",
+    "green",
+    "coffee",
+    "nbOrange",
+    "nbPink",
+    "foBlue",
+    "cdBlue",
+    "cdGreen",
+    "purple",
+  ];
+
+  const position = getRandomElement(colorList.length);
+  const color = colorList[position];
+
+  return _.get(colors, color);
+};
+
 export {
   md,
   getDomain,
   copyToClipboard,
   getNextNote,
-  extractTagCodes,
   readFileContent,
   generateFormData,
   getSettingsById,
   parseTags,
   scrollToPosition,
+  getTagsMap,
+  getRandomColor,
 };

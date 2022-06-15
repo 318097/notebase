@@ -5,6 +5,7 @@ import colors from "@codedrops/react-ui";
 import NoteCard from "./NoteCard";
 import _ from "lodash";
 import { setFilter } from "../../store/actions";
+import { getTagsMap } from "../../lib/utils";
 const PageWrapper = styled.div`
   margin-bottom: 25px;
   .page-splitter {
@@ -47,7 +48,6 @@ const CardView = ({
   handleClick,
   onEdit,
   onDelete,
-  tagsCodes,
   meta,
   filters,
   appLoading,
@@ -75,7 +75,6 @@ const CardView = ({
                 handleClick={handleClick}
                 onEdit={onEdit}
                 onDelete={onDelete}
-                tagsCodes={tagsCodes}
                 dispatch={dispatch}
                 selectedItems={selectedItems}
               />

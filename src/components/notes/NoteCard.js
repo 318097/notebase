@@ -9,13 +9,13 @@ import { md, getDomain } from "../../lib/utils";
 import { StyledNoteCard } from "./styled";
 import NoteMeta from "./NoteMeta";
 import { toggleSelectedItems } from "../../store/actions";
+import Tags from "./Tags";
 
 const NoteCard = ({
   note,
   handleClick,
   onEdit,
   onDelete,
-  tagsCodes,
   settings,
   selectedItems,
   dispatch,
@@ -94,11 +94,7 @@ const NoteCard = ({
       <Card className={classnames("action-row", { today: !!isCreatedToday })}>
         <div className="status-row">
           <div className="tags">
-            {tags.map((tag) => (
-              <Tag key={tag} color={tagsCodes[tag]}>
-                {tag}
-              </Tag>
-            ))}
+            <Tags tags={tags} />
           </div>
 
           <Tag

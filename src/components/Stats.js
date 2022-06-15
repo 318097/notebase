@@ -5,7 +5,7 @@ import _ from "lodash";
 import { fetchStats } from "../store/actions";
 import colors from "@codedrops/react-ui";
 import { Doughnut, HorizontalBar, Bar } from "react-chartjs-2";
-import { extractTagCodes } from "../lib/utils";
+import { getTagsMap } from "../lib/utils";
 
 const StyledContainer = styled.section`
   display: flex;
@@ -45,24 +45,27 @@ const StyledContainer = styled.section`
   }
 `;
 
-const getChartData = ({ data = {}, type, tagsCodes } = {}) =>
+const getChartData = ({ data = {}, type, tagsMap } = {}) =>
   _.reduce(
     _.get(data, type, {}),
     (acc, value, label) => {
-      acc.labels.push(label.toUpperCase());
+      acc.labels.push(label);
       acc.values.push(value);
-      if (type === "tags") acc.colors.push(tagsCodes[label]);
+      if (type === "tags") {
+        const selectedColor = _.get(tagsMap, [label, "color"]);
+        acc.colors.push(selectedColor);
+      }
       return acc;
     },
     { labels: [], values: [], colors: [] }
   ) || {};
 
-const Stats = ({ tagsCodes, stats, fetchStats }) => {
+const Stats = ({ tagsMap, stats, fetchStats }) => {
   useEffect(() => {
     fetchStats();
   }, []);
 
-  const tagsData = getChartData({ data: stats, type: "tags", tagsCodes });
+  const tagsData = getChartData({ data: stats, type: "tags", tagsMap });
   const typesData = getChartData({ data: stats, type: "types" });
   const statusData = getChartData({ data: stats, type: "status" });
   const createdOnData = getChartData({ data: stats, type: "created" });
@@ -213,7 +216,7 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
 };
 
 const mapStateToProps = ({ settings, stats }) => ({
-  tagsCodes: extractTagCodes(settings.tags),
+  tagsMap: getTagsMap(settings),
   stats,
 });
 
