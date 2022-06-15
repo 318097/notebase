@@ -65,20 +65,27 @@ export const fetchNotes = () => async (dispatch, getState) => {
 };
 
 export const getNoteById = (noteId) => async (dispatch, getState) => {
-  const { notes, activeCollectionId } = getState();
-  dispatch(setAppLoading(true));
+  try {
+    dispatch(setAppLoading(true));
+    const { notes, activeCollectionId } = getState();
 
-  let viewPost = notes.find((note) => note._id === noteId);
+    let viewPost = _.find(notes, { _id: noteId });
 
-  if (!viewPost) {
-    const {
-      data: { post },
-    } = await axios.get(`/posts/${noteId}?collectionId=${activeCollectionId}`);
-    viewPost = post;
+    if (!viewPost) {
+      const {
+        data: { post },
+      } = await axios.get(
+        `/posts/${noteId}?collectionId=${activeCollectionId}`
+      );
+      viewPost = post;
+    }
+
+    dispatch({ type: GET_NOTE_BY_ID, payload: viewPost });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    dispatch(setAppLoading(false));
   }
-
-  dispatch({ type: GET_NOTE_BY_ID, payload: viewPost });
-  dispatch(setAppLoading(false));
 };
 
 export const addNote =
@@ -101,6 +108,8 @@ export const addNote =
       refetch(dispatch);
       if (_.get(data, "0.type") === "CHAIN") dispatch(getChains());
       message.success(`Success.`);
+    } catch (err) {
+      console.log(err);
     } finally {
       dispatch(setAppLoading(false));
     }
@@ -132,6 +141,8 @@ export const updateNote = (note, action) => async (dispatch, getState) => {
 
     dispatch({ type: UPDATE_NOTE, payload: result });
     message.success(`Updated.`);
+  } catch (err) {
+    console.log(err);
   } finally {
     dispatch(setAppLoading(false));
   }
@@ -149,6 +160,8 @@ export const bulkUpdate = (data, action) => async (dispatch, getState) => {
     dispatch({ type: SET_KEY, payload: { selectedItems: [] } });
     refetch(dispatch);
     message.success(`Updated.`);
+  } catch (err) {
+    console.log(err);
   } finally {
     dispatch(setAppLoading(false));
   }
@@ -162,6 +175,8 @@ export const deleteNote = (noteId) => async (dispatch, getState) => {
 
     dispatch({ type: DELETE_NOTE, payload: noteId });
     message.success(`Deleted.`);
+  } catch (err) {
+    console.log(err);
   } finally {
     dispatch(setAppLoading(false));
   }

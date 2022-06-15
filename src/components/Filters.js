@@ -25,7 +25,7 @@ const RESET_FILTER = {
   search: undefined,
   rating: undefined,
   type: undefined,
-  visible: true,
+  visible: "true",
   sortOrder: "DESC",
   sortFilter: "index",
 };

@@ -69,7 +69,7 @@ const Settings = ({
       />
       {showJSON ? (
         <JSONEditor
-          data={activeSettings}
+          data={_.omit(activeSettings, "tags")}
           saveCollectionSettings={saveCollectionSettings}
           loading={loading}
         />

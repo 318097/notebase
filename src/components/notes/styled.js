@@ -118,17 +118,23 @@ const StyledNoteCard = styled.div`
 `;
 
 const StyledNoteView = styled.div`
-  padding-top: 20px;
+  padding: 20px 0;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   column-gap: 8px;
+  max-height: 100%;
+  grid-template-rows: 100%;
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
   .controls.left {
     grid-column: 3/4;
   }
   .card {
     overflow: hidden;
     animation: 0.2s ${fadeInDownAnimation};
-    height: 78vh;
     width: 100%;
     padding: 30px 0;
     grid-column: 4/10;

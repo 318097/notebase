@@ -110,7 +110,7 @@ const DEFAULT_SETTING_STATE = {
       value: "linkedin",
     },
   ],
-  collectionType: "DEFAULT",
+  collectionType: "DEFAULT", // LINK|WORD|DEFAULT - card sizes
   defaultFilters: {
     limit: 50,
     status: ["QUICK_ADD", "DRAFT"],

@@ -36,7 +36,6 @@ const { Option } = Select;
 
 const ControlsWrapper = styled.div`
   background: white;
-  margin-bottom: 8px;
   width: 218px;
   padding: 14px 12px;
   border-radius: 4px;
@@ -382,7 +381,7 @@ const Controls = ({
   );
 
   const PublishDates = (
-    <ControlsWrapper>
+    <ControlsWrapper style={{ overflowY: "auto" }}>
       <div className="mb">
         Added:
         <span className="bold">{createdAtFormatted}</span>
@@ -628,8 +627,9 @@ const Controls = ({
   const tagOptions = tagList.map((d) => (
     <Option key={d.value}>{d.label}</Option>
   ));
+
   const Tags = (
-    <ControlsWrapper>
+    <ControlsWrapper style={{ overflowY: "auto" }}>
       <div className="header">
         <h4>Tags</h4>
       </div>

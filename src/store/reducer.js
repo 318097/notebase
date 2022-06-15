@@ -45,7 +45,7 @@ const INITIAL_STATE = {
     search: undefined,
     rating: undefined,
     type: undefined,
-    visible: true,
+    visible: "true",
     sortOrder: "DESC",
     sortFilter: "index",
     page: 1,
