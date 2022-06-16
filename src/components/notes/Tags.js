@@ -6,7 +6,7 @@ import _ from "lodash";
 
 const Tags = ({ tags = [], tagsMap }) => {
   return tags.map((tag) => {
-    const { color, label } = _.get(tagsMap, tag);
+    const { color, label } = _.get(tagsMap, tag) || {};
     return (
       <Tag key={tag} color={color}>
         {_.capitalize(label)}
