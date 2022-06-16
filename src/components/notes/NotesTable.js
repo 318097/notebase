@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 import { Table, Tag, Pagination, Badge } from "antd";
 import _ from "lodash";
@@ -12,9 +12,8 @@ const getCustomColumns = ({ customColumns }) => {
       case "URL":
         return {
           title: "URL",
-          key: "url",
           dataIndex: "url",
-          width: "300px",
+          width: 300,
           render: (url) => {
             return (
               <a
@@ -56,16 +55,15 @@ const NotesTable = ({
 
   const columns = [
     {
-      title: "Id",
+      title: "Index",
       dataIndex: "index",
-      key: "index",
-      width: "50px",
+      width: 70,
     },
     {
       title: "Title",
       dataIndex: "title",
-      key: "title",
-      width: "40%",
+      width: 340,
+      // fixed: "left",
       render: (title, row) => (
         <div style={{ display: "flex", alignItems: "center" }}>
           {title}&nbsp;
@@ -77,22 +75,22 @@ const NotesTable = ({
     {
       title: "Tags",
       dataIndex: "tags",
-      key: "tags",
       align: "center",
-      width: "150px",
+      width: 150,
       render: (tags) => <Tags tags={tags} />,
     },
     {
       title: "Status",
-      key: "status",
       dataIndex: "status",
       align: "center",
+      width: 80,
+      render: (status) => <Tag>{status}</Tag>,
     },
     {
       title: "Created",
-      key: "createdAt",
       dataIndex: "createdAt",
       align: "center",
+      width: 100,
       render: (createdAt) => {
         const addedDays = moment().diff(moment(createdAt), "days");
         return <Tag>{addedDays ? `${addedDays}d ago` : "Today"}</Tag>;
@@ -103,15 +101,12 @@ const NotesTable = ({
   return (
     <div
       style={{
-        width: "90%",
-        margin: "0 auto",
+        margin: "0 28px 10px",
         background: "white",
-        paddingBottom: "10px",
       }}
     >
       <Table
-        size="middle"
-        tableLayout="fixed"
+        size="medium"
         columns={columns}
         dataSource={notes}
         onRow={(record) => ({
@@ -119,6 +114,7 @@ const NotesTable = ({
         })}
         pagination={false}
         rowClassName="table-row"
+        scroll={{ x: "1000" }}
       />
       <br />
       <Pagination
