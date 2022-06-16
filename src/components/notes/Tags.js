@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { getTagsMap } from "../../lib/utils";
 import _ from "lodash";
 
-const Tags = ({ tags = [], tagsMap }) => {
+const Tags = ({ tags = [], tagsMap = {} }) => {
   return tags.map((tag) => {
     const { color, label } = _.get(tagsMap, tag) || {};
     return (
