@@ -37,13 +37,12 @@ const App = ({
   setModalMeta,
   setQuickAddModalMeta,
   history,
-  activePage,
   viewNoteMeta,
   fetchSession,
 }) => {
   const isAuthenticated = _.get(session, "isAuthenticated");
 
-  const [loading, setLoading] = useState(true);
+  const [initLoading, setInitLoading] = useState(true);
   const viewNoteMetaRef = useRef();
   const activePageRef = useRef();
 
@@ -62,11 +61,13 @@ const App = ({
         } catch (err) {
           console.log("Error:", err);
         } finally {
-          setTimeout(() => setLoading(false), 100);
+          setTimeout(() => setInitLoading(false), 100);
         }
-      } else setLoading(false);
+      } else setInitLoading(false);
     };
+
     isAccountActive();
+
     document.addEventListener("keydown", handleShortcut);
     return () => document.removeEventListener("keydown", handleShortcut);
   }, []);
@@ -82,7 +83,6 @@ const App = ({
 
   const handleShortcut = (e) => {
     try {
-      // console.log(e.code, e.target.nodeName, e.shiftKey, activePageRef);
       const { code, shiftKey, target } = e;
       const { nodeName } = target;
 
@@ -124,7 +124,7 @@ const App = ({
       <div className="contentWrapper">
         <Header />
         <div className="content">
-          {!loading && (
+          {!initLoading && (
             <Routes session={session} isAuthenticated={isAuthenticated} />
           )}
         </div>
@@ -136,7 +136,7 @@ const App = ({
           <Settings />
         </Fragment>
       )}
-      {(appLoading || loading) && <Loading type="dot-loader" />}
+      {(appLoading || initLoading) && <Loading type="dot-loader" />}
     </div>
   );
 };
@@ -148,7 +148,6 @@ const mapStateToProps = ({
   quickAddModalMeta = {},
   modalMeta = {},
   settingsDrawerVisibility,
-  activePage,
   viewNoteMeta,
 }) => ({
   session,
@@ -157,7 +156,6 @@ const mapStateToProps = ({
   quickAddModalVisibility: quickAddModalMeta.visibility,
   addModalVisibility: modalMeta.visibility,
   settingsDrawerVisibility,
-  activePage,
   viewNoteMeta,
 });
 

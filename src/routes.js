@@ -3,7 +3,6 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import NotFound from "./components/NotFound";
 import Notes from "./components/notes/Notes";
 import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
@@ -21,7 +20,6 @@ const routes = ({ isAuthenticated }) => {
         <Route path="/upload" exact component={UploadContent} />
         <Route path="/stats" exact component={Stats} />
       </ProtectedRoute>
-      {/* <Route component={NotFound} /> */}
     </Switch>
   );
 };

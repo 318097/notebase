@@ -108,7 +108,11 @@ const Header = ({
         >
           JSON
         </Button>
-        <Button onClick={addNewCollection} icon="plus"></Button>
+        <Button
+          onClick={addNewCollection}
+          icon="plus"
+          title="Create New Collection"
+        ></Button>
       </div>
     </div>
   );

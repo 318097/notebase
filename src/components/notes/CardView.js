@@ -3,9 +3,8 @@ import styled from "styled-components";
 import { Button } from "antd";
 import colors from "@codedrops/react-ui";
 import NoteCard from "./NoteCard";
-import _ from "lodash";
 import { setFilter } from "../../store/actions";
-import { getTagsMap } from "../../lib/utils";
+
 const PageWrapper = styled.div`
   margin-bottom: 25px;
   .page-splitter {
