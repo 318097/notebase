@@ -76,6 +76,16 @@ const config = {
       </div>
     `,
   },
+  WORKONA: {
+    accept: ".json",
+    collectionType: "WORKONA",
+    emptyState: `
+      <div>
+      <h4>Upload Workona resources</h4>
+        Export Workona as .json & upload
+      </div>
+    `,
+  },
   CHROME: {
     accept: ".json",
     collectionType: "CHROME",
@@ -139,7 +149,7 @@ const UploadContent = ({
 
   const currentDataTypeConfig = _.get(config, dataType, {});
   const isCustomSource = _.includes(["POST", "DROP"], dataType);
-  const isExternalData = ["TOBY", "CHROME"].includes(dataType);
+  const isExternalData = ["TOBY", "CHROME", "WORKONA"].includes(dataType);
 
   useEffect(() => {
     if (status === "PROCESS_DATA") processData();
@@ -176,7 +186,8 @@ const UploadContent = ({
         parsed.type = "DROP";
         break;
       }
-      case "TOBY": {
+      case "TOBY":
+      case "WORKONA": {
         parsed.title = item.title;
         parsed.url = item.url;
         break;
@@ -215,6 +226,29 @@ const UploadContent = ({
           parseItem(item, sourceInfo)
         );
         parsedContent.push(...parsedCollection);
+      });
+    } else if (dataType === "WORKONA") {
+      const json = JSON.parse(rawData);
+
+      _.get(json, "Workspaces").forEach(({ workspaces }) => {
+        workspaces.forEach((workspace) => {
+          const { title, resources } = workspace;
+          let prefix = `${title}`;
+
+          resources.forEach((resource) => {
+            const { title, resources: links } = resource;
+            const sourceInfo = {
+              collectionName: `${prefix}/${title}`,
+              collectionSize: links.length,
+              id: uuid(),
+            };
+
+            const parsedCollection = links.map((item) => {
+              return parseItem(item, sourceInfo);
+            });
+            parsedContent.push(...parsedCollection);
+          });
+        });
       });
     } else if (dataType === "CHROME") {
       const json = JSON.parse(rawData);
@@ -376,6 +410,7 @@ const UploadContent = ({
           <OptGroup label="External">
             <Option value={"TOBY"}>Toby</Option>
             <Option value={"CHROME"}>Chrome</Option>
+            <Option value={"WORKONA"}>Workona</Option>
           </OptGroup>
           <OptGroup label="Assets">
             <Option value={"RESOURCES"}>Resources</Option>
